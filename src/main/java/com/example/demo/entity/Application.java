@@ -1,10 +1,19 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "APPLICATIONS")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 public class Application {
 
     @Id
@@ -30,12 +39,13 @@ public class Application {
     @Column(name = "approval_date")
     private LocalDate approvalDate;
 
+    @Column(name = "dormitory_area")
+    private String dormitoryArea;
+
     @Column(name = "note", length = 255)
     private String note;
 
     public enum ApplicationStatus {
         pending, approved, rejected
     }
-
-    // Constructors, getters, setters...
 }
