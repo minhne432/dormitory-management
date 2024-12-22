@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+    <title layout:fragment="title" >Danh sách đơn đăng ký KTX</title>
+</head>
+<body>
+<div layout:fragment="content">
+<h1>Danh sách đơn đăng ký</h1>
+
+<!-- Form filter theo ngày -->
+<form method="get" th:action="@{/manager/applications}">
+    <label>Từ ngày:
+        <input type="date" name="startDate" th:value="${startDate}"/>
+    </label>
+    <label>Đến ngày:
+        <input type="date" name="endDate" th:value="${endDate}"/>
+    </label>
+    <button type="submit">Lọc</button>
+</form>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Application ID</th>
+        <th>Ngày nộp</th>
+        <th>Trạng thái</th>
+        <th>Sinh viên</th>
+        <th>Chi tiết</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="app : ${applications}">
+        <td th:text="${app.applicationId}"></td>
+        <td th:text="${app.submissionDate}"></td>
+        <td th:text="${app.status}"></td>
+        <td th:text="${app.student.fullName}"></td>
+        <td>
+            <a th:href="@{/manager/applications/{id}(id=${app.applicationId})}">Xem</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div>
+    <span th:text="'Trang ' + ${currentPage} + ' / ' + ${totalPages}"></span>
+    <span th:if="${currentPage} > 0">
+        <a th:href="@{/manager/applications(page=${currentPage-1}, startDate=${startDate}, endDate=${endDate})}">Trang trước</a>
+    </span>
+    <span th:if="${currentPage} < ${totalPages}-1">
+        <a th:href="@{/manager/applications(page=${currentPage+1}, startDate=${startDate}, endDate=${endDate})}">Trang sau</a>
+    </span>
+</div>
+</div>
+</body>
+</html>

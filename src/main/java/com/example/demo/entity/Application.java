@@ -21,7 +21,7 @@ public class Application {
     @Column(name = "application_id")
     private Long applicationId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 

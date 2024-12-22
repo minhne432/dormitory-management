@@ -69,26 +69,15 @@ public class ApplicationController {
             model.addAttribute("error", "Student not found!");
             return "registerDormitory";
         }
+
+        //lây student hiện tại
         Student student = optionalStudent.get();
-
-        // Cập nhật những thông tin mà sinh viên có thể chỉnh (sđt, email, etc.)
-        student.setPhoneNumber(form.getPhoneNumber());
-        student.setEmail(form.getEmail());
-        // address, fullName, department,... có thể là readonly => không update
-
-        // Lưu Student (nếu có thay đổi)
-        studentRepository.save(student);
 
         // Tạo 1 Application (đơn đăng ký) mới
         Application application = new Application();
         application.setStudent(student);
         application.setSubmissionDate(LocalDate.now());
         application.setStatus(ApplicationStatus.pending);
-        // Chưa có approvedBy, approvalDate, note => vì manager chưa duyệt
-
-        // Bạn có thể mở rộng cột “dormitory_area” nếu muốn.
-        // Hoặc tạm thời gắn "Khu A/B/C" vào note,
-        // hoặc thêm cột dorm_area vào entity Application:
         application.setDormitoryArea(form.getDormitoryArea());
         application.setNote(form.getNote());
 

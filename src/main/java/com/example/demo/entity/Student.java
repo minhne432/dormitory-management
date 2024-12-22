@@ -49,10 +49,6 @@ public class Student {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "account_status")
-    private AccountStatus accountStatus; // 'active' hoặc 'inactive'
-
     public enum AccountStatus {
         active, inactive
     }

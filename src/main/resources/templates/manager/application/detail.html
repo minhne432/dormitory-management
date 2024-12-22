@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+  <title layout:fragment="title">Chi tiết đơn đăng ký</title>
+</head>
+<body>
+<div layout:fragment="content">
+<h1>Chi tiết đơn đăng ký</h1>
+<!--<p>Debug Application: <span th:text="${appDetail}"></span></p>-->
+<div th:if="${appDetail != null}" >
+  <p><strong>ID:</strong> <span th:text="${appDetail.applicationId}"></span></p>
+  <p><strong>Ngày nộp:</strong> <span th:text="${appDetail.submissionDate}"></span></p>
+  <p><strong>Trạng thái:</strong> <span th:text="${appDetail.status}"></span></p>
+  <p><strong>Khu mong muốn:</strong> <span th:text="${appDetail.dormitoryArea}"></span></p>
+  <p><strong>Note:</strong> <span th:text="${appDetail.note}"></span></p>
+  <p><strong>Ngày duyệt:</strong> <span th:text="${appDetail.approvalDate}"></span></p>
+  <p><strong>Người duyệt:</strong>
+    <span th:text="${appDetail.approvedBy != null ? appDetail.approvedBy.fullName : 'Chưa có'}"></span>
+  </p>
+</div>
+
+<hr/>
+<h3>Thông tin Sinh viên</h3>
+<div th:if="${appDetail.student != null}">
+  <p><strong>Họ Tên:</strong> <span th:text="${appDetail.student.fullName}"></span></p>
+  <p><strong>Khoa:</strong> <span th:text="${appDetail.student.department}"></span></p>
+  <p><strong>Lớp:</strong> <span th:text="${appDetail.student.studentClass}"></span></p>
+  <p><strong>Email:</strong> <span th:text="${appDetail.student.email}"></span></p>
+  <p><strong>SĐT:</strong> <span th:text="${appDetail.student.phoneNumber}"></span></p>
+  <p><strong>Địa chỉ:</strong> <span th:text="${appDetail.student.address}"></span></p>
+</div>
+
+<!-- Nút approve/reject nếu status = 'pending' -->
+<div th:if="${appDetail.status == T(com.example.demo.entity.Application.ApplicationStatus).pending}">
+  <form th:action="@{/manager/applications/{id}/approve(id=${appDetail.applicationId})}" method="post">
+    <button type="submit">Phê duyệt</button>
+  </form>
+  <form th:action="@{/manager/applications/{id}/reject(id=${appDetail.applicationId})}" method="post">
+    <button type="submit">Từ chối</button>
+  </form>
+</div>
+
+<a th:href="@{/manager/applications}">Quay lại danh sách</a>
+</div>
+</body>
+</html>

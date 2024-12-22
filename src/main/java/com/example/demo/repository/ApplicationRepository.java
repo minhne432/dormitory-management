@@ -1,8 +1,17 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Application;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
+
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
-    // Có thể thêm các method custom nếu cần
+    /**
+     * Tìm tất cả Application có submissionDate nằm trong [startDate, endDate].
+     * Kết quả trả về dạng Page, dùng cho phân trang.
+     */
+    Page<Application> findBySubmissionDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
+
 }
