@@ -1,9 +1,17 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "DORMITORIES")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode
 public class Dormitory {
 
     @Id

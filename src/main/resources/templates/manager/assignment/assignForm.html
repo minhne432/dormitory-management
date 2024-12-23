@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Xếp phòng cho sinh viên</title>
+</head>
+<body>
+<h1>Xếp phòng cho đơn #[<span th:text="${applicationDetails.applicationId}"></span>]</h1>
+<p>Sinh viên: <span th:text="${applicationDetails.student.fullName}"></span></p>
+<p>Khu mong muốn: <span th:text="${applicationDetails.dormitoryArea}"></span></p>
+
+<form th:action="@{/manager/room-assignments/{appId}/assign(appId=${applicationDetails.applicationId})}" method="post">
+    <label>Chọn phòng:</label>
+    <select name="roomId">
+        <option th:each="r : ${availableRooms}"
+                th:value="${r.roomId}"
+                th:text="${r.dormitory.dormName} + ' - ' + ${r.roomNumber} + ' (Hiện tại ' + ${r.currentOccupancy} + '/' + ${r.maxCapacity} + ')'">
+        </option>
+    </select>
+    <button type="submit">Xác nhận xếp phòng</button>
+</form>
+
+<a th:href="@{/manager/room-assignments}">Quay lại</a>
+</body>
+</html>

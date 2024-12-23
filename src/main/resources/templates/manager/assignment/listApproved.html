@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách đơn đã approved</title>
+</head>
+<body>
+<h1>Danh sách đơn đã approved</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Sinh viên</th>
+        <th>Khu mong muốn</th>
+        <th>Tùy chọn</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="app : ${approvedApps}">
+        <td th:text="${app.applicationId}"></td>
+        <td th:text="${app.student.fullName}"></td>
+        <td th:text="${app.dormitoryArea}"></td>
+        <td>
+            <a th:href="@{/manager/room-assignments/{appId}/assign(appId=${app.applicationId})}">
+                Xếp phòng
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
