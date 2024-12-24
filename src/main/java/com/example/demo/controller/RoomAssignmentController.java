@@ -46,77 +46,127 @@ public class RoomAssignmentController {
         // -> Tạo file: resources/templates/manager/assignment/listApproved.html
     }
 
+
     /**
      * Hiển thị form chọn phòng cho 1 application cụ thể
      * URL: GET /manager/room-assignments/{appId}/assign
      */
     @GetMapping("/{appId}/assign")
-    public String showAssignForm(@PathVariable Long appId, Model model) {
-        // Lấy application
+    public String showAssignForm(
+            @PathVariable Long appId,
+            Model model) {
+
+        // Lấy thông tin đơn đăng ký
         Application application = applicationRepository.findById(appId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid application ID:" + appId));
 
-        // Lấy danh sách phòng còn trống => status=available, current < max
-        List<Room> availableRooms = roomRepository.findByStatusAndCurrentOccupancyLessThan(
-                RoomStatus.available, 99_999 // Hoặc so sánh maxCapacity, tuỳ logic
-        );
+        // Lấy danh sách các khu ký túc xá để hiển thị trong dropdown lọc
+        List<String> dormitoryNames = roomRepository.findDistinctDormitoryNames();
+        model.addAttribute("dormitoryNames", dormitoryNames);
 
+        // Lấy thông tin chi tiết của đơn đăng ký
         model.addAttribute("applicationDetails", application);
-        model.addAttribute("availableRooms", availableRooms);
 
         return "manager/assignment/assignForm";
         // -> Tạo file Thymeleaf: assignForm.html
     }
 
+
+
+
     /**
      * Xử lý POST xếp phòng
      * URL: POST /manager/room-assignments/{appId}/assign
      */
-
     @PostMapping("/{appId}/assign")
     public String assignRoom(@PathVariable Long appId,
-                             @RequestParam("roomId") Long roomId) {
+                             @RequestParam("roomId") Long roomId,
+                             @RequestParam(value = "dormitoryName", required = false) String dormitoryName,
+                             @RequestParam(value = "minCapacity", required = false) Integer minCapacity,
+                             @RequestParam(value = "maxCapacity", required = false) Integer maxCapacity,
+                             Model model) {
+        try {
+            // Lấy Application
+            Application application = applicationRepository.findById(appId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid application ID:" + appId));
+
+            Student student = application.getStudent();
+
+            // Kiểm tra nếu student đã có RoomAssignment
+//            boolean alreadyAssigned = roomAssignmentRepository.existsByStudentAndEndDateIsNull(student);
+            boolean alreadyAssigned = false;
+            if (alreadyAssigned) {
+                model.addAttribute("error", "Sinh viên đã được xếp phòng trước đó!");
+                return reloadAssignForm(appId, dormitoryName, minCapacity, maxCapacity, model);
+            }
+
+            // Lấy Room
+            Room room = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid room ID:" + roomId));
+
+            // Kiểm tra sức chứa
+            if (room.getCurrentOccupancy() >= room.getMaxCapacity()) {
+                model.addAttribute("error", "Phòng đã đầy!");
+                return reloadAssignForm(appId, dormitoryName, minCapacity, maxCapacity, model);
+            }
+
+            // Tạo RoomAssignmentId
+            RoomAssignmentId roomAssignmentId = new RoomAssignmentId(room.getRoomId(), student.getStudentId());
+
+            // Tạo RoomAssignment
+            RoomAssignment assignment = new RoomAssignment();
+            assignment.setId(roomAssignmentId); // Đặt EmbeddedId
+            assignment.setRoom(room);
+            assignment.setStudent(student);
+            assignment.setAssignedDate(LocalDate.now());
+            // end_date null => Chưa có
+
+            // Lưu RoomAssignment
+            roomAssignmentRepository.save(assignment);
+
+            // Tăng occupancy
+            room.setCurrentOccupancy(room.getCurrentOccupancy() + 1);
+            if (room.getCurrentOccupancy().equals(room.getMaxCapacity())) {
+                room.setStatus(RoomStatus.full); // Nếu đã full => cập nhật
+            }
+            roomRepository.save(room);
+            application.setStatus(ApplicationStatus.completed);
+
+            // (Tuỳ ý) Cập nhật application -> note = "Đã xếp phòng" hay thay đổi gì đó
+            // application.setNote("Đã xếp phòng " + room.getRoomNumber());
+            // applicationRepository.save(application);
+
+            return "redirect:/manager/room-assignments?success=assigned";
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            model.addAttribute("error", e.getMessage());
+            // Cập nhật lại danh sách lọc để hiển thị lại form
+            return reloadAssignForm(appId, dormitoryName, minCapacity, maxCapacity, model);
+        }
+    }
+
+    /**
+     * Helper method để tải lại form assign với các tham số lọc hiện tại
+     */
+    private String reloadAssignForm(Long appId, String dormitoryName, Integer minCapacity, Integer maxCapacity, Model model) {
         // Lấy Application
         Application application = applicationRepository.findById(appId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid application ID:" + appId));
 
-        Student student = application.getStudent();
+        // Lấy danh sách các khu ký túc xá để hiển thị trong dropdown lọc
+        List<String> dormitoryNames = roomRepository.findDistinctDormitoryNames();
+        model.addAttribute("dormitoryNames", dormitoryNames);
 
-        // Lấy Room
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid room ID:" + roomId));
+        // Lấy thông tin chi tiết của đơn đăng ký
+        model.addAttribute("applicationDetails", application);
 
-        // Kiểm tra sức chứa
-        if (room.getCurrentOccupancy() >= room.getMaxCapacity()) {
-            throw new IllegalStateException("Phòng đã đầy!");
-        }
+        // Lấy danh sách phòng dựa trên các tiêu chí lọc
+        List<Room> availableRooms = roomRepository.findAvailableRooms(
+                dormitoryName, minCapacity, maxCapacity
+        );
+        model.addAttribute("availableRooms", availableRooms);
 
-        // Tạo RoomAssignmentId
-        RoomAssignmentId roomAssignmentId = new RoomAssignmentId(room.getRoomId(), student.getStudentId());
-
-        // Tạo RoomAssignment
-        RoomAssignment assignment = new RoomAssignment();
-        assignment.setId(roomAssignmentId); // Đặt EmbeddedId
-        assignment.setRoom(room);
-        assignment.setStudent(student);
-        assignment.setAssignedDate(LocalDate.now());
-        // end_date null => Chưa có
-
-        // Lưu RoomAssignment
-        roomAssignmentRepository.save(assignment);
-
-        // Tăng occupancy
-        room.setCurrentOccupancy(room.getCurrentOccupancy() + 1);
-        if (room.getCurrentOccupancy().equals(room.getMaxCapacity())) {
-            room.setStatus(RoomStatus.full); // Nếu đã full => cập nhật
-        }
-        roomRepository.save(room);
-
-        // (Tuỳ ý) Cập nhật application -> note = "Đã xếp phòng" hay thay đổi gì đó
-        // application.setNote("Đã xếp phòng " + room.getRoomNumber());
-        // applicationRepository.save(application);
-
-        return "redirect:/manager/room-assignments?success=assigned";
+        return "manager/assignment/assignForm";
     }
+
 
 }

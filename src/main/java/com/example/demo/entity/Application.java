@@ -46,6 +46,6 @@ public class Application {
     private String note;
 
     public enum ApplicationStatus {
-        pending, approved, rejected
+        pending, approved, rejected, completed
     }
 }

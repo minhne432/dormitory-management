@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
 <head>
-    <title>Danh sách đơn đã approved</title>
+    <title layout:fragment="title">Danh sách đơn đã approved</title>
 </head>
 <body>
+<div layout:fragment="content">
 <h1>Danh sách đơn đã approved</h1>
 
 <table border="1">
@@ -28,5 +31,6 @@
     </tr>
     </tbody>
 </table>
+</div>
 </body>
 </html>

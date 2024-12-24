@@ -55,10 +55,15 @@ public class ApplicationManagementController {
             // Lấy tới hôm nay hoặc xa hơn
             endDate = LocalDate.now().plusDays(1);
         }
-
+            // Tạo Pageable object với sắp xếp giảm dần theo submissionDate
         Pageable pageable = PageRequest.of(page, size, Sort.by("submissionDate").descending());
+            // Gọi repository để lấy data chỉ với status = pending
         Page<Application> applicationPage = applicationRepository
-                .findBySubmissionDateBetween(startDate, endDate, pageable);
+                .findBySubmissionDateBetweenAndStatus(
+                        startDate,
+                        endDate,
+                        Application.ApplicationStatus.pending,
+                        pageable);
 
         // Đưa data vào Model để hiển thị
         model.addAttribute("applications", applicationPage.getContent()); // danh sách

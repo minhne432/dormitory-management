@@ -1,24 +1,108 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
 <head>
-    <title>Xếp phòng cho sinh viên</title>
+    <title layout:fragment="title">Xếp phòng cho sinh viên</title>
+    <!-- Thêm CSS cho Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Thêm một số CSS cơ bản để bố trí các trường lọc */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        .filter-container label {
+            margin-right: 10px;
+        }
+        .filter-container select,
+        .filter-container input {
+            margin-right: 20px;
+        }
+    </style>
 </head>
 <body>
+<div layout:fragment="content">
 <h1>Xếp phòng cho đơn #[<span th:text="${applicationDetails.applicationId}"></span>]</h1>
 <p>Sinh viên: <span th:text="${applicationDetails.student.fullName}"></span></p>
-<p>Khu mong muốn: <span th:text="${applicationDetails.dormitoryArea}"></span></p>
+<p>Khu ký túc xá mong muốn: <span th:text="${applicationDetails.dormitoryArea}"></span></p>
 
+<!-- Các tiêu chí lọc phòng -->
+<div class="filter-container">
+    <label for="dormitoryName">Khu ký túc xá:</label>
+    <select id="dormitoryName" name="dormitoryName">
+        <option value="">Tất cả</option>
+        <option th:each="name : ${dormitoryNames}" th:value="${name}" th:text="${name}"></option>
+    </select>
+
+    <label for="minCapacity">Số người tối thiểu:</label>
+    <input type="number" id="minCapacity" name="minCapacity" min="1" placeholder="Nhập số">
+
+    <label for="maxCapacity">Số người tối đa:</label>
+    <input type="number" id="maxCapacity" name="maxCapacity" min="1" placeholder="Nhập số">
+</div>
+
+<!-- Hiển thị lỗi nếu có -->
+<div th:if="${error}" style="color: red; margin-bottom: 20px;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Form chọn phòng -->
 <form th:action="@{/manager/room-assignments/{appId}/assign(appId=${applicationDetails.applicationId})}" method="post">
     <label>Chọn phòng:</label>
-    <select name="roomId">
-        <option th:each="r : ${availableRooms}"
-                th:value="${r.roomId}"
-                th:text="${r.dormitory.dormName} + ' - ' + ${r.roomNumber} + ' (Hiện tại ' + ${r.currentOccupancy} + '/' + ${r.maxCapacity} + ')'">
-        </option>
+    <select name="roomId" class="select2-ajax" style="width: 100%;">
+        <option value="">-- Chọn phòng --</option>
     </select>
     <button type="submit">Xác nhận xếp phòng</button>
 </form>
 
 <a th:href="@{/manager/room-assignments}">Quay lại</a>
+
+<!-- Thêm JS cho Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function formatRoom(room) {
+            return room.dormName + ' - ' + room.roomNumber + ' (Hiện tại ' + room.currentOccupancy + '/' + room.maxCapacity + ')';
+        }
+
+        // Khởi tạo Select2 với AJAX
+        $('.select2-ajax').select2({
+            placeholder: 'Chọn phòng',
+            allowClear: true,
+            ajax: {
+                url: '/api/rooms/search',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        query: params.term || '', // Từ khóa tìm kiếm, có thể rỗng
+                        dormitoryName: $('#dormitoryName').val(),
+                        minCapacity: $('#minCapacity').val(),
+                        maxCapacity: $('#maxCapacity').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function(room) {
+                            return {
+                                id: room.roomId,
+                                text: formatRoom(room)
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 0 // Cho phép không cần nhập ký tự
+        });
+
+        // Khi các tiêu chí lọc thay đổi, reset Select2 để tải lại danh sách phòng
+        $('#dormitoryName, #minCapacity, #maxCapacity').on('change keyup', function() {
+            $('.select2-ajax').val(null).trigger('change');
+        });
+    });
+</script>
+</div>
 </body>
 </html>
