@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.security.CustomSuccessHandler;
+import com.example.demo.config.CustomSuccessHandler;
 import com.example.demo.service.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
