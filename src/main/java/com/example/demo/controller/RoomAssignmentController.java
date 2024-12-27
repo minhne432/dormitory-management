@@ -94,11 +94,10 @@ public class RoomAssignmentController {
 
             // Kiểm tra nếu student đã có RoomAssignment
 //            boolean alreadyAssigned = roomAssignmentRepository.existsByStudentAndEndDateIsNull(student);
-            boolean alreadyAssigned = false;
-            if (alreadyAssigned) {
-                model.addAttribute("error", "Sinh viên đã được xếp phòng trước đó!");
-                return reloadAssignForm(appId, dormitoryName, minCapacity, maxCapacity, model);
-            }
+//            if (alreadyAssigned) {
+//                model.addAttribute("error", "Sinh viên đã được xếp phòng trước đó!");
+//                return reloadAssignForm(appId, dormitoryName, minCapacity, maxCapacity, model);
+//            }
 
             // Lấy Room
             Room room = roomRepository.findById(roomId)

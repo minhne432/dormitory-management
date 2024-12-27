@@ -13,8 +13,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
      * Tìm tất cả Application có submissionDate nằm trong [startDate, endDate].
      * Kết quả trả về dạng Page, dùng cho phân trang.
      */
-
-
     Page<Application> findBySubmissionDateBetweenAndStatus(LocalDate startDate, LocalDate endDate,Application.ApplicationStatus status ,Pageable pageable);
     List<Application> findByStatus(Application.ApplicationStatus status);
 
