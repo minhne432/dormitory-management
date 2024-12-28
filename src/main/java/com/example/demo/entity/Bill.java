@@ -17,7 +17,7 @@ public class Bill {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @Column(name = "billing_period", length = 10)
