@@ -23,11 +23,12 @@ public class Room {
     @JoinColumn(name = "dorm_id", nullable = false)
     private Dormitory dormitory;
 
+    @ManyToOne
+    @JoinColumn(name = "room_type_id")
+    private RoomType roomType; // Liên kết đến bảng room_types
+
     @Column(name = "room_number", length = 50)
     private String roomNumber;
-
-    @Column(name = "max_capacity")
-    private Integer maxCapacity;
 
     @Column(name = "current_occupancy")
     private Integer currentOccupancy;

@@ -101,7 +101,13 @@ public class ApplicationManagementController {
      * POST /manager/applications/{id}/approve
      */
     @PostMapping("/{id}/approve")
-    public String approveApplication(@PathVariable("id") Long applicationId) {
+    public String approveApplication(
+            @PathVariable("id") Long applicationId,
+            @RequestParam(required = false) String dormitoryArea,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String department,
+            @RequestParam(defaultValue = "0") int page
+    ) {
         // Lấy application
         Optional<Application> optionalApp = applicationRepository.findById(applicationId);
         if (optionalApp.isEmpty()) {
@@ -118,7 +124,12 @@ public class ApplicationManagementController {
 
         applicationRepository.save(application);
 
-        return "redirect:/manager/applications?success=approved";
+        // Truyền tham số lọc trở lại khi chuyển hướng
+        return "redirect:/manager/applications/pending-applications?success=approved"
+                + (dormitoryArea != null ? "&dormitoryArea=" + dormitoryArea : "")
+                + (address != null ? "&address=" + address : "")
+                + (department != null ? "&department=" + department : "")
+                + "&page=" + page;
     }
 
     /**

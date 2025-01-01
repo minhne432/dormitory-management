@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "DORMITORIES")
 @Getter
@@ -28,9 +30,8 @@ public class Dormitory {
     @Column(name = "description", length = 255)
     private String description;
 
-    // Nếu muốn ánh xạ 1-n với Rooms:
-    // @OneToMany(mappedBy = "dormitory", cascade = CascadeType.ALL)
-    // private List<Room> rooms;
+    @OneToMany(mappedBy = "dormitory", cascade = CascadeType.ALL)
+    private List<Room> rooms;
 
     // Constructors, getters, setters...
 }
