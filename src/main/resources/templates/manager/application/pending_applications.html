@@ -1,11 +1,13 @@
-<!-- src/main/resources/templates/application/pending_applications.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
 <head>
-    <title>Pending Applications</title>
+    <title layout:fragment="title" >Pending Applications</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
+<div layout:fragment="content">
 <h1>Pending Applications</h1>
 
 <form th:action="@{/manager/applications/pending-applications}" method="get">
@@ -107,6 +109,7 @@
             <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Next</a>
         </li>
     </ul>
+</div>
 </div>
 </body>
 </html>
