@@ -30,58 +30,18 @@ public class ApplicationManagementController {
     }
 
     /**
-     * Liệt kê các đơn với phân trang và lọc theo khoảng thời gian (submissionDate).
-     *  - URL ví dụ: GET /manager/applications?startDate=2024-01-01&endDate=2024-12-31&page=0&size=10
-     */
-    @GetMapping
-    public String listApplications(
-            @RequestParam(value = "startDate", required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-
-            @RequestParam(value = "endDate", required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-
-            Model model
-    ) {
-        // Nếu không chọn startDate/endDate thì gán mặc định
-        if (startDate == null) {
-            // Vd: lấy từ rất xa
-            startDate = LocalDate.of(2000, 1, 1);
-        }
-        if (endDate == null) {
-            // Lấy tới hôm nay hoặc xa hơn
-            endDate = LocalDate.now().plusDays(1);
-        }
-            // Tạo Pageable object với sắp xếp giảm dần theo submissionDate
-        Pageable pageable = PageRequest.of(page, size, Sort.by("submissionDate").descending());
-            // Gọi repository để lấy data chỉ với status = pending
-        Page<Application> applicationPage = applicationRepository
-                .findBySubmissionDateBetweenAndStatus(
-                        startDate,
-                        endDate,
-                        Application.ApplicationStatus.pending,
-                        pageable);
-
-        // Đưa data vào Model để hiển thị
-        model.addAttribute("applications", applicationPage.getContent()); // danh sách
-        model.addAttribute("currentPage", applicationPage.getNumber());  // trang hiện tại
-        model.addAttribute("totalPages", applicationPage.getTotalPages());
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-
-        return "manager/application/list";
-        // -> Bạn sẽ tạo file Thymeleaf: resources/templates/manager/application/list.html
-    }
-
-    /**
      * Xem chi tiết 1 đơn đăng ký
      * URL: GET /manager/applications/{id}
      */
     @GetMapping("/{id}")
-    public String viewApplicationDetail(@PathVariable("id") Long applicationId, Model model) {
+    public String viewApplicationDetail(
+            @PathVariable("id") Long applicationId,
+            @RequestParam(required = false) String dormitoryArea,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String department,
+            @RequestParam(defaultValue = "0") int page,
+            Model model
+    ) {
         Optional<Application> optionalApp = applicationRepository.findById(applicationId);
         if (optionalApp.isEmpty()) {
             // Xử lý nếu không tìm thấy
@@ -89,12 +49,16 @@ public class ApplicationManagementController {
         }
 
         Application application = optionalApp.get();
-        // Đưa application lên Model
+        // Đưa application và các tham số lọc vào Model
         model.addAttribute("appDetail", application);
-        // -> Trong Thymeleaf, bạn có thể truy cập application.student để xem thông tin sinh viên
-        return "manager/application/detail";
-        // -> File Thymeleaf: detail.html
+        model.addAttribute("dormitoryArea", dormitoryArea);
+        model.addAttribute("address", address);
+        model.addAttribute("department", department);
+        model.addAttribute("page", page);
+
+        return "manager/application/detail"; // File Thymeleaf: detail.html
     }
+
 
     /**
      * Phê duyệt (approve) đơn
@@ -137,22 +101,33 @@ public class ApplicationManagementController {
      * POST /manager/applications/{id}/reject
      */
     @PostMapping("/{id}/reject")
-    public String rejectApplication(@PathVariable("id") Long applicationId) {
+    public String rejectApplication(
+            @PathVariable("id") Long applicationId,
+            @RequestParam(required = false) String dormitoryArea,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String department,
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        // Logic từ chối
         Optional<Application> optionalApp = applicationRepository.findById(applicationId);
         if (optionalApp.isEmpty()) {
-            return "redirect:/manager/applications?error=notfound";
+            return "redirect:/manager/applications/pending-applications?error=notfound";
         }
         Application application = optionalApp.get();
-
         Manager currentManager = getCurrentManager();
         application.setStatus(ApplicationStatus.rejected);
         application.setApprovalDate(LocalDate.now());
         application.setApprovedBy(currentManager);
-
         applicationRepository.save(application);
 
-        return "redirect:/manager/applications?success=rejected";
+        // Truyền lại tham số lọc khi chuyển hướng
+        return "redirect:/manager/applications/pending-applications?success=rejected"
+                + (dormitoryArea != null ? "&dormitoryArea=" + dormitoryArea : "")
+                + (address != null ? "&address=" + address : "")
+                + (department != null ? "&department=" + department : "")
+                + "&page=" + page;
     }
+
 
     /**
      * Lấy Manager hiện tại từ SecurityContext

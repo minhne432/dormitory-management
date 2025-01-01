@@ -62,6 +62,15 @@
         <td>
             <!-- Các nút phê duyệt hoặc từ chối -->
             <div>
+                <!-- Link Xem -->
+                <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" style="display: inline;">
+                    <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}">
+                    <input type="hidden" name="address" th:value="${address}">
+                    <input type="hidden" name="department" th:value="${department}">
+                    <input type="hidden" name="page" th:value="${applicationPage.number}">
+                    <button type="submit">Xem</button>
+                </form>
+
                 <!-- Form phê duyệt -->
                 <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" style="display: inline;">
                     <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}">
@@ -92,10 +101,10 @@
 <div>
     <ul>
         <li th:if="${applicationPage.hasPrevious()}">
-            <a th:href="@{/pending-applications(page=${applicationPage.number - 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Previous</a>
+            <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number - 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Previous</a>
         </li>
         <li th:if="${applicationPage.hasNext()}">
-            <a th:href="@{/pending-applications(page=${applicationPage.number + 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Next</a>
+            <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Next</a>
         </li>
     </ul>
 </div>

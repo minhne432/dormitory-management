@@ -42,7 +42,9 @@
   </form>
 </div>
 
-<a th:href="@{/manager/applications}">Quay lại danh sách</a>
+  <a th:href="@{/manager/applications/pending-applications(dormitoryArea=${dormitoryArea}, address=${address}, department=${department}, page=${page})}">
+    Quay lại danh sách
+  </a>
 </div>
 </body>
 </html>
