@@ -24,6 +24,9 @@ public class PendingApplication {
     @Column(name = "submission_date")
     private LocalDate submissionDate;
 
+    @Column(name = "approval_date")
+    private LocalDate approvalDate;
+
     @Column(name = "dormitory_area")
     private String dormitoryArea;
 
