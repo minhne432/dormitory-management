@@ -28,6 +28,8 @@ public class RoomAssignmentService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired ApplicationService applicationService;
+
     public void assignRoomToApplications(Long roomId, List<Long> applicationIds) {
         // 1. Lấy Room
         Room room = roomRepository.findById(roomId)
@@ -99,6 +101,9 @@ public class RoomAssignmentService {
             notification.setCreatedAt(LocalDateTime.now());
             notification.setReadStatus(Notification.ReadStatus.unread);
             notificationRepository.save(notification);
+
+            //cập nhật application status là completed
+            applicationService.completeApplication(appId);
         }
 
         // 4. Cập nhật currentOccupancy

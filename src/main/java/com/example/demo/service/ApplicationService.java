@@ -56,4 +56,24 @@ public class ApplicationService {
 
         applicationRepository.save(application);
     }
+
+    /**
+     * Tìm kiếm Application theo ID và cập nhật trạng thái thành ApplicationStatus.completed.
+     *
+     * @param applicationId ID của Application cần cập nhật.
+     * @throws IllegalArgumentException nếu Application không tồn tại.
+     */
+    public void completeApplication(Long applicationId) {
+        Optional<Application> optionalApplication = applicationRepository.findById(applicationId);
+
+        if (optionalApplication.isEmpty()) {
+            throw new IllegalArgumentException("Application not found!");
+        }
+
+        Application application = optionalApplication.get();
+        application.setStatus(Application.ApplicationStatus.completed);
+
+        // Lưu cập nhật vào cơ sở dữ liệu
+        applicationRepository.save(application);
+    }
 }
