@@ -22,12 +22,16 @@ public class Bill {
     private Long billId;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false)
+    private DormitoryService dormitoryService; // Trỏ trực tiếp đến dịch vụ
 
     @Column(name = "billing_period", length = 10)
     private String billingPeriod; // ví dụ '2024-12'

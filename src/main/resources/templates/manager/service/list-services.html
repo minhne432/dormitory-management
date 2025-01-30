@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Dịch Vụ</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center">Danh Sách Dịch Vụ Ký Túc Xá</h2>
+
+    <table class="table table-striped table-bordered mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Tên Dịch Vụ</th>
+            <th>Giá (VND)</th>
+            <th>Đơn Vị</th>
+            <th>Mô Tả</th>
+            <th>Hành Động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="service : ${services}">
+            <td th:text="${service.serviceId}"></td>
+            <td th:text="${service.serviceName}"></td>
+            <td th:text="${#numbers.formatDecimal(service.unitPrice, 0, 'COMMA', 0, 'POINT')}"></td>
+            <td th:text="${service.unit}"></td>
+            <td th:text="${service.description}"></td>
+            <td>
+                <a th:href="@{/manager/services/edit/{id}(id=${service.serviceId})}" class="btn btn-warning btn-sm">Chỉnh Sửa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/services/create" class="btn btn-primary">Thêm Dịch Vụ</a>
+</div>
+</body>
+</html>

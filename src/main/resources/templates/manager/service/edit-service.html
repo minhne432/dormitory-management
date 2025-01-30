@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chỉnh Sửa Dịch Vụ</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+</head>
+<body>
+
+<h2>Chỉnh Sửa Dịch Vụ</h2>
+
+<form th:action="@{/manager/services/edit/{id}(id=${serviceDTO.serviceId})}" th:object="${serviceDTO}" method="post">
+    <label for="serviceName">Tên dịch vụ:</label>
+    <input type="text" id="serviceName" th:field="*{serviceName}" required>
+    <span th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}"></span>
+
+    <label for="unitPrice">Giá:</label>
+    <input type="number" id="unitPrice" th:field="*{unitPrice}" step="0.01" required>
+    <span th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}"></span>
+
+    <label for="unit">Đơn vị:</label>
+    <input type="text" id="unit" th:field="*{unit}" required>
+    <span th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}"></span>
+
+    <label for="description">Mô tả:</label>
+    <textarea id="description" th:field="*{description}"></textarea>
+    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+
+    <button type="submit">Cập Nhật</button>
+</form>
+
+<p th:if="${successMessage}" th:text="${successMessage}" style="color: green;"></p>
+<p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "STUDENTS")
@@ -52,6 +53,10 @@ public class Student {
     public enum AccountStatus {
         active, inactive
     }
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<StudentServiceRegistration> registrations;
+
 
     // Constructors, getters, setters...
 }

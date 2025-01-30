@@ -23,7 +23,7 @@ public class ServiceUsage {
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
-    private Service service;
+    private DormitoryService dormitoryService;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)

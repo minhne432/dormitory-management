@@ -4,32 +4,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "SERVICES")
+@Table(name = "services")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-@EqualsAndHashCode
-public class Service {
+public class DormitoryService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "service_id")
     private Long serviceId;
 
-    @Column(name = "service_name", length = 100)
     private String serviceName;
-
-    @Column(name = "unit_price")
     private Double unitPrice;
-
-    @Column(name = "unit", length = 50)
     private String unit;
-
-    @Column(name = "description", length = 255)
     private String description;
-
-    // Constructors, getters, setters...
 }
