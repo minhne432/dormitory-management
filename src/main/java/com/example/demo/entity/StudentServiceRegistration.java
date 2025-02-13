@@ -35,10 +35,17 @@ public class StudentServiceRegistration {
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "ENUM('active', 'inactive') DEFAULT 'active'")
+    @Column(name = "status", columnDefinition = "ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'")
     private RegistrationStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "approved_by") // Quản lý duyệt yêu cầu
+    private Manager approvedBy;
+
+    @Column(name = "approval_date")
+    private LocalDate approvalDate;
+
     public enum RegistrationStatus {
-        active, inactive
+        pending, approved, rejected
     }
 }

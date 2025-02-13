@@ -2,11 +2,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "PAYMENTS")
+@Table(name = "payments")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,26 +20,24 @@ public class Payment {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @ManyToOne
-    @JoinColumn(name = "bill_id", nullable = false)
-    private Bill bill;
-
-    @Column(name = "payment_method", length = 50)
-    private String paymentMethod;
+    @Column(name = "amount_paid")
+    private Double amountPaid;
 
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
-    @Column(name = "amount_paid")
-    private Double amountPaid;
+    @Column(name = "payment_method")
+    private String paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private PaymentStatus status; // 'completed','pending'
+    @Column(name = "status", columnDefinition = "ENUM('completed','pending') DEFAULT 'pending'")
+    private PaymentStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "bill_id", nullable = false)
+    private Bill bill;
 
     public enum PaymentStatus {
         completed, pending
     }
-
-    // Constructors, getters, setters...
 }

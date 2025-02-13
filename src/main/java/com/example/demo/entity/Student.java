@@ -57,6 +57,8 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentServiceRegistration> registrations;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<ServiceUsage> serviceUsages; // Thêm danh sách sử dụng dịch vụ
 
     // Constructors, getters, setters...
 }

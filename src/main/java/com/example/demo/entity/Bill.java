@@ -2,11 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "BILLS")
+@Table(name = "bills")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,37 +22,47 @@ public class Bill {
     @Column(name = "bill_id")
     private Long billId;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
-
-    @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
-    private DormitoryService dormitoryService; // Trỏ trực tiếp đến dịch vụ
-
-    @Column(name = "billing_period", length = 10)
-    private String billingPeriod; // ví dụ '2024-12'
-
-    @Column(name = "total_amount")
-    private Double totalAmount;
-
-    @Column(name = "issue_date")
-    private LocalDate issueDate;
+    @Column(name = "billing_period")
+    private String billingPeriod; // Ví dụ: "2025-02" hoặc "Feb-2025"
 
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private BillStatus status; // 'unpaid','paid','overdue'
+    @Column(name = "status", columnDefinition = "ENUM('overdue','paid','unpaid') DEFAULT 'unpaid'")
+    private BillStatus status;
+
+    @Column(name = "total_amount")
+    private Double totalAmount;
+
+    // Nếu hoá đơn có gắn với phòng
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
+    // Nếu hoá đơn gắn với sinh viên
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    // Liên kết OneToMany với BillItem
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<BillItem> billItems = new ArrayList<>();
 
     public enum BillStatus {
-        unpaid, paid, overdue
+        overdue, paid, unpaid
     }
 
-    // Constructors, getters, setters...
+    // Tính totalAmount tự động (tuỳ logic)
+    public void calculateTotalAmount() {
+        double sum = 0.0;
+        for (BillItem item : billItems) {
+            sum += item.getAmount();
+        }
+        this.totalAmount = sum;
+    }
 }

@@ -20,4 +20,13 @@ public class DormitoryService {
     private Double unitPrice;
     private String unit;
     private String description;
+
+    @Enumerated(EnumType.STRING) // Chỉ định kiểu ENUM
+    private ServiceType serviceType; // Thêm trường mới
+
+    // Enum để định nghĩa các loại dịch vụ
+    public enum ServiceType {
+        PERSONAL,
+        ROOM
+    }
 }

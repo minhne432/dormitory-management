@@ -2,11 +2,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "SERVICE_USAGE")
+@Table(name = "service_usage")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,22 +20,32 @@ public class ServiceUsage {
     @Column(name = "usage_id")
     private Long usageId;
 
-    @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
-    private DormitoryService dormitoryService;
+    @Column(name = "current_reading")
+    private Double currentReading;
+
+    @Column(name = "previous_reading")
+    private Double previousReading;
+
+    @Column(name = "record_date")
+    private LocalDate recordDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "invoiced", columnDefinition = "ENUM('NO','YES') NOT NULL")
+    private InvoicedStatus invoiced;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @Column(name = "record_date")
-    private LocalDate recordDate;
+    @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false)
+    private DormitoryService service;
 
-    @Column(name = "previous_reading")
-    private Double previousReading;
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
-    @Column(name = "current_reading")
-    private Double currentReading;
-
-    // Constructors, getters, setters...
+    public enum InvoicedStatus {
+        NO, YES
+    }
 }
