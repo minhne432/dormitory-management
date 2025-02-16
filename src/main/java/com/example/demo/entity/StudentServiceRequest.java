@@ -62,6 +62,8 @@ public class StudentServiceRequest {
     @Column(name = "service_status", nullable = false)
     private ServiceStatus serviceStatus;
 
+    @Column(name = "service_name", nullable = false)
+    private String serviceName;
     public enum ServiceStatus {
         pending, approved, rejected
     }
