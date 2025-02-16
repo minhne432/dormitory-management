@@ -30,4 +30,19 @@ public class StudentService {
         }
         return optionalStudent.get().getStudentId();
     }
+
+    /**
+     * Lấy thông tin sinh viên dựa trên studentId.
+     *
+     * @param studentId ID của sinh viên cần tìm.
+     * @return Đối tượng Student nếu tìm thấy.
+     * @throws IllegalStateException Nếu không tìm thấy sinh viên.
+     */
+    public Student getStudentById(Long studentId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isEmpty()) {
+            throw new IllegalStateException("No student found with ID: " + studentId);
+        }
+        return optionalStudent.get();
+    }
 }
