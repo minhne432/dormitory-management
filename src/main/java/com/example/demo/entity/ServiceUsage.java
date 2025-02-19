@@ -45,7 +45,13 @@ public class ServiceUsage {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
+    // Liên kết hóa đơn điện nước (nếu có)
+    @ManyToOne
+    @JoinColumn(name = "bill_id")
+    private Bill bill;
+
     public enum InvoicedStatus {
         NO, YES
     }
 }
+

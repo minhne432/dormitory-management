@@ -39,11 +39,15 @@ public class StudentServiceRegistration {
     private RegistrationStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "approved_by") // Quản lý duyệt yêu cầu
+    @JoinColumn(name = "approved_by")
     private Manager approvedBy;
 
     @Column(name = "approval_date")
     private LocalDate approvalDate;
+
+    // Ghi nhận số lượng sử dụng dịch vụ thực tế
+    @Column(name = "actual_quantity")
+    private Integer actualQuantity;
 
     public enum RegistrationStatus {
         pending, approved, rejected

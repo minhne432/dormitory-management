@@ -3,10 +3,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDate;
 
 @Entity
+@Immutable
 @Table(name = "pending_applications")
 @Getter
 @Setter

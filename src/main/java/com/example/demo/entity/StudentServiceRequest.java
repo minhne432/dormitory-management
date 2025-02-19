@@ -2,12 +2,15 @@ package com.example.demo.entity;
 
 import lombok.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Immutable;
+
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Immutable // Đánh dấu đây là một View (chỉ đọc)
 @Entity
 @Table(name = "student_service_requests") // Ánh xạ đến view hoặc bảng trong MySQL
 public class StudentServiceRequest {

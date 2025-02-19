@@ -2,8 +2,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Immutable;
 
 @Entity
+@Immutable
 @Table(name = "room_list") // Tên view
 @Getter
 @Setter

@@ -32,5 +32,12 @@ public class RoomType {
     @JoinColumn(name = "dorm_id", nullable = false)
     private Dormitory dormitory;
 
-    // Constructors, getters, setters...
+    // Thêm trường phân loại theo giới tính: ENUM('Nam','Nữ')
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", columnDefinition = "ENUM('Nam','Nữ')")
+    private Gender gender;
+
+    public enum Gender {
+        Nam, Nữ
+    }
 }

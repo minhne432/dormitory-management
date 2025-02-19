@@ -38,26 +38,32 @@ public class Bill {
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    // Nếu hoá đơn có gắn với phòng
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
-    // Nếu hoá đơn gắn với sinh viên
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    // Liên kết OneToMany với BillItem
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<BillItem> billItems = new ArrayList<>();
+
+    // Thêm trường phân loại hóa đơn: ENUM('phòng','điện-nước','dịch-vụ')
+    @Convert(converter = BillTypeConverter.class)
+    @Column(name = "bill_type", columnDefinition = "ENUM('phòng','điện-nước','dịch-vụ')")
+    private BillType billType;
 
     public enum BillStatus {
         overdue, paid, unpaid
     }
 
-    // Tính totalAmount tự động (tuỳ logic)
+    public enum BillType {
+        PHONG, DIEN_NUOC, DICH_VU
+    }
+
+    // Tính tổng tiền hóa đơn dựa trên các BillItem (tuỳ logic)
     public void calculateTotalAmount() {
         double sum = 0.0;
         for (BillItem item : billItems) {
@@ -66,3 +72,4 @@ public class Bill {
         this.totalAmount = sum;
     }
 }
+
