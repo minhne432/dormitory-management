@@ -15,6 +15,7 @@ TRUNCATE TABLE services;
 TRUNCATE TABLE student_service_registrations;
 TRUNCATE TABLE students;
 TRUNCATE TABLE users;
+TRUNCATE TABLE billing_schedules;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -137,16 +138,16 @@ VALUES
 INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
 VALUES
     -- Phòng 1 (A101, 4 nam)
-    ('2025-01-03','2025-06-03', 1, 4),
-    ('2025-01-03','2025-06-03', 1, 5),
-    ('2025-01-03','2025-06-03', 1, 6),
-    ('2025-01-03','2025-06-03', 1, 9),
+    ('2025-01-03',NULL, 1, 4),
+    ('2025-01-03',NULL, 1, 5),
+    ('2025-01-03',NULL, 1, 6),
+    ('2025-01-03',NULL, 1, 9),
 
     -- Phòng 2 (A102, 4 nữ)
-    ('2025-01-05','2025-06-05', 2, 7),
-    ('2025-01-05','2025-06-05', 2, 8),
-    ('2025-01-05','2025-06-05', 2, 10),
-    ('2025-01-05','2025-06-05', 2, 12);
+    ('2025-01-05',NULL, 2, 7),
+    ('2025-01-05',NULL, 2, 8),
+    ('2025-01-05',NULL, 2, 10),
+    ('2025-01-05',NULL, 2, 12);
 
 -- Cập nhật lại current_occupancy cho các phòng đã có người ở:
 UPDATE rooms SET current_occupancy = 4 WHERE room_id = 1;  -- 4 sinh viên
@@ -264,6 +265,11 @@ VALUES
     (13, NULL, '2025-03-08', '2025-06-01', '2025-03-01', 'rejected', 3, 1, 10),
     -- #14: Student 14 đăng ký Internet (service_id=1) từ 2025-03-15 → 2025-04-15, đã được duyệt (manager 1)
     (14, NULL, '2025-03-16', '2025-04-15', '2025-03-15', 'approved', 1, 1, 14);
+
+
+    -- Lên lịch tu dong tao hoa don tien phong.
+    INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
+
 
 -- Hoàn tất script dữ liệu mẫu.
 -- Bạn có thể chỉnh sửa/cơi nới thêm để phù hợp hơn với mục đích test của mình.
