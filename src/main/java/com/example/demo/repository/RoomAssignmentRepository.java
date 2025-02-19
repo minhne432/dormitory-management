@@ -11,4 +11,7 @@ public interface RoomAssignmentRepository extends JpaRepository<RoomAssignment, 
     // Lấy phân phòng hiện tại của sinh viên (chưa có ngày kết thúc)
     RoomAssignment findByStudentStudentIdAndEndDateIsNull(Long studentId);
     List<RoomAssignment> findAllByEndDateIsNull();
+
+    List<RoomAssignment> findByRoomRoomIdAndEndDateIsNull(Long roomId);
+
 }

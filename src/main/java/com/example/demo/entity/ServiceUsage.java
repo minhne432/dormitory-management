@@ -34,7 +34,7 @@ public class ServiceUsage {
     private InvoicedStatus invoiced;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = true)
     private Room room;
 
     @ManyToOne
@@ -42,7 +42,7 @@ public class ServiceUsage {
     private DormitoryService service;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "student_id", nullable = true)
     private Student student;
 
     // Liên kết hóa đơn điện nước (nếu có)

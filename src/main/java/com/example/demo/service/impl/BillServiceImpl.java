@@ -1,14 +1,17 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Bill;
+import com.example.demo.entity.Notification;
 import com.example.demo.entity.RoomAssignment;
 import com.example.demo.entity.Room;
 import com.example.demo.repository.BillRepository;
+import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.RoomAssignmentRepository;
 import com.example.demo.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,11 +19,13 @@ public class BillServiceImpl implements BillService {
 
     private final BillRepository billRepository;
     private final RoomAssignmentRepository roomAssignmentRepository;
-
+    private final NotificationRepository notificationRepository;
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository) {
+    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository) {
         this.billRepository = billRepository;
         this.roomAssignmentRepository = roomAssignmentRepository;
+        this.notificationRepository = notificationRepository;
+
     }
 
     @Override
@@ -55,6 +60,23 @@ public class BillServiceImpl implements BillService {
                 .dueDate(dueDate)
                 .status(Bill.BillStatus.unpaid)
                 .build();
+
+String title = "Thông báo hóa đơn tiền phòng mới";
+String message = String.format("Hóa đơn tiền phòng %s cho tháng %d/%d đã được tạo. Tổng tiền: %.0f VND. Hạn đóng: %s",
+        room.getRoomNumber(),
+        issueDate.getMonthValue(),
+        issueDate.getYear(),
+        monthlyRent,
+        dueDate.toString());
+
+Notification notification = Notification.builder()
+        .student(assignment.getStudent())
+        .title(title)
+        .message(message)
+        .createdAt(LocalDateTime.now())
+        .readStatus(Notification.ReadStatus.unread)
+        .build();
+notificationRepository.save(notification);
 
         return billRepository.save(bill);
     }

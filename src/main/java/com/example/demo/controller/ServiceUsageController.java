@@ -1,0 +1,62 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.ServiceUsage;
+import com.example.demo.entity.Room;
+import com.example.demo.entity.DormitoryService;
+import com.example.demo.repository.RoomRepository;
+import com.example.demo.repository.DormitoryServiceRepository;
+import com.example.demo.service.ServiceUsageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
+import java.util.List;
+
+@Controller
+@RequestMapping("/service-usage")
+public class ServiceUsageController {
+
+    private final ServiceUsageService serviceUsageService;
+    private final RoomRepository roomRepository;
+    private final DormitoryServiceRepository dormitoryServiceRepository;
+
+    @Autowired
+    public ServiceUsageController(ServiceUsageService serviceUsageService,
+                                  RoomRepository roomRepository,
+                                  DormitoryServiceRepository dormitoryServiceRepository) {
+        this.serviceUsageService = serviceUsageService;
+        this.roomRepository = roomRepository;
+        this.dormitoryServiceRepository = dormitoryServiceRepository;
+    }
+
+    // Hiển thị form ghi số điện/nước
+    @GetMapping("/record")
+    public String showMeterReadingForm(Model model) {
+List<Room> rooms = roomRepository.findAll().stream()
+                .filter(room -> room.getCurrentOccupancy() > 0) // Lọc ra các phòng đã có người ở
+                .toList();
+        List<DormitoryService> services = dormitoryServiceRepository.findAll();
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("services", services);
+        return "record_meter_reading";
+    }
+
+    // Xử lý dữ liệu từ form
+    @PostMapping("/record")
+    public String recordMeterReading(@RequestParam("roomId") Long roomId,
+                                     @RequestParam("serviceId") Long serviceId,
+                                     @RequestParam("currentReading") Double currentReading,
+                                     @RequestParam("recordDate") String recordDateStr,
+                                     Model model) {
+        try {
+            LocalDate recordDate = LocalDate.parse(recordDateStr); // định dạng yyyy-MM-dd
+            ServiceUsage usage = serviceUsageService.recordMeterReading(roomId, serviceId, currentReading, recordDate);
+            model.addAttribute("usage", usage);
+            return "record_meter_reading_success";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "record_meter_reading";
+        }
+    }
+}

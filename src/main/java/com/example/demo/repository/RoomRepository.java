@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificationExecutor<Room> {
 
+
     /**
      * Lọc các phòng đang 'AVAILABLE' và occupancy < max_capacity
      */
