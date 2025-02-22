@@ -2,9 +2,12 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.*;
 import com.example.demo.entity.DormitoryService.ServiceType;
+import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.ServiceUsageRepository;
 import com.example.demo.repository.BillRepository;
+import com.example.demo.service.NotificationService;
+import com.example.demo.service.StudentService;
 import com.example.demo.service.UtilityBillingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +22,20 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
     private final RoomRepository roomRepository;
     private final ServiceUsageRepository serviceUsageRepository;
     private final BillRepository billRepository;
+    private final StudentService studentService;
+    private final NotificationService notificationService;
 
     @Autowired
     public UtilityBillingServiceImpl(RoomRepository roomRepository,
                                      ServiceUsageRepository serviceUsageRepository,
-                                     BillRepository billRepository) {
+                                     BillRepository billRepository,
+                                     StudentService studentService,
+                                     NotificationService notificationService) {
         this.roomRepository = roomRepository;
         this.serviceUsageRepository = serviceUsageRepository;
         this.billRepository = billRepository;
+        this.studentService = studentService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -111,6 +120,15 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
                     usage.setInvoiced(ServiceUsage.InvoicedStatus.YES);
                     usage.setBill(savedBill);
                     serviceUsageRepository.save(usage);
+                }
+
+                // 🔹 **Gửi thông báo đến tất cả sinh viên trong phòng sau khi tạo hóa đơn thành công**
+                List<Student> students = studentService.getStudentsByRoom(room);
+                if (!students.isEmpty()) {
+                    String title = "Hóa đơn điện nước tháng " + billingPeriod;
+                    String message = "Hóa đơn phòng " + room.getRoomNumber() + " đã được tạo với số tiền: " + totalAmount + " VND. Vui lòng thanh toán trước ngày " + bill.getDueDate() + ".";
+
+                    notificationService.sendNotificationToStudents(students, title, message);
                 }
             }
         }
