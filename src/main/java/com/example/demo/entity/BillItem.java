@@ -31,10 +31,5 @@ public class BillItem {
     @Column(name = "amount")
     private Double amount;
 
-    // Nếu bạn muốn ghi nhận "quantity" và "unitPrice"
-    // @Column(name = "quantity", nullable = false)
-    // private Integer quantity;
-    //
-    // @Column(name = "unit_price", nullable = false)
-    // private Double unitPrice;
+
 }

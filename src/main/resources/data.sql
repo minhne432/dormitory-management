@@ -16,7 +16,7 @@ TRUNCATE TABLE student_service_registrations;
 TRUNCATE TABLE students;
 TRUNCATE TABLE users;
 TRUNCATE TABLE billing_schedules;
-
+TRUNCATE TABLE utility_billing_schedule;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -189,28 +189,27 @@ VALUES
     (3, 100000, 6, 1);
 
 -- =========================================
--- 11. Thêm service_usage (giả lập chỉ số điện/nước) để bạn test việc tạo hóa đơn
---     Trong thực tế, bạn có thể tạo bill từ bảng này (khi invoiced = 'NO')
---     Ở đây ta ràng buộc bill_id (nếu đã được lập hóa đơn) hoặc NULL
+-- X. Thêm service_usage (tất cả đều chưa lập hóa đơn, 'NO')
+--     student_id giữ nguyên nhưng đặt = NULL
 -- =========================================
 INSERT INTO service_usage
 (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id)
 VALUES
-    -- Giả sử Student 4 ở phòng 1, service Điện (id=3), Nước (id=4)
-    (1, 120, 'YES', 100, '2025-01-25', 2, 1, 3, 4),   -- đã lập hóa đơn 2 (điện)
-    (2, 25,  'YES', 20,  '2025-01-25', 2, 1, 4, 4),   -- đã lập hóa đơn 2 (nước)
+    -- Phòng 1, dịch vụ Điện (service_id=3)
+    (1, 120, 'NO', 100, '2025-01-01', NULL, 1, 3, NULL),
+    (2, 130, 'NO', 120, '2025-02-26', NULL, 1, 3, NULL),
 
-    -- Giả sử Student 5 ở phòng 1, service Điện (id=3), Nước (id=4)
-    (3, 110, 'YES', 90,  '2025-01-25', 5, 1, 3, 5),   -- đã lập hóa đơn 5 (điện)
-    (4, 22,  'YES', 18,  '2025-01-25', 5, 1, 4, 5),   -- đã lập hóa đơn 5 (nước)
+    -- Phòng 1, dịch vụ Nước (service_id=4)
+    (3, 25,  'NO', 20,  '2025-01-01', NULL, 1, 4, NULL),
+    (4, 28,  'NO', 25,  '2025-02-26', NULL, 1, 4, NULL),
 
-    -- Thêm ví dụ service_usage chưa lập hóa đơn (invoiced = 'NO')
-    -- (để bạn có thể test tạo bill mới)
-    (5, 130, 'NO',  120, '2025-02-26', NULL, 1, 3, 4),
-    (6, 28,  'NO',  25,  '2025-02-26', NULL, 1, 4, 4),
+    -- Phòng 2, dịch vụ Điện
+    (5, 95,  'NO', 80,  '2025-01-10', NULL, 2, 3, NULL),
+    (6, 100, 'NO', 95,  '2025-02-26', NULL, 2, 3, NULL),
 
-    (7, 125, 'NO',  110, '2025-02-26', NULL, 1, 3, 5),
-    (8, 24,  'NO',  22,  '2025-02-26', NULL, 1, 4, 5);
+    -- Phòng 2, dịch vụ Nước
+    (7, 15,  'NO', 12,  '2025-01-10', NULL, 2, 4, NULL),
+    (8, 20,  'NO', 15,  '2025-02-26', NULL, 2, 4, NULL);
 
 -- =========================================
 -- 12. Thêm một vài payment (thanh toán) mẫu
@@ -270,6 +269,8 @@ VALUES
     -- Lên lịch tu dong tao hoa don tien phong.
     INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
 
+    -- Lên lịch tu dong tao hoa don dien nuoc.
+    INSERT INTO utility_billing_schedule (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
 
 -- Hoàn tất script dữ liệu mẫu.
 -- Bạn có thể chỉnh sửa/cơi nới thêm để phù hợp hơn với mục đích test của mình.
