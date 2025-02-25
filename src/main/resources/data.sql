@@ -179,14 +179,14 @@ VALUES
 -- 10. Thêm chi tiết hóa đơn (bill_items) cho hóa đơn 'dịch-vụ'
 --     Mỗi bill_item gắn với một service cụ thể
 -- =========================================
-INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id)
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id)
 VALUES
     -- Hóa đơn 3 của student 4: Internet (100000) + Giặt ủi (20000)
-    (1, 100000, 3, 1),  -- Internet
-    (2, 20000,  3, 2),  -- Giặt ủi
+    (1, 100000, 3, 1,NULL),  -- Internet
+    (2, 20000,  3, 2,NULL),  -- Giặt ủi
 
     -- Hóa đơn 6 của student 5: chỉ Internet (100000)
-    (3, 100000, 6, 1);
+    (3, 100000, 6, 1,NULL);
 
 -- =========================================
 -- X. Thêm service_usage (tất cả đều chưa lập hóa đơn, 'NO')

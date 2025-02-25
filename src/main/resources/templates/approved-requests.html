@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách Approved Student Service Requests</title>
+    <meta charset="UTF-8">
+    <script>
+        // Lưu thông tin filter vào localStorage khi form được submit
+        function saveFilters() {
+            const filters = {
+                registrationId: document.getElementById("registrationId").value,
+                studentId: document.getElementById("studentId").value,
+                phoneNumber: document.getElementById("phoneNumber").value,
+                roomId: document.getElementById("roomId").value,
+                serviceStartDate: document.getElementById("serviceStartDate").value,
+                serviceEndDate: document.getElementById("serviceEndDate").value,
+                serviceName: document.getElementById("serviceName").value
+            };
+            localStorage.setItem("approvedRequestFilters", JSON.stringify(filters));
+        }
+
+        // Nạp thông tin filter từ localStorage khi trang được tải
+        function loadFilters() {
+            const filters = JSON.parse(localStorage.getItem("approvedRequestFilters"));
+            if (filters) {
+                document.getElementById("registrationId").value = filters.registrationId || "";
+                document.getElementById("studentId").value = filters.studentId || "";
+                document.getElementById("phoneNumber").value = filters.phoneNumber || "";
+                document.getElementById("roomId").value = filters.roomId || "";
+                document.getElementById("serviceStartDate").value = filters.serviceStartDate || "";
+                document.getElementById("serviceEndDate").value = filters.serviceEndDate || "";
+                document.getElementById("serviceName").value = filters.serviceName || "";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadFilters);
+    </script>
+</head>
+<body>
+<h1>Danh sách Approved Student Service Requests</h1>
+
+<!-- Form lọc -->
+<form action="#" method="get" onsubmit="saveFilters()">
+    <div>
+        <label for="registrationId">Registration ID:</label>
+        <input type="text" id="registrationId" name="registrationId" th:value="${filter.registrationId}" />
+    </div>
+    <div>
+        <label for="studentId">Student ID:</label>
+        <input type="text" id="studentId" name="studentId" th:value="${filter.studentId}" />
+    </div>
+    <div>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${filter.phoneNumber}" />
+    </div>
+    <div>
+        <label for="roomId">Room ID:</label>
+        <input type="text" id="roomId" name="roomId" th:value="${filter.roomId}" />
+    </div>
+    <div>
+        <label for="serviceStartDate">Service Start Date:</label>
+        <input type="date" id="serviceStartDate" name="serviceStartDate" th:value="${filter.serviceStartDate}" />
+    </div>
+    <div>
+        <label for="serviceEndDate">Service End Date:</label>
+        <input type="date" id="serviceEndDate" name="serviceEndDate" th:value="${filter.serviceEndDate}" />
+    </div>
+    <div>
+        <label for="serviceName">Service Name:</label>
+        <input type="text" id="serviceName" name="serviceName" th:value="${filter.serviceName}" />
+    </div>
+    <button type="submit">Lọc</button>
+</form>
+
+<!-- Bảng hiển thị dữ liệu -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>Registration ID</th>
+        <th>Student ID</th>
+        <th>Phone Number</th>
+        <th>Room ID</th>
+        <th>Service Start Date</th>
+        <th>Service End Date</th>
+        <th>Service Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${approvedRequests.content}">
+        <td th:text="${item.registrationId}"></td>
+        <td th:text="${item.studentId}"></td>
+        <td th:text="${item.phoneNumber}"></td>
+        <td th:text="${item.roomId}"></td>
+        <td th:text="${item.serviceStartDate}"></td>
+        <td th:text="${item.serviceEndDate}"></td>
+        <td th:text="${item.serviceName}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div>
+    <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
+    <div>
+        <a th:if="${approvedRequests.hasPrevious()}"
+           th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}">Trang trước</a>
+        <a th:if="${approvedRequests.hasNext()}"
+           th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}">Trang sau</a>
+    </div>
+</div>
+</body>
+</html>
