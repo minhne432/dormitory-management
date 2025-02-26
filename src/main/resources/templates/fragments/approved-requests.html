@@ -1,0 +1,48 @@
+<!-- file: fragments/approved-requests.html -->
+<div th:fragment="approvedRequestsList">
+    <table border="1">
+        <thead>
+        <tr>
+            <th></th> <!-- Cột checkbox để chọn đăng ký -->
+            <th>Registration ID</th>
+            <th>Student ID</th>
+            <th>Phone Number</th>
+            <th>Room ID</th>
+            <th>Service Start Date</th>
+            <th>Service End Date</th>
+            <th>Service Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${approvedRequests.content}">
+            <td>
+                <input type="checkbox"
+                       name="registrationIds"
+                       th:value="${item.registrationId}" />
+            </td>
+            <td th:text="${item.registrationId}"></td>
+            <td th:text="${item.studentId}"></td>
+            <td th:text="${item.phoneNumber}"></td>
+            <td th:text="${item.roomId}"></td>
+            <td th:text="${item.serviceStartDate}"></td>
+            <td th:text="${item.serviceEndDate}"></td>
+            <td th:text="${item.serviceName}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div>
+        <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
+        <div>
+            <a th:if="${approvedRequests.hasPrevious()}"
+               th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}">
+                Trang trước
+            </a>
+            <a th:if="${approvedRequests.hasNext()}"
+               th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}">
+                Trang sau
+            </a>
+        </div>
+    </div>
+</div>

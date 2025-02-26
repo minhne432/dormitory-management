@@ -22,10 +22,20 @@ public class ApprovedStudentServiceRequestController {
             @ModelAttribute("filter") ApprovedStudentServiceRequestFilter filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            Model model) {
-
-        Page<ApprovedStudentServiceRequest> approvedRequests = service.getApprovedRequests(filter, PageRequest.of(page, size));
+            Model model,
+            @RequestHeader(value="X-Requested-With", required=false) String requestedWith
+    ) {
+        Page<ApprovedStudentServiceRequest> approvedRequests =
+                service.getApprovedRequests(filter, PageRequest.of(page, size));
         model.addAttribute("approvedRequests", approvedRequests);
-        return "approved-requests";
+
+        // Nếu là AJAX request, trả về fragment thay vì toàn bộ trang
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            return "fragments/approved-requests :: approvedRequestsList";
+        }
+
+        // Nếu không phải AJAX, trả về toàn bộ template gốc:
+        return "approved-requests";  // Tên template chính
     }
 }
+

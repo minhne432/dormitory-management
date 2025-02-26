@@ -1,18 +1,21 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Bill;
-import com.example.demo.entity.Notification;
-import com.example.demo.entity.RoomAssignment;
-import com.example.demo.entity.Room;
+import com.example.demo.entity.*;
 import com.example.demo.repository.BillRepository;
 import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.RoomAssignmentRepository;
+import com.example.demo.repository.StudentServiceRegistrationRepository;
 import com.example.demo.service.BillService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -20,11 +23,14 @@ public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final RoomAssignmentRepository roomAssignmentRepository;
     private final NotificationRepository notificationRepository;
+
+    private final StudentServiceRegistrationRepository registrationRepository;
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository) {
+    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository) {
         this.billRepository = billRepository;
         this.roomAssignmentRepository = roomAssignmentRepository;
         this.notificationRepository = notificationRepository;
+        this.registrationRepository = registrationRepository;
 
     }
 
@@ -102,6 +108,55 @@ notificationRepository.save(notification);
             if (!billExistsForStudent(studentId, monthStart)) {
                 createRoomBill(studentId);
             }
+        }
+    }
+
+    /**
+     * Tạo hóa đơn cho danh sách registrationId
+     */
+    @Override
+    @Transactional
+    public Bill createBillForRegistrations(List<Long> registrationIds) {
+        // Sử dụng truy vấn tối ưu để lấy thông tin đăng ký cùng với sinh viên
+        List<StudentServiceRegistration> registrations = registrationRepository.findAllByIdsWithStudent(registrationIds);
+
+        if (registrations.isEmpty()) {
+            // Nếu không tìm thấy đăng ký nào, trả về HTTP 404 NOT FOUND
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Không tìm thấy đăng ký nào với danh sách ID đã cung cấp.");
+        }
+
+        try {
+            // Giả sử tất cả đăng ký đều của cùng một sinh viên, lấy thông tin từ đăng ký đầu tiên
+            Student student = registrations.get(0).getStudent();
+
+            Bill bill = Bill.builder()
+                    .billingPeriod(LocalDate.now().toString())
+                    .issueDate(LocalDate.now())
+                    .dueDate(LocalDate.now().plusDays(15))
+                    .status(Bill.BillStatus.unpaid)
+                    .student(student)
+                    .billType(Bill.BillType.DICH_VU)
+                    .build();
+
+            List<BillItem> billItems = registrations.stream().map(registration ->
+                    BillItem.builder()
+                            .bill(bill)
+                            .registration(registration)
+                            .service(registration.getDormitoryService())
+                            .amount(registration.getDormitoryService().getUnitPrice()
+                                    * (registration.getActualQuantity() != null ? registration.getActualQuantity() : 1))
+                            .build()
+            ).collect(Collectors.toList());
+
+            bill.setBillItems(billItems);
+            bill.calculateTotalAmount();
+
+            return billRepository.save(bill);
+        } catch (Exception e) {
+            // Nếu xảy ra lỗi trong quá trình xử lý (database hay logic), trả về HTTP 500 INTERNAL SERVER ERROR
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Lỗi khi tạo hóa đơn: " + e.getMessage());
         }
     }
 }
