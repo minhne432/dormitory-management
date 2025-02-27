@@ -57,6 +57,7 @@ public class StudentDormitoryServiceController {
             DormitoryService service = serviceOpt.get();
             registration.setStudent(studentService.getStudentById(studentId));
             registration.setDormitoryService(service);
+            registration.setInvoiced(StudentServiceRegistration.InvoicedStatus.NO);
 
             studentServiceRegistrationService.registerService(registration);
             return ResponseEntity.ok("Đăng ký thành công");

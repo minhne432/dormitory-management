@@ -3,6 +3,8 @@
     <head>
         <title>Danh sách Approved Applications</title>
         <meta charset="UTF-8"/>
+        <meta name="_csrf" th:content="${_csrf.token}" />
+        <meta name="_csrf_header" th:content="${_csrf.headerName}" />
         <!-- Bootstrap 5 CSS (giả sử bạn đã import sẵn ở layout) -->
         <link
                 rel="stylesheet"
@@ -170,13 +172,16 @@
                 return;
             }
 
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
             // Gọi API /assign-room bằng fetch (POST)
             // payload: JSON { applicationIds: [...], roomId: ... }
             fetch('/assign-room', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'X-CSRF-Token': document.querySelector('input[name=_csrf]').value // Lấy token từ input hidden
+                   [csrfHeader]: csrfToken  // Thêm CSRF token vào header
                 },
                 body: JSON.stringify({
                     applicationIds: selectedAppIds,

@@ -13,15 +13,12 @@ public class StudentServiceRegistrationService {
     @Autowired
     private StudentServiceRegistrationRepository studentServiceRegistrationRepository;
 
-    @Autowired
-    private StudentServiceRegistrationRepository registrationRepository;
-
     public void registerService(StudentServiceRegistration registration) {
         studentServiceRegistrationRepository.save(registration);
     }
 
     public StudentServiceRegistration updateRegistrationStatus(Long registrationId, StudentServiceRegistration.RegistrationStatus newStatus) {
-        StudentServiceRegistration registration = registrationRepository.findById(registrationId)
+        StudentServiceRegistration registration = studentServiceRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Registration có id " + registrationId));
 
         // Chỉ cập nhật nếu trạng thái hiện tại là pending
@@ -31,7 +28,7 @@ public class StudentServiceRegistrationService {
                 registration.setApprovalDate(LocalDate.now());
                 // Nếu có thông tin về người duyệt (Manager), có thể set ở đây
             }
-            return registrationRepository.save(registration);
+            return studentServiceRegistrationRepository.save(registration);
         }
         throw new RuntimeException("Không thể cập nhật yêu cầu. Trạng thái hiện tại: " + registration.getStatus());
     }

@@ -41,7 +41,7 @@ public class Application {
 
     // Thay thế trường dormitoryArea bằng liên kết đến Dormitory qua khóa ngoại dorm_id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "dorm_id", nullable = false)
+    @JoinColumn(name = "dorm_id", nullable = true)
     private Dormitory dormitory;
 
     @Column(name = "note", length = 255)
