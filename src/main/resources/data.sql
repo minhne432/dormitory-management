@@ -135,23 +135,8 @@ VALUES
 --          4 sinh viên nữ tiếp theo vào phòng 2, ...
 --   (Tùy chỉnh theo nhu cầu)
 -- =========================================
-INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
-VALUES
-    -- Phòng 1 (A101, 4 nam)
-    ('2025-01-03',NULL, 1, 4),
-    ('2025-01-03',NULL, 1, 5),
-    ('2025-01-03',NULL, 1, 6),
-    ('2025-01-03',NULL, 1, 9),
-
-    -- Phòng 2 (A102, 4 nữ)
-    ('2025-01-05',NULL, 2, 7),
-    ('2025-01-05',NULL, 2, 8),
-    ('2025-01-05',NULL, 2, 10),
-    ('2025-01-05',NULL, 2, 12);
 
 -- Cập nhật lại current_occupancy cho các phòng đã có người ở:
-UPDATE rooms SET current_occupancy = 4 WHERE room_id = 1;  -- 4 sinh viên
-UPDATE rooms SET current_occupancy = 4 WHERE room_id = 2;  -- 4 sinh viên
 
 -- =========================================
 -- 9. Tạo hóa đơn (bills) mẫu để test
@@ -159,75 +144,29 @@ UPDATE rooms SET current_occupancy = 4 WHERE room_id = 2;  -- 4 sinh viên
 --   - Tạo hóa đơn 'điện-nước'
 --   - Tạo hóa đơn 'dịch-vụ'
 -- =========================================
-INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id)
-VALUES
-    -- Hóa đơn 1: tiền phòng cho Student 4
-    (1, 'phòng', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 500000, 1, 4),
 
-    -- Hóa đơn 2: điện-nước cho Student 4
-    (2, 'điện-nước', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 40000, 1, 4),
-
-    -- Hóa đơn 3: dịch-vụ cho Student 4 (VD: internet + giặt ủi)
-    (3, 'dịch-vụ', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 120000, 1, 4),
-
-    -- Thêm hóa đơn cho 1 sinh viên khác (VD: Student 5)
-    (4, 'phòng', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 500000, 1, 5),
-    (5, 'điện-nước', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 35000, 1, 5),
-    (6, 'dịch-vụ', '2025-02', '2025-02-10', '2025-02-01', 'unpaid', 100000, 1, 5);
 
 -- =========================================
 -- 10. Thêm chi tiết hóa đơn (bill_items) cho hóa đơn 'dịch-vụ'
 --     Mỗi bill_item gắn với một service cụ thể
 -- =========================================
-INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id)
-VALUES
-    -- Hóa đơn 3 của student 4: Internet (100000) + Giặt ủi (20000)
-    (1, 100000, 3, 1,NULL),  -- Internet
-    (2, 20000,  3, 2,NULL),  -- Giặt ủi
 
-    -- Hóa đơn 6 của student 5: chỉ Internet (100000)
-    (3, 100000, 6, 1,NULL);
 
 -- =========================================
 -- X. Thêm service_usage (tất cả đều chưa lập hóa đơn, 'NO')
 --     student_id giữ nguyên nhưng đặt = NULL
 -- =========================================
-INSERT INTO service_usage
-(usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id)
-VALUES
-    -- Phòng 1, dịch vụ Điện (service_id=3)
-    (1, 120, 'NO', 100, '2025-01-01', NULL, 1, 3, NULL),
-    (2, 130, 'NO', 120, '2025-02-26', NULL, 1, 3, NULL),
-
-    -- Phòng 1, dịch vụ Nước (service_id=4)
-    (3, 25,  'NO', 20,  '2025-01-01', NULL, 1, 4, NULL),
-    (4, 28,  'NO', 25,  '2025-02-26', NULL, 1, 4, NULL),
-
-    -- Phòng 2, dịch vụ Điện
-    (5, 95,  'NO', 80,  '2025-01-10', NULL, 2, 3, NULL),
-    (6, 100, 'NO', 95,  '2025-02-26', NULL, 2, 3, NULL),
-
-    -- Phòng 2, dịch vụ Nước
-    (7, 15,  'NO', 12,  '2025-01-10', NULL, 2, 4, NULL),
-    (8, 20,  'NO', 15,  '2025-02-26', NULL, 2, 4, NULL);
 
 -- =========================================
 -- 12. Thêm một vài payment (thanh toán) mẫu
 --     (Tham chiếu tới các bill_id đã có)
 -- =========================================
-INSERT INTO payments (payment_id, amount_paid, payment_date, payment_method, status, bill_id)
-VALUES
-    (1,  200000, '2025-02-05', 'Chuyển khoản', 'pending', 1),  -- Mới thanh toán một phần
-    (2,  500000, '2025-02-06', 'Tiền mặt',     'completed', 4),-- Trả đủ luôn
-    (3,  40000,  '2025-02-07', 'Chuyển khoản', 'completed', 2); -- Trả đủ
+
 
 -- =========================================
 -- 13. Tùy chọn: thêm ví dụ về notifications
 -- =========================================
-INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id)
-VALUES
-    (1, '2025-02-05 09:00:00', 'Bạn có một hóa đơn mới cần thanh toán', 'unread', 'Thông báo hóa đơn', 4),
-    (2, '2025-02-06 14:00:00', 'Thanh toán của bạn đã được ghi nhận',  'read',   'Xác nhận thanh toán', 5);
+
 
 -- (Có thể thêm dữ liệu cho các bảng khác như applications, approved_applications,
 --  student_service_registrations... nếu bạn cần)
@@ -235,42 +174,13 @@ VALUES
 -- 1) THÊM CÁC ĐƠN ĐĂNG KÝ KÝ TÚC XÁ Ở BẢNG GỐC `applications`
 --    (Xem chú thích bên dưới về cách VIEW pending_applications / approved_applications hoạt động)
 --------------------------------------------------------------------------------
-INSERT INTO applications
-(application_id, approval_date, note, status, submission_date, approved_by, dorm_id, student_id)
-VALUES
-    -- Đơn #21: Student 11 vào KTX Khu B (dorm_id=2), đang chờ duyệt
-    (21, NULL, 'Muốn ở KTX khu B', 'pending', '2025-03-01', NULL, 2, 11),
-    -- Đơn #22: Student 12 vào KTX Khu B (dorm_id=2), đang chờ duyệt
-    (22, NULL, 'Nhờ sắp xếp phòng Khu B', 'pending', '2025-03-01', NULL, 2, 12),
-    -- Đơn #23: Student 13 vào KTX Khu A (dorm_id=1), đang chờ duyệt
-    (23, NULL, 'Mong được ở gần căn tin khu A', 'pending', '2025-03-02', NULL, 1, 13),
-    -- Đơn #24: Student 16 vào KTX Khu B, đã được duyệt bởi Manager 1
-    (24, '2025-03-05', 'Hồ sơ đầy đủ, phù hợp', 'approved', '2025-03-01', 1, 2, 16),
-    -- Đơn #25: Student 20 vào KTX Khu A, bị từ chối (rejected) bởi Manager 2
-    (25, '2025-03-06', 'Thiếu một số giấy tờ quan trọng', 'rejected', '2025-03-02', 2, 1, 20);
+
 
 --------------------------------------------------------------------------------
 -- 2) THÊM CÁC ĐƠN ĐĂNG KÝ SỬ DỤNG DỊCH VỤ Ở BẢNG GỐC `student_service_registrations`
 --    (Xem chú thích bên dưới về cách VIEW student_service_requests hoạt động)
 --------------------------------------------------------------------------------
-INSERT INTO student_service_registrations
-(registration_id, actual_quantity, approval_date, end_date, start_date, status, approved_by, service_id, student_id)
-VALUES
-    -- #11: Student 7 đăng ký dịch vụ Internet (service_id=1) từ 2025-03-10 → 2025-06-10, đang chờ duyệt
-    (11, NULL, NULL, '2025-06-10', '2025-03-10', 'pending', NULL, 1, 7),
-    -- #12: Student 8 đăng ký dịch vụ Giặt ủi (service_id=2) từ 2025-03-05 → 2025-03-20, đã được duyệt (manager 2)
-    (12, 5, '2025-03-06', '2025-03-20', '2025-03-05', 'approved', 2, 2, 8),
-    -- #13: Student 10 đăng ký Internet (service_id=1), bị từ chối (rejected)
-    (13, NULL, '2025-03-08', '2025-06-01', '2025-03-01', 'rejected', 3, 1, 10),
-    -- #14: Student 14 đăng ký Internet (service_id=1) từ 2025-03-15 → 2025-04-15, đã được duyệt (manager 1)
-    (14, NULL, '2025-03-16', '2025-04-15', '2025-03-15', 'approved', 1, 1, 14);
 
-
-    -- Lên lịch tu dong tao hoa don tien phong.
-    INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
-
-    -- Lên lịch tu dong tao hoa don dien nuoc.
-    INSERT INTO utility_billing_schedule (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
 
 -- Hoàn tất script dữ liệu mẫu.
 -- Bạn có thể chỉnh sửa/cơi nới thêm để phù hợp hơn với mục đích test của mình.

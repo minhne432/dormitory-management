@@ -49,7 +49,17 @@ public class StudentServiceRegistration {
     @Column(name = "actual_quantity")
     private Integer actualQuantity;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "invoiced", columnDefinition = "ENUM('NO','YES') NOT NULL")
+    private StudentServiceRegistration.InvoicedStatus invoiced;
+
+
     public enum RegistrationStatus {
         pending, approved, rejected
     }
+
+    public enum InvoicedStatus {
+        NO, YES
+    }
+
 }

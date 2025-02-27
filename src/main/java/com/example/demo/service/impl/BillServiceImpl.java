@@ -152,6 +152,12 @@ notificationRepository.save(notification);
             bill.setBillItems(billItems);
             bill.calculateTotalAmount();
 
+            // Đánh dấu các đăng ký đã được tạo hóa đơn
+            registrations.forEach(registration -> {
+                registration.setInvoiced(StudentServiceRegistration.InvoicedStatus.YES);
+                registrationRepository.save(registration);
+            });
+
             return billRepository.save(bill);
         } catch (Exception e) {
             // Nếu xảy ra lỗi trong quá trình xử lý (database hay logic), trả về HTTP 500 INTERNAL SERVER ERROR
