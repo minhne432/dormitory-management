@@ -187,5 +187,12 @@ VALUES
 -- Bạn có thể chỉnh sửa/cơi nới thêm để phù hợp hơn với mục đích test của mình.
 
 
+    -- Lên lịch tu dong tao hoa don tien phong.
+    INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
+
+    -- Lên lịch tu dong tao hoa don dien nuoc.
+    INSERT INTO utility_billing_schedule (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
+
+
 -- HOÀN TẤT GIAO DỊCH
 COMMIT;
