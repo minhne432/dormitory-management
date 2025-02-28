@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Chi Tiết Hóa Đơn</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1>Chi Tiết Hóa Đơn</h1>
+
+        <table class="table">
+            <tr>
+                <th>Bill ID</th>
+                <td th:text="${bill.billId}"></td>
+            </tr>
+            <tr>
+                <th>Hóa đơn tiền phòng tháng:</th>
+                <td th:text="${bill.billingPeriod}"></td>
+            </tr>
+            <tr>
+                <th>Student</th>
+                <td th:text="${bill.student.fullName}"></td>
+            </tr>
+            <tr>
+                <th>Bill Type</th>
+                <td th:text="${bill.billType}"></td>
+            </tr>
+            <tr>
+                <th>Total Amount</th>
+                <td th:text="${bill.totalAmount}"></td>
+            </tr>
+            <tr>
+                <th>Bill Date</th>
+                <td th:text="${bill.issueDate}"></td>
+            </tr>
+            <tr>
+                <th>Bill Status</th>
+                <td th:text="${bill.status}"></td>
+            </tr>
+        </table>
+
+        <a href="/bills/create" class="btn btn-primary">Tạo Hóa Đơn Khác</a>
+    </div>
+</div>
+</body>
+
+</html>

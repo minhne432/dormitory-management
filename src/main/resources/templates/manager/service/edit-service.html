@@ -1,35 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
 <head>
-    <title>Chỉnh Sửa Dịch Vụ</title>
+    <title layout:fragment="title">Chỉnh Sửa Dịch Vụ</title>
     <link rel="stylesheet" th:href="@{/static/css/style.css}">
 </head>
+
 <body>
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <h2 class="text-center">Chỉnh Sửa Dịch Vụ</h2>
 
-<h2>Chỉnh Sửa Dịch Vụ</h2>
+        <form th:action="@{/manager/services/edit/{id}(id=${serviceDTO.serviceId})}" th:object="${serviceDTO}" method="post">
+            <div class="mb-3">
+                <label for="serviceName" class="form-label">Tên dịch vụ:</label>
+                <input type="text" id="serviceName" name="serviceName" class="form-control" th:field="*{serviceName}" required>
+                <span class="text-danger" th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}"></span>
+            </div>
 
-<form th:action="@{/manager/services/edit/{id}(id=${serviceDTO.serviceId})}" th:object="${serviceDTO}" method="post">
-    <label for="serviceName">Tên dịch vụ:</label>
-    <input type="text" id="serviceName" th:field="*{serviceName}" required>
-    <span th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}"></span>
+            <div class="mb-3">
+                <label for="unitPrice" class="form-label">Giá:</label>
+                <input type="number" id="unitPrice" name="unitPrice" class="form-control" th:field="*{unitPrice}" step="0.01" required>
+                <span class="text-danger" th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}"></span>
+            </div>
 
-    <label for="unitPrice">Giá:</label>
-    <input type="number" id="unitPrice" th:field="*{unitPrice}" step="0.01" required>
-    <span th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}"></span>
+            <div class="mb-3">
+                <label for="unit" class="form-label">Đơn vị:</label>
+                <input type="text" id="unit" name="unit" class="form-control" th:field="*{unit}" required>
+                <span class="text-danger" th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}"></span>
+            </div>
 
-    <label for="unit">Đơn vị:</label>
-    <input type="text" id="unit" th:field="*{unit}" required>
-    <span th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}"></span>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả:</label>
+                <textarea id="description" name="description" class="form-control" th:field="*{description}"></textarea>
+                <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
 
-    <label for="description">Mô tả:</label>
-    <textarea id="description" th:field="*{description}"></textarea>
-    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            <button type="submit" class="btn btn-success">Cập Nhật</button>
+        </form>
 
-    <button type="submit">Cập Nhật</button>
-</form>
-
-<p th:if="${successMessage}" th:text="${successMessage}" style="color: green;"></p>
-<p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
-
+        <p th:if="${successMessage}" class="text-success mt-3" th:text="${successMessage}"></p>
+        <p th:if="${errorMessage}" class="text-danger mt-3" th:text="${errorMessage}"></p>
+    </div>
+</div>
 </body>
+
 </html>

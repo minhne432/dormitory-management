@@ -49,6 +49,6 @@ public class RoomServiceUsageController {
         model.addAttribute("roomNumber", roomNumber);
         model.addAttribute("recordDate", recordDate);
         model.addAttribute("serviceName", serviceName);
-        return "room_service_usage";
+        return "manager/room_service_usage";
     }
 }

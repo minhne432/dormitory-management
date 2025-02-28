@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+  <title layout:fragment="title">Student Service Requests</title>
+  <script>
+    // Lưu thông tin filter vào localStorage khi submit form
+    function saveFilters() {
+        localStorage.setItem('studentId', document.getElementById('studentId').value);
+        localStorage.setItem('fromDate', document.getElementById('fromDate').value);
+        localStorage.setItem('toDate', document.getElementById('toDate').value);
+        localStorage.setItem('serviceName', document.getElementById('serviceName').value);
+    }
+    // Nạp lại thông tin filter từ localStorage khi trang được tải
+    function loadFilters() {
+        if(localStorage.getItem('studentId')) {
+            document.getElementById('studentId').value = localStorage.getItem('studentId');
+        }
+        if(localStorage.getItem('fromDate')) {
+            document.getElementById('fromDate').value = localStorage.getItem('fromDate');
+        }
+        if(localStorage.getItem('toDate')) {
+            document.getElementById('toDate').value = localStorage.getItem('toDate');
+        }
+        if(localStorage.getItem('serviceName')) {
+            document.getElementById('serviceName').value = localStorage.getItem('serviceName');
+        }
+    }
+    document.addEventListener("DOMContentLoaded", loadFilters);
+  </script>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <div class="container mt-4">
+    <h1>Student Service Requests</h1>
+
+    <form method="get" onsubmit="saveFilters()">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="studentId" class="form-label">Student ID</label>
+          <input type="number" id="studentId" name="studentId" class="form-control" th:value="${studentId}">
+        </div>
+        <div class="col-md-3">
+          <label for="fromDate" class="form-label">Service Start Date From</label>
+          <input type="date" id="fromDate" name="fromDate" class="form-control" th:value="${fromDate}">
+        </div>
+        <div class="col-md-3">
+          <label for="toDate" class="form-label">Service Start Date To</label>
+          <input type="date" id="toDate" name="toDate" class="form-control" th:value="${toDate}">
+        </div>
+        <div class="col-md-3">
+          <label for="serviceName" class="form-label">Service Name</label>
+          <input type="text" id="serviceName" name="serviceName" class="form-control" th:value="${serviceName}">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <table class="table table-striped mt-4">
+      <thead>
+      <tr>
+        <th>Registration ID</th>
+        <th>Student ID</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Gender</th>
+        <th>Phone Number</th>
+        <th>Class</th>
+        <th>Department</th>
+        <th>Date of Birth</th>
+        <th>Address</th>
+        <th>Room ID</th>
+        <th>Assigned Date</th>
+        <th>Room End Date</th>
+        <th>Service Start Date</th>
+        <th>Service End Date</th>
+        <th>Service Status</th>
+        <th>Service Name</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="request : ${result.content}">
+        <td th:text="${request.registrationId}"></td>
+        <td th:text="${request.studentId}"></td>
+        <td th:text="${request.fullName}"></td>
+        <td th:text="${request.email}"></td>
+        <td th:text="${request.gender}"></td>
+        <td th:text="${request.phoneNumber}"></td>
+        <td th:text="${request.studentClass}"></td>
+        <td th:text="${request.department}"></td>
+        <td th:text="${request.dateOfBirth}"></td>
+        <td th:text="${request.address}"></td>
+        <td th:text="${request.roomId}"></td>
+        <td th:text="${request.assignedDate}"></td>
+        <td th:text="${request.roomEndDate}"></td>
+        <td th:text="${request.serviceStartDate}"></td>
+        <td th:text="${request.serviceEndDate}"></td>
+        <td th:text="${request.serviceStatus}"></td>
+        <td th:text="${request.serviceName}"></td>
+        <td>
+          <!-- Hiển thị các button nếu trạng thái đang là pending -->
+          <div th:if="${request.serviceStatus.name() == 'pending'}">
+            <form th:action="@{'/student-service-registrations/' + ${request.registrationId} + '/approve'}" method="post" style="display:inline">
+              <button type="submit" class="btn btn-success btn-sm">Approve</button>
+            </form>
+            <form th:action="@{'/student-service-registrations/' + ${request.registrationId} + '/reject'}" method="post" style="display:inline">
+              <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" th:classappend="${result.first} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/student-service-requests(page=${result.number - 1}, studentId=${studentId}, fromDate=${fromDate}, toDate=${toDate}, serviceName=${serviceName})}"
+             aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, result.totalPages - 1)}"
+            th:classappend="${i == result.number} ? 'active'">
+          <a class="page-link"
+             th:href="@{/student-service-requests(page=${i}, studentId=${studentId}, fromDate=${fromDate}, toDate=${toDate}, serviceName=${serviceName})}"
+             th:text="${i + 1}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${result.last} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/student-service-requests(page=${result.number + 1}, studentId=${studentId}, fromDate=${fromDate}, toDate=${toDate}, serviceName=${serviceName})}"
+             aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+</body>
+
+</html>

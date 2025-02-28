@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Tạo Hóa Đơn Phòng</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1>Tạo Hóa Đơn Phòng</h1>
+
+        <div th:if="${error}">
+            <div class="alert alert-danger" th:text="${error}"></div>
+        </div>
+
+        <form th:action="@{/bills/create}" method="post">
+            <div class="mb-3">
+                <label for="studentId" class="form-label">Student ID</label>
+                <input type="number" class="form-control" id="studentId" name="studentId" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Tạo Hóa Đơn</button>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

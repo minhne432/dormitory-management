@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student/layout}">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Đăng ký thành công</title>
+  <title layout:fragment="title">Đăng ký thành công</title>
 </head>
+
 <body>
-<div class="container mt-5">
-  <h2>Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
-  <p>Vui lòng chờ quản lý duyệt đơn.</p>
-  <a th:href="@{/student/home}">Quay về Trang chủ</a>
+<div layout:fragment="content">
+  <div class="container mt-5">
+    <h2>Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
+    <p>Vui lòng chờ quản lý duyệt đơn.</p>
+    <a th:href="@{/student/home}" class="btn btn-primary">Quay về Trang chủ</a>
+  </div>
 </div>
 </body>
+
 </html>

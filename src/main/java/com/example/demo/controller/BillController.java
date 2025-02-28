@@ -21,7 +21,7 @@ public class BillController {
     // Hiển thị form tạo hóa đơn
     @GetMapping("/create")
     public String showCreateBillForm() {
-        return "bill_form";
+        return "manager/bill_form";
     }
 
     // Xử lý tạo hóa đơn khi submit form
@@ -30,10 +30,10 @@ public class BillController {
         try {
             Bill bill = billService.createRoomBill(studentId);
             model.addAttribute("bill", bill);
-            return "bill_detail";
+            return "manager/bill_detail";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "bill_form";
+            return "manager/bill_form";
         }
     }
 }

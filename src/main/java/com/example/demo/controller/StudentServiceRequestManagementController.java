@@ -53,6 +53,6 @@ public class StudentServiceRequestManagementController {
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
         model.addAttribute("serviceName", serviceName);
-        return "student_service_requests"; // Tên file template Thymeleaf
+        return "manager/student_service_requests"; // Tên file template Thymeleaf
     }
 }

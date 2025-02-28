@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Ghi Số Thành Công</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1>Ghi Số Thành Công</h1>
+
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <td th:text="${usage.usageId}"></td>
+            </tr>
+            <tr>
+                <th>Phòng</th>
+                <td th:text="${usage.room.roomNumber}"></td>
+            </tr>
+            <tr>
+                <th>Dịch vụ</th>
+                <td th:text="${usage.service.serviceName}"></td>
+            </tr>
+            <tr>
+                <th>Số đo cũ</th>
+                <td th:text="${usage.previousReading}"></td>
+            </tr>
+            <tr>
+                <th>Số đo hiện tại</th>
+                <td th:text="${usage.currentReading}"></td>
+            </tr>
+            <tr>
+                <th>Ngày ghi số</th>
+                <td th:text="${usage.recordDate}"></td>
+            </tr>
+            <tr>
+                <th>Đã lập hóa đơn</th>
+                <td th:text="${usage.invoiced}"></td>
+            </tr>
+        </table>
+
+        <a href="/service-usage/record" class="btn btn-primary">Ghi số khác</a>
+    </div>
+</div>
+</body>
+
+</html>

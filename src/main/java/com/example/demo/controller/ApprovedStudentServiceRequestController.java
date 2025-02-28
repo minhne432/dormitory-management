@@ -31,11 +31,11 @@ public class ApprovedStudentServiceRequestController {
 
         // Nếu là AJAX request, trả về fragment thay vì toàn bộ trang
         if ("XMLHttpRequest".equals(requestedWith)) {
-            return "fragments/approved-requests :: approvedRequestsList";
+            return "layout/manager/fragment/approved-requests :: approvedRequestsList";
         }
 
         // Nếu không phải AJAX, trả về toàn bộ template gốc:
-        return "approved-requests";  // Tên template chính
+        return "manager/approved-requests";  // Tên template chính
     }
 }
 

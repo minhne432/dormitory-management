@@ -39,7 +39,7 @@ List<Room> rooms = roomRepository.findAll().stream()
         List<DormitoryService> services = dormitoryServiceRepository.findAll();
         model.addAttribute("rooms", rooms);
         model.addAttribute("services", services);
-        return "record_meter_reading";
+        return "manager/record_meter_reading";
     }
 
     // Xử lý dữ liệu từ form
@@ -53,10 +53,10 @@ List<Room> rooms = roomRepository.findAll().stream()
             LocalDate recordDate = LocalDate.parse(recordDateStr); // định dạng yyyy-MM-dd
             ServiceUsage usage = serviceUsageService.recordMeterReading(roomId, serviceId, currentReading, recordDate);
             model.addAttribute("usage", usage);
-            return "record_meter_reading_success";
+            return "manager/record_meter_reading_success";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "record_meter_reading";
+            return "manager/record_meter_reading";
         }
     }
 }
