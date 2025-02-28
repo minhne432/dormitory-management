@@ -44,6 +44,8 @@ public class PendingApplication {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+
+
     // Getters và Setters
     // ...
 }

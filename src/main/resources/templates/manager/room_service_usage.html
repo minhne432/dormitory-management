@@ -2,121 +2,110 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
-
 <head>
     <title layout:fragment="title">Room Service Usage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Lưu thông tin lọc vào localStorage khi submit form
         function saveFilters() {
-            localStorage.setItem('roomId', document.getElementById('roomId').value);
-            localStorage.setItem('roomNumber', document.getElementById('roomNumber').value);
-            localStorage.setItem('recordDate', document.getElementById('recordDate').value);
-            localStorage.setItem('serviceName', document.getElementById('serviceName').value);
+          localStorage.setItem('roomId', document.getElementById('roomId').value);
+          localStorage.setItem('roomNumber', document.getElementById('roomNumber').value);
+          localStorage.setItem('recordDate', document.getElementById('recordDate').value);
+          localStorage.setItem('serviceName', document.getElementById('serviceName').value);
         }
         // Nạp lại thông tin lọc từ localStorage khi trang được tải
         function loadFilters() {
-            if(localStorage.getItem('roomId')) {
-                document.getElementById('roomId').value = localStorage.getItem('roomId');
-            }
-            if(localStorage.getItem('roomNumber')) {
-                document.getElementById('roomNumber').value = localStorage.getItem('roomNumber');
-            }
-            if(localStorage.getItem('recordDate')) {
-                document.getElementById('recordDate').value = localStorage.getItem('recordDate');
-            }
-            if(localStorage.getItem('serviceName')) {
-                document.getElementById('serviceName').value = localStorage.getItem('serviceName');
-            }
+          if(localStorage.getItem('roomId')) {
+            document.getElementById('roomId').value = localStorage.getItem('roomId');
+          }
+          if(localStorage.getItem('roomNumber')) {
+            document.getElementById('roomNumber').value = localStorage.getItem('roomNumber');
+          }
+          if(localStorage.getItem('recordDate')) {
+            document.getElementById('recordDate').value = localStorage.getItem('recordDate');
+          }
+          if(localStorage.getItem('serviceName')) {
+            document.getElementById('serviceName').value = localStorage.getItem('serviceName');
+          }
         }
         document.addEventListener("DOMContentLoaded", loadFilters);
     </script>
 </head>
-
 <body>
-<div layout:fragment="content">
-    <div class="container mt-4">
-        <h1>Room Service Usage</h1>
+<div layout:fragment="content" class="mx-auto mt-4 max-w-6xl">
+    <h1 class="text-2xl font-bold mb-4">Room Service Usage</h1>
 
-        <form method="get" onsubmit="saveFilters()">
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <label for="roomId" class="form-label">Room ID</label>
-                    <input type="number" id="roomId" name="roomId" class="form-control" th:value="${roomId}">
-                </div>
-                <div class="col-md-3">
-                    <label for="roomNumber" class="form-label">Room Number</label>
-                    <input type="text" id="roomNumber" name="roomNumber" class="form-control" th:value="${roomNumber}">
-                </div>
-                <div class="col-md-3">
-                    <label for="recordDate" class="form-label">Record Date</label>
-                    <input type="date" id="recordDate" name="recordDate" class="form-control" th:value="${recordDate}">
-                </div>
-                <div class="col-md-3">
-                    <label for="serviceName" class="form-label">Service Name</label>
-                    <input type="text" id="serviceName" name="serviceName" class="form-control" th:value="${serviceName}">
-                </div>
+    <form method="get" onsubmit="saveFilters()" class="mb-4">
+        <div class="flex flex-wrap gap-4">
+            <div class="w-full md:w-1/4">
+                <label for="roomId" class="block text-gray-700 mb-1">Room ID</label>
+                <input type="number" id="roomId" name="roomId" class="w-full border border-gray-300 rounded px-3 py-2" th:value="${roomId}">
             </div>
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
+            <div class="w-full md:w-1/4">
+                <label for="roomNumber" class="block text-gray-700 mb-1">Room Number</label>
+                <input type="text" id="roomNumber" name="roomNumber" class="w-full border border-gray-300 rounded px-3 py-2" th:value="${roomNumber}">
+            </div>
+            <div class="w-full md:w-1/4">
+                <label for="recordDate" class="block text-gray-700 mb-1">Record Date</label>
+                <input type="date" id="recordDate" name="recordDate" class="w-full border border-gray-300 rounded px-3 py-2" th:value="${recordDate}">
+            </div>
+            <div class="w-full md:w-1/4">
+                <label for="serviceName" class="block text-gray-700 mb-1">Service Name</label>
+                <input type="text" id="serviceName" name="serviceName" class="w-full border border-gray-300 rounded px-3 py-2" th:value="${serviceName}">
+            </div>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Filter</button>
+    </form>
 
-        <table class="table table-striped mt-4">
-            <thead>
-            <tr>
-                <th>Room ID</th>
-                <th>Room Number</th>
-                <th>Record Date</th>
-                <th>Service Name</th>
-                <th>Unit</th>
-                <th>Previous Reading</th>
-                <th>Current Reading</th>
-                <th>Consumption</th>
-                <th>Unit Price</th>
-                <th>Total Cost</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="usage : ${result.content}">
-                <td th:text="${usage.id.roomId}"></td>
-                <td th:text="${usage.roomNumber}"></td>
-                <td th:text="${usage.id.recordDate}"></td>
-                <td th:text="${usage.id.serviceName}"></td>
-                <td th:text="${usage.unit}"></td>
-                <td th:text="${usage.previousReading}"></td>
-                <td th:text="${usage.currentReading}"></td>
-                <td th:text="${usage.consumption}"></td>
-                <td th:text="${usage.unitPrice}"></td>
-                <td th:text="${#numbers.formatDecimal(usage.totalCost, 0, 'COMMA', 2, 'POINT')}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+        <tr>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room ID</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room Number</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Record Date</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Name</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Unit</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Previous Reading</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Current Reading</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Consumption</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Unit Price</th>
+            <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Total Cost</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+        <tr th:each="usage : ${result.content}">
+            <td class="px-4 py-2 border" th:text="${usage.id.roomId}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.roomNumber}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.id.recordDate}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.id.serviceName}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.unit}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.previousReading}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.currentReading}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.consumption}"></td>
+            <td class="px-4 py-2 border" th:text="${usage.unitPrice}"></td>
+            <td class="px-4 py-2 border" th:text="${#numbers.formatDecimal(usage.totalCost, 0, 'COMMA', 2, 'POINT')}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-        <!-- Phân trang -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${result.first} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/room-service-usage(page=${result.number - 1}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, result.totalPages - 1)}"
-                    th:classappend="${i == result.number} ? 'active'">
-                    <a class="page-link"
-                       th:href="@{/room-service-usage(page=${i}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}"
-                       th:text="${i + 1}"></a>
-                </li>
-                <li class="page-item" th:classappend="${result.last} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/room-service-usage(page=${result.number + 1}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}"
-                       aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="flex items-center space-x-2">
+            <li class="px-3 py-1 bg-gray-200 rounded" th:classappend="${result.first} ? 'opacity-50 cursor-not-allowed'">
+                <a class="hover:underline" th:href="@{/room-service-usage(page=${result.number - 1}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}" aria-label="Previous">
+                    &laquo;
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, result.totalPages - 1)}" class="px-3 py-1 bg-gray-200 rounded" th:classappend="${i == result.number} ? 'bg-blue-500 text-white'">
+                <a class="hover:underline" th:href="@{/room-service-usage(page=${i}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="px-3 py-1 bg-gray-200 rounded" th:classappend="${result.last} ? 'opacity-50 cursor-not-allowed'">
+                <a class="hover:underline" th:href="@{/room-service-usage(page=${result.number + 1}, roomId=${roomId}, roomNumber=${roomNumber}, recordDate=${recordDate}, serviceName=${serviceName})}" aria-label="Next">
+                    &raquo;
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 </body>
-
 </html>

@@ -1,48 +1,76 @@
-<!-- file: fragments/approved-requests.html -->
-<div th:fragment="approvedRequestsList">
-    <table border="1">
-        <thead>
-        <tr>
-            <th></th> <!-- Cột checkbox để chọn đăng ký -->
-            <th>Registration ID</th>
-            <th>Student ID</th>
-            <th>Phone Number</th>
-            <th>Room ID</th>
-            <th>Service Start Date</th>
-            <th>Service End Date</th>
-            <th>Service Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${approvedRequests.content}">
-            <td>
-                <input type="checkbox"
-                       name="registrationIds"
-                       th:value="${item.registrationId}" />
-            </td>
-            <td th:text="${item.registrationId}"></td>
-            <td th:text="${item.studentId}"></td>
-            <td th:text="${item.phoneNumber}"></td>
-            <td th:text="${item.roomId}"></td>
-            <td th:text="${item.serviceStartDate}"></td>
-            <td th:text="${item.serviceEndDate}"></td>
-            <td th:text="${item.serviceName}"></td>
-        </tr>
-        </tbody>
-    </table>
+<div layout:fragment="content">
+    <div class="mx-auto mt-4 max-w-6xl">
+        <h1 class="text-2xl font-bold mb-4">Danh sách Approved Student Service Requests</h1>
 
-    <!-- Phân trang -->
-    <div>
-        <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
-        <div>
-            <a th:if="${approvedRequests.hasPrevious()}"
-               th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}">
-                Trang trước
-            </a>
-            <a th:if="${approvedRequests.hasNext()}"
-               th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}">
-                Trang sau
-            </a>
+        <!-- Form lọc với AJAX -->
+        <form id="filterForm" action="#" method="get" onsubmit="event.preventDefault(); submitFilterForm();" class="mb-4">
+            <div class="flex flex-wrap gap-4">
+                <div class="w-full md:w-1/4">
+                    <label for="registrationId" class="block text-gray-700 mb-1">Registration ID:</label>
+                    <input type="text" id="registrationId" name="registrationId" class="w-full border border-gray-300 rounded p-2" th:value="${filter.registrationId}">
+                </div>
+                <div class="w-full md:w-1/4">
+                    <label for="studentId" class="block text-gray-700 mb-1">Student ID:</label>
+                    <input type="text" id="studentId" name="studentId" class="w-full border border-gray-300 rounded p-2" th:value="${filter.studentId}">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Danh sách hiển thị -->
+        <div id="approved-requests-container" class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600"></th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Registration ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Student ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Phone Number</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Start Date</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service End Date</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Name</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="item : ${approvedRequests.content}">
+                    <td class="px-4 py-2 border">
+                        <input type="checkbox" name="registrationIds" th:value="${item.registrationId}">
+                    </td>
+                    <td class="px-4 py-2 border" th:text="${item.registrationId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.studentId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.phoneNumber}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.roomId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+
+        <!-- Phân trang -->
+        <div class="mt-4 flex items-center justify-between">
+            <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
+            <div class="flex space-x-4">
+                <a th:if="${approvedRequests.hasPrevious()}"
+                   th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}"
+                   class="text-blue-500 hover:underline">
+                    Trang trước
+                </a>
+                <a th:if="${approvedRequests.hasNext()}"
+                   th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}"
+                   class="text-blue-500 hover:underline">
+                    Trang sau
+                </a>
+            </div>
+        </div>
+
+        <!-- Nút tạo hóa đơn -->
+        <button type="button" id="createBillButton" class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Tạo Hóa Đơn
+        </button>
     </div>
 </div>

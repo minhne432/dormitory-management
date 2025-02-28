@@ -2,50 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
-
 <head>
     <title layout:fragment="title">Ghi Số Thành Công</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body>
-<div layout:fragment="content">
-    <div class="container mt-4">
-        <h1>Ghi Số Thành Công</h1>
-
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <td th:text="${usage.usageId}"></td>
-            </tr>
-            <tr>
-                <th>Phòng</th>
-                <td th:text="${usage.room.roomNumber}"></td>
-            </tr>
-            <tr>
-                <th>Dịch vụ</th>
-                <td th:text="${usage.service.serviceName}"></td>
-            </tr>
-            <tr>
-                <th>Số đo cũ</th>
-                <td th:text="${usage.previousReading}"></td>
-            </tr>
-            <tr>
-                <th>Số đo hiện tại</th>
-                <td th:text="${usage.currentReading}"></td>
-            </tr>
-            <tr>
-                <th>Ngày ghi số</th>
-                <td th:text="${usage.recordDate}"></td>
-            </tr>
-            <tr>
-                <th>Đã lập hóa đơn</th>
-                <td th:text="${usage.invoiced}"></td>
-            </tr>
-        </table>
-
-        <a href="/service-usage/record" class="btn btn-primary">Ghi số khác</a>
-    </div>
+<div layout:fragment="content" class="mx-auto mt-4 max-w-2xl">
+    <h1 class="text-2xl font-bold mb-4">Ghi Số Thành Công</h1>
+    <table class="min-w-full border border-gray-200">
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">ID</th>
+            <td class="px-4 py-2" th:text="${usage.usageId}"></td>
+        </tr>
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">Phòng</th>
+            <td class="px-4 py-2" th:text="${usage.room.roomNumber}"></td>
+        </tr>
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">Dịch vụ</th>
+            <td class="px-4 py-2" th:text="${usage.service.serviceName}"></td>
+        </tr>
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">Số đo cũ</th>
+            <td class="px-4 py-2" th:text="${usage.previousReading}"></td>
+        </tr>
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">Số đo hiện tại</th>
+            <td class="px-4 py-2" th:text="${usage.currentReading}"></td>
+        </tr>
+        <tr class="border-b">
+            <th class="px-4 py-2 text-left font-medium">Ngày ghi số</th>
+            <td class="px-4 py-2" th:text="${usage.recordDate}"></td>
+        </tr>
+        <tr>
+            <th class="px-4 py-2 text-left font-medium">Đã lập hóa đơn</th>
+            <td class="px-4 py-2" th:text="${usage.invoiced}"></td>
+        </tr>
+    </table>
+    <a href="/service-usage/record" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Ghi số khác
+    </a>
 </div>
 </body>
-
 </html>

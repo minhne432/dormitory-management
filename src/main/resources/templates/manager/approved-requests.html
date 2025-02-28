@@ -2,104 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
-
 <head>
     <title layout:fragment="title">Danh sách Approved Student Service Requests</title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CSS cho toast (có thể tùy chỉnh thêm nếu cần) -->
     <style>
-        /* CSS đơn giản cho toast */
         .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #333;
-            color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            opacity: 0.9;
-            z-index: 9999;
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 15px;
+          border-radius: 5px;
+          opacity: 0.9;
+          z-index: 9999;
         }
-        .toast.success { background-color: green; }
-        .toast.error { background-color: red; }
+        .toast.success { background-color: green; color: #fff; }
+        .toast.error { background-color: red; color: #fff; }
     </style>
 </head>
-
 <body>
 <div layout:fragment="content">
-    <div class="container mt-4">
-        <h1>Danh sách Approved Student Service Requests</h1>
+    <div class="mx-auto mt-4 max-w-6xl">
+        <h1 class="text-2xl font-bold mb-4">Danh sách Approved Student Service Requests</h1>
 
         <!-- Form lọc với AJAX -->
-        <form id="filterForm" action="#" method="get" onsubmit="event.preventDefault(); submitFilterForm();">
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <label for="registrationId" class="form-label">Registration ID:</label>
-                    <input type="text" id="registrationId" name="registrationId" class="form-control" th:value="${filter.registrationId}">
+        <form id="filterForm" action="#" method="get" onsubmit="event.preventDefault(); submitFilterForm();" class="mb-4">
+            <div class="flex flex-wrap gap-4">
+                <div class="w-full md:w-1/4">
+                    <label for="registrationId" class="block text-gray-700 mb-1">Registration ID:</label>
+                    <input type="text" id="registrationId" name="registrationId" class="w-full border border-gray-300 rounded p-2" th:value="${filter.registrationId}">
                 </div>
-                <div class="col-md-3">
-                    <label for="studentId" class="form-label">Student ID:</label>
-                    <input type="text" id="studentId" name="studentId" class="form-control" th:value="${filter.studentId}">
+                <div class="w-full md:w-1/4">
+                    <label for="studentId" class="block text-gray-700 mb-1">Student ID:</label>
+                    <input type="text" id="studentId" name="studentId" class="w-full border border-gray-300 rounded p-2" th:value="${filter.studentId}">
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Lọc</button>
+                <div class="flex items-end">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
                 </div>
             </div>
         </form>
 
-        <!-- Container hiển thị danh sách -->
-        <div id="approved-requests-container">
-            <table class="table table-striped">
-                <thead>
+        <!-- Danh sách hiển thị -->
+        <div id="approved-requests-container" class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                 <tr>
-                    <th></th> <!-- Cột checkbox để chọn đăng ký -->
-                    <th>Registration ID</th>
-                    <th>Student ID</th>
-                    <th>Phone Number</th>
-                    <th>Room ID</th>
-                    <th>Service Start Date</th>
-                    <th>Service End Date</th>
-                    <th>Service Name</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600"></th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Registration ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Student ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Phone Number</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room ID</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Start Date</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service End Date</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Name</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                 <tr th:each="item : ${approvedRequests.content}">
-                    <td>
-                        <input type="checkbox" name="registrationIds"
-                               th:value="${item.registrationId}">
+                    <td class="px-4 py-2 border">
+                        <input type="checkbox" name="registrationIds" th:value="${item.registrationId}">
                     </td>
-                    <td th:text="${item.registrationId}"></td>
-                    <td th:text="${item.studentId}"></td>
-                    <td th:text="${item.phoneNumber}"></td>
-                    <td th:text="${item.roomId}"></td>
-                    <td th:text="${item.serviceStartDate}"></td>
-                    <td th:text="${item.serviceEndDate}"></td>
-                    <td th:text="${item.serviceName}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.registrationId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.studentId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.phoneNumber}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.roomId}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
+                    <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-            <!-- Phân trang -->
-            <div>
-                <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
-                <div>
-                    <a th:if="${approvedRequests.hasPrevious()}"
-                       th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}">
-                        Trang trước
-                    </a>
-                    <a th:if="${approvedRequests.hasNext()}"
-                       th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}">
-                        Trang sau
-                    </a>
-                </div>
+        <!-- Phân trang -->
+        <div class="mt-4 flex items-center justify-between">
+            <span th:text="'Trang ' + (${approvedRequests.number} + 1) + ' / ' + ${approvedRequests.totalPages}"></span>
+            <div class="flex space-x-4">
+                <a th:if="${approvedRequests.hasPrevious()}"
+                   th:href="@{/approved-requests(page=${approvedRequests.number - 1}, size=${approvedRequests.size})}"
+                   class="text-blue-500 hover:underline">
+                    Trang trước
+                </a>
+                <a th:if="${approvedRequests.hasNext()}"
+                   th:href="@{/approved-requests(page=${approvedRequests.number + 1}, size=${approvedRequests.size})}"
+                   class="text-blue-500 hover:underline">
+                    Trang sau
+                </a>
             </div>
         </div>
 
         <!-- Nút tạo hóa đơn -->
-        <button type="button" id="createBillButton" class="btn btn-success mt-3">Tạo Hóa Đơn</button>
+        <button type="button" id="createBillButton" class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Tạo Hóa Đơn
+        </button>
     </div>
 </div>
 
-<!-- Đoạn script để xử lý AJAX và Toast -->
+<!-- Các đoạn script AJAX và toast -->
 <script th:inline="javascript">
     var csrfParameterName = /*[[${_csrf.parameterName}]]*/ '_csrf';
     var csrfTokenValue    = /*[[${_csrf.token}]]*/ 'dummyToken';
@@ -108,53 +107,52 @@
 <script>
     // Xử lý tạo hóa đơn
     document.getElementById("createBillButton").addEventListener("click", function() {
-        const selectedRegistrations = Array.from(
-            document.querySelectorAll('input[name="registrationIds"]:checked')
-        ).map(el => el.value);
+      const selectedRegistrations = Array.from(
+        document.querySelectorAll('input[name="registrationIds"]:checked')
+      ).map(el => el.value);
 
-        if (selectedRegistrations.length === 0) {
-            showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
-            return;
+      if (selectedRegistrations.length === 0) {
+        showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
+        return;
+      }
+
+      const bodyParams = new URLSearchParams({
+        registrationIds: selectedRegistrations
+      });
+      bodyParams.append(csrfParameterName, csrfTokenValue);
+
+      fetch("/personal-bills/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: bodyParams
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          showToast(data.message, "success");
+        } else if (data.error) {
+          showToast(data.error, "error");
         }
-
-        const bodyParams = new URLSearchParams({
-            registrationIds: selectedRegistrations
-        });
-        bodyParams.append(csrfParameterName, csrfTokenValue);
-
-        fetch("/personal-bills/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            body: bodyParams
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                showToast(data.message, "success");
-            } else if (data.error) {
-                showToast(data.error, "error");
-            }
-        })
-        .catch(error => {
-            showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
-        });
+      })
+      .catch(error => {
+        showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
+      });
     });
 
     function submitFilterForm() {
-        // Hàm xử lý lọc dữ liệu (cần hoàn thiện nếu muốn dùng AJAX)
+      // Hàm xử lý lọc dữ liệu (nếu muốn dùng AJAX, bạn có thể bổ sung logic tại đây)
     }
 
     function showToast(message, type = "success") {
-        const toast = document.createElement("div");
-        toast.classList.add("toast", type);
-        toast.innerText = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+      const toast = document.createElement("div");
+      toast.className = "toast " + type;
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 </script>
-
 </body>
 </html>

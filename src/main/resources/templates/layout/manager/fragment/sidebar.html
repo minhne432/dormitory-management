@@ -1,85 +1,107 @@
-<nav class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;" layout:fragment="sidebar">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
+<nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
+    <!-- Tiêu đề / logo sidebar -->
+    <a href="/" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
+        <svg class="mr-2" width="40" height="32">
             <use xlink:href="#bootstrap" />
         </svg>
-        <span class="fs-4">Sidebar</span>
+        <span class="text-xl font-semibold">Sidebar</span>
     </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="/dashboard" class="nav-link active" aria-current="page">
-                <svg class="bi me-2" width="16" height="16">
+    <hr class="my-4 border-gray-300">
+    <!-- Danh sách menu -->
+    <ul class="flex flex-col space-y-2">
+        <li>
+            <a href="/dashboard" class="flex items-center p-2 rounded hover:bg-gray-200 active:bg-blue-100">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#home" />
                 </svg>
                 Dashboard
             </a>
         </li>
         <li>
-            <a href="/profile" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a href="/profile" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#speedometer2" />
                 </svg>
                 Profile
             </a>
         </li>
         <li>
-            <a href="/settings" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a href="/settings" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#table" />
                 </svg>
                 Settings
             </a>
         </li>
         <li>
-            <a href="/reports" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a href="/reports" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#grid" />
                 </svg>
                 Reports
             </a>
         </li>
         <li>
-            <a href="/help" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a href="/help" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#people-circle" />
                 </svg>
                 Help
             </a>
         </li>
         <li>
-            <a th:href="@{/manager/applications/pending-applications}" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a th:href="@{/manager/applications/pending-applications}" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#people-circle" />
                 </svg>
                 Đơn xin ở KTX
             </a>
         </li>
         <li>
-            <a th:href="@{/manager/room-assignments}" class="nav-link link-dark">
-                <svg class="bi me-2" width="16" height="16">
+            <a th:href="@{/manager/room-assignments}" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#people-circle" />
                 </svg>
                 Xếp phòng
             </a>
         </li>
     </ul>
-    <hr>
-    <div class="dropdown">
-        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://via.placeholder.com/32" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>User</strong>
-        </a>
-        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-            <li><a class="dropdown-item" href="#">New project...</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
+    <hr class="my-4 border-gray-300">
+    <!-- Dropdown User -->
+    <div class="relative" id="dropdown">
+        <button id="dropdownButton" class="flex items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none">
+            <img src="https://via.placeholder.com/32" alt="User" class="w-8 h-8 rounded-full mr-2">
+            <strong class="font-semibold">User</strong>
+            <svg class="ml-auto w-4 h-4 transform transition-transform duration-200" id="dropdownIcon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+        <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden" id="dropdownMenu">
             <li>
-                <hr class="dropdown-divider">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">New project...</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+            </li>
+            <li>
+                <hr class="my-1 border-gray-200">
+            </li>
+            <li>
                 <form th:action="@{/logout}" method="post">
-                    <button class="dropdown-item" type="submit">Sign out</button>
+                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Sign out</button>
                 </form>
             </li>
         </ul>
     </div>
 </nav>
+<!-- Script xử lý dropdown -->
+<script>
+    document.getElementById('dropdownButton').addEventListener('click', function() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('hidden');
+      document.getElementById('dropdownIcon').classList.toggle('rotate-180');
+    });
+</script>

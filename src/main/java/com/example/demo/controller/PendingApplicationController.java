@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Dormitory;
 import com.example.demo.entity.PendingApplication;
+import com.example.demo.service.DormitoryService;
 import com.example.demo.service.PendingApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,9 @@ public class PendingApplicationController {
     @Autowired
     private PendingApplicationService service;
 
+    @Autowired
+    private DormitoryService dormitoryService;
+
     @GetMapping("/manager/applications/pending-applications")
     public String getPendingApplications(
             Model model,
@@ -29,10 +34,9 @@ public class PendingApplicationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size
     ) {
-        // Sử dụng đúng Pageable từ Spring Data
         Pageable pageable = PageRequest.of(page, size);
 
-        // Gọi service để lấy dữ liệu phân trang
+        // Giả sử service trả về Page<PendingApplication> có trường dormitory
         Page<PendingApplication> applicationPage = service.getPendingApplications(dormitoryArea, address, department, pageable);
 
         // Thêm dữ liệu vào model
@@ -41,12 +45,15 @@ public class PendingApplicationController {
         model.addAttribute("address", address);
         model.addAttribute("department", department);
 
-        // Thêm danh sách mẫu cho dropdown
-        List<String> dormitoryAreas = Arrays.asList("Khu A", "Khu B");
-        List<String> departments = Arrays.asList("Computer Science", "Electrical Engineering");
+        // Lấy danh sách các Dormitory từ service
+        List<Dormitory> dormitoryAreas = dormitoryService.getAllDormitories();
         model.addAttribute("dormitoryAreas", dormitoryAreas);
+
+        // Thêm danh sách mẫu cho dropdown
+        List<String> departments = Arrays.asList("Computer Science", "Electrical Engineering");
         model.addAttribute("departments", departments);
 
         return "manager/application/pending_applications";
     }
+
 }
