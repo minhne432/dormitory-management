@@ -127,7 +127,8 @@ VALUES
     (1, 'Internet cáp quang',      'Internet',         'ROOM',    'tháng',  100000),
     (2, 'Dịch vụ giặt ủi',         'Giặt ủi',          'PERSONAL','lần',    20000),
     (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000),
-    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000);
+    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000),
+    (5, 'Dịch vụ gưi xe',          'gửi xe',           'PERSONAL',    'tháng',     60000);
 
 -- =========================================
 -- 8. Gán sinh viên vào phòng (bảng room_assignments)
