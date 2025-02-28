@@ -4,51 +4,51 @@
       layout:decorate="~{layout/student/layout}">
 <head>
     <meta charset="UTF-8">
-    <title layout:fragment="title" >Đăng ký ở KTX</title>
+    <title layout:fragment="title">Đăng ký ở KTX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div layout:fragment="content" class="container mt-5">
-    <h1 class="text-center">Đăng ký ở KTX</h1>
-
-    <!-- Sử dụng th:object = "${student}" => map với DormApplicationForm -->
-    <form th:action="@{/register-dormitory}" th:object="${student}" method="post">
-        <div class="mb-3">
-            <label for="fullName" class="form-label">Họ và Tên</label>
-            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" readonly>
+<div layout:fragment="content" class="container mx-auto mt-10 max-w-xl">
+    <h1 class="text-center text-3xl font-bold mb-6">Đăng ký ở KTX</h1>
+    <!-- Form đăng ký: các field readonly hiển thị thông tin sinh viên -->
+    <form th:action="@{/register-dormitory}" th:object="${student}" method="post" class="space-y-4">
+        <div>
+            <label for="fullName" class="block text-gray-700 mb-1">Họ và Tên</label>
+            <input type="text" id="fullName" th:field="*{fullName}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
         </div>
-        <div class="mb-3">
-            <label for="department" class="form-label">Khoa</label>
-            <input type="text" class="form-control" id="department" th:field="*{department}" readonly>
+        <div>
+            <label for="department" class="block text-gray-700 mb-1">Khoa</label>
+            <input type="text" id="department" th:field="*{department}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
         </div>
-        <div class="mb-3">
-            <label for="class" class="form-label">Lớp</label>
-            <input type="text" class="form-control" id="class" th:field="*{studentClass}" readonly>
+        <div>
+            <label for="class" class="block text-gray-700 mb-1">Lớp</label>
+            <input type="text" id="class" th:field="*{studentClass}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
         </div>
-        <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Số điện thoại</label>
-            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" readonly>
+        <div>
+            <label for="phoneNumber" class="block text-gray-700 mb-1">Số điện thoại</label>
+            <input type="text" id="phoneNumber" th:field="*{phoneNumber}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+        <div>
+            <label for="email" class="block text-gray-700 mb-1">Email</label>
+            <input type="email" id="email" th:field="*{email}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
         </div>
-        <div class="mb-3">
-            <label for="address" class="form-label">Địa chỉ</label>
-            <textarea class="form-control" id="address" th:field="*{address}" readonly></textarea>
+        <div>
+            <label for="address" class="block text-gray-700 mb-1">Địa chỉ</label>
+            <textarea id="address" th:field="*{address}" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"></textarea>
         </div>
-        <div class="mb-3">
-            <label for="dormitoryArea" class="form-label">Khu ký túc xá mong muốn</label>
-            <select class="form-select" id="dormitoryArea" th:field="*{dormitoryArea}">
+        <div>
+            <label for="dormitoryArea" class="block text-gray-700 mb-1">Khu ký túc xá mong muốn</label>
+            <select id="dormitoryArea" th:field="*{dormitoryArea}" class="w-full border border-gray-300 rounded px-3 py-2">
                 <option value="Khu A">Khu A</option>
                 <option value="Khu B">Khu B</option>
                 <option value="Khu C - Hòa An">Khu C - Hòa An</option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="note" class="form-label">Ghi chú</label>
-            <textarea class="form-control" id="note" th:field="*{note}"></textarea>
+        <div>
+            <label for="note" class="block text-gray-700 mb-1">Ghi chú</label>
+            <textarea id="note" th:field="*{note}" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Gửi Đơn Đăng Ký</button>
+        <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Gửi Đơn Đăng Ký</button>
     </form>
 </div>
 </body>

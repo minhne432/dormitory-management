@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/student/layout}">
-
 <head>
   <title layout:fragment="title">Đăng ký thành công</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body>
-<div layout:fragment="content">
-  <div class="container mt-5">
-    <h2>Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
-    <p>Vui lòng chờ quản lý duyệt đơn.</p>
-    <a th:href="@{/student/home}" class="btn btn-primary">Quay về Trang chủ</a>
-  </div>
+<div layout:fragment="content" class="mx-auto mt-10 max-w-xl text-center">
+  <h2 class="text-2xl font-bold mb-4">Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
+  <p class="mb-6 text-gray-700">Vui lòng chờ quản lý duyệt đơn.</p>
+  <a th:href="@{/student/home}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Quay về Trang chủ</a>
 </div>
 </body>
-
 </html>

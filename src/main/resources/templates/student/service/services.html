@@ -2,23 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/student/layout}">
-
 <head>
     <title layout:fragment="title">Danh sách dịch vụ</title>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         function registerService(serviceId) {
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
             fetch(`/student/register-service/${serviceId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    [csrfHeader]: csrfToken  // Thêm CSRF token vào header
+                    [csrfHeader]: csrfToken
                 }
             })
             .then(response => response.text())
@@ -33,32 +31,33 @@
         }
     </script>
 </head>
-
 <body>
-<div layout:fragment="content">
-    <div class="container mt-5">
-        <h1>Danh sách dịch vụ</h1>
-        <table class="table table-bordered">
-            <thead>
+<div layout:fragment="content" class="container mx-auto mt-10">
+    <h1 class="text-2xl font-bold mb-6">Danh sách dịch vụ</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
             <tr>
-                <th>ID</th>
-                <th>Tên dịch vụ</th>
-                <th>Đơn giá</th>
-                <th>Đơn vị</th>
-                <th>Mô tả</th>
-                <th>Hành động</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">ID</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Tên dịch vụ</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Đơn giá</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Đơn vị</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Mô tả</th>
+                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Hành động</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
             <tr th:each="service : ${services}">
-                <td th:text="${service.serviceId}"></td>
-                <td th:text="${service.serviceName}"></td>
-                <td th:text="${service.unitPrice}"></td>
-                <td th:text="${service.unit}"></td>
-                <td th:text="${service.description}"></td>
-                <td>
-                    <button class="btn btn-primary"
-                            th:attr="onclick='registerService(' + ${service.serviceId} + ')'">Đăng ký</button>
+                <td class="px-4 py-2 border" th:text="${service.serviceId}"></td>
+                <td class="px-4 py-2 border" th:text="${service.serviceName}"></td>
+                <td class="px-4 py-2 border" th:text="${service.unitPrice}"></td>
+                <td class="px-4 py-2 border" th:text="${service.unit}"></td>
+                <td class="px-4 py-2 border" th:text="${service.description}"></td>
+                <td class="px-4 py-2 border">
+                    <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                            th:attr="onclick='registerService(' + ${service.serviceId} + ')'">
+                        Đăng ký
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -66,5 +65,4 @@
     </div>
 </div>
 </body>
-
 </html>

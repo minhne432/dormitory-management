@@ -3,113 +3,98 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
 <head>
-    <title layout:fragment="title" >Pending Applications</title>
+    <title layout:fragment="title">Pending Applications</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
 <div layout:fragment="content">
-<h1>Pending Applications</h1>
+    <h1>Pending Applications</h1>
 
-<form th:action="@{/manager/applications/pending-applications}" method="get">
+    <form th:action="@{/manager/applications/pending-applications}" method="get">
+        <div>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" th:value="${address}">
+        </div>
+
+        <div>
+            <label for="department">Department:</label>
+            <select id="department" name="department">
+                <option value="">All</option>
+                <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"
+                        th:selected="${dept} == ${department}">Department</option>
+            </select>
+        </div>
+
+        <button type="submit">Filter</button>
+        <a th:href="@{/manager/applications/pending-applications}">Reset</a>
+    </form>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Application ID</th>
+            <th>Submission Date</th>
+            <th>Dormitory Area</th>
+            <th>Full Name</th>
+            <th>Address</th>
+            <th>Department</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="app : ${applicationPage.content}">
+            <td th:text="${app.applicationId}">ID</td>
+            <td th:text="${app.submissionDate}">Date</td>
+            <td th:text="${app.dormitoryArea}">Dormitory Area</td>
+            <td th:text="${app.fullName}">Full Name</td>
+            <td th:text="${app.address}">Address</td>
+            <td th:text="${app.department}">Department</td>
+            <td th:text="${app.phoneNumber}">Phone Number</td>
+            <td>
+                <div>
+                    <!-- Link Xem -->
+                    <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" style="display: inline;">
+                        <input type="hidden" name="address" th:value="${address}">
+                        <input type="hidden" name="department" th:value="${department}">
+                        <input type="hidden" name="page" th:value="${applicationPage.number}">
+                        <button type="submit">Xem</button>
+                    </form>
+
+                    <!-- Form phê duyệt -->
+                    <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" style="display: inline;">
+                        <input type="hidden" name="address" th:value="${address}">
+                        <input type="hidden" name="department" th:value="${department}">
+                        <input type="hidden" name="page" th:value="${applicationPage.number}">
+                        <button type="submit">Phê duyệt</button>
+                    </form>
+
+                    <!-- Form từ chối -->
+                    <form th:action="@{/manager/applications/{id}/reject(id=${app.applicationId})}" method="post" style="display: inline;">
+                        <input type="hidden" name="address" th:value="${address}">
+                        <input type="hidden" name="department" th:value="${department}">
+                        <input type="hidden" name="page" th:value="${applicationPage.number}">
+                        <button type="submit">Từ chối</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
     <div>
-        <label for="dormitoryArea">Dormitory Area:</label>
-        <select id="dormitoryArea" name="dormitoryArea">
-            <option value="">All</option>
-            <option th:each="area : ${dormitoryAreas}" th:value="${area}" th:text="${area}"
-                    th:selected="${area} == ${dormitoryArea}">Area</option>
-        </select>
+        <span th:text="'Page ' + ${applicationPage.number + 1} + ' of ' + ${applicationPage.totalPages}">Page info</span>
     </div>
-
     <div>
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" th:value="${address}">
+        <ul>
+            <li th:if="${applicationPage.hasPrevious()}">
+                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number - 1}, address=${address}, department=${department})}">Previous</a>
+            </li>
+            <li th:if="${applicationPage.hasNext()}">
+                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, address=${address}, department=${department})}">Next</a>
+            </li>
+        </ul>
     </div>
-
-    <div>
-        <label for="department">Department:</label>
-        <select id="department" name="department">
-            <option value="">All</option>
-            <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"
-                    th:selected="${dept} == ${department}">Department</option>
-        </select>
-    </div>
-
-    <button type="submit">Filter</button>
-    <a th:href="@{/manager/applications/pending-applications}">Reset</a>
-</form>
-
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>Application ID</th>
-        <th>Submission Date</th>
-        <th>Dormitory Area</th>
-        <th>Full Name</th>
-        <th>Address</th>
-        <th>Department</th>
-        <th>Phone Number</th>
-        <th>Actions</th> <!-- Cột cho các hành động -->
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="app : ${applicationPage.content}">
-        <td th:text="${app.applicationId}">ID</td>
-        <td th:text="${app.submissionDate}">Date</td>
-        <td th:text="${app.dormitoryArea}">Dormitory Area</td>
-        <td th:text="${app.fullName}">Full Name</td>
-        <td th:text="${app.address}">Address</td>
-        <td th:text="${app.department}">Department</td>
-        <td th:text="${app.phoneNumber}">Phone Number</td>
-        <td>
-            <!-- Các nút phê duyệt hoặc từ chối -->
-            <div>
-                <!-- Link Xem -->
-                <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" style="display: inline;">
-                    <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}">
-                    <input type="hidden" name="address" th:value="${address}">
-                    <input type="hidden" name="department" th:value="${department}">
-                    <input type="hidden" name="page" th:value="${applicationPage.number}">
-                    <button type="submit">Xem</button>
-                </form>
-
-                <!-- Form phê duyệt -->
-                <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" style="display: inline;">
-                    <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}">
-                    <input type="hidden" name="address" th:value="${address}">
-                    <input type="hidden" name="department" th:value="${department}">
-                    <input type="hidden" name="page" th:value="${applicationPage.number}">
-                    <button type="submit">Phê duyệt</button>
-                </form>
-
-                <!-- Form từ chối -->
-                <form th:action="@{/manager/applications/{id}/reject(id=${app.applicationId})}" method="post" style="display: inline;">
-                    <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}">
-                    <input type="hidden" name="address" th:value="${address}">
-                    <input type="hidden" name="department" th:value="${department}">
-                    <input type="hidden" name="page" th:value="${applicationPage.number}">
-                    <button type="submit">Từ chối</button>
-                </form>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<!-- Thêm sau bảng hiển thị -->
-<div>
-    <span th:text="'Page ' + ${applicationPage.number + 1} + ' of ' + ${applicationPage.totalPages}">Page info</span>
-</div>
-<div>
-    <ul>
-        <li th:if="${applicationPage.hasPrevious()}">
-            <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number - 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Previous</a>
-        </li>
-        <li th:if="${applicationPage.hasNext()}">
-            <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, dormitoryArea=${dormitoryArea}, address=${address}, department=${department})}">Next</a>
-        </li>
-    </ul>
-</div>
 </div>
 </body>
 </html>
