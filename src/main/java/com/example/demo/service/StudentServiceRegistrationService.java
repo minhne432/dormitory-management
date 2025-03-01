@@ -32,4 +32,11 @@ public class StudentServiceRegistrationService {
         }
         throw new RuntimeException("Không thể cập nhật yêu cầu. Trạng thái hiện tại: " + registration.getStatus());
     }
+
+    public void updateActualQuantity(Long registrationId, Integer actualQuantity) {
+        StudentServiceRegistration registration = studentServiceRegistrationRepository.findById(registrationId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy Registration có id " + registrationId));
+        registration.setActualQuantity(actualQuantity);
+        studentServiceRegistrationRepository.save(registration);
+    }
 }

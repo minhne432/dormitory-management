@@ -76,4 +76,5 @@ public class ApplicationService {
         // Lưu cập nhật vào cơ sở dữ liệu
         applicationRepository.save(application);
     }
+
 }

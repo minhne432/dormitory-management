@@ -47,6 +47,7 @@ public class Application {
     @Column(name = "note", length = 255)
     private String note;
 
+
     public enum ApplicationStatus {
         approved,
         pending,

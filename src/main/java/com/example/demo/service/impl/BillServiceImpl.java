@@ -155,6 +155,15 @@ notificationRepository.save(notification);
             bill.setBillItems(billItems);
             bill.calculateTotalAmount();
 
+            Notification notification = Notification.builder()
+                    .student(student)
+                    .title("Thông báo hóa đơn dịch vụ mới")
+                    .message("Hóa đơn dịch vụ mới đã được tạo. Tổng tiền: " + bill.getTotalAmount() + " VND. Hạn đóng: " + bill.getDueDate())
+                    .createdAt(LocalDateTime.now())
+                    .readStatus(Notification.ReadStatus.unread)
+                    .build();
+            notificationRepository.save(notification);  // Lưu thông báo
+
             // Đánh dấu các đăng ký đã được tạo hóa đơn
             registrations.forEach(registration -> {
                 registration.setInvoiced(StudentServiceRegistration.InvoicedStatus.YES);
