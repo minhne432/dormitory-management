@@ -34,6 +34,7 @@ public class ApprovedStudentServiceRequestController {
             return "layout/manager/fragment/approved-requests :: approvedRequestsList";
         }
 
+
         // Nếu không phải AJAX, trả về toàn bộ template gốc:
         return "manager/approved-requests";  // Tên template chính
     }

@@ -5,7 +5,7 @@
 <head>
     <title layout:fragment="title">Danh sách Approved Student Service Requests</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- CSS cho toast (có thể tùy chỉnh thêm nếu cần) -->
+    <!-- CSS cho toast -->
     <style>
         .toast {
           position: fixed;
@@ -55,6 +55,7 @@
                     <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Start Date</th>
                     <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service End Date</th>
                     <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Name</th>
+                    <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Actual Quantity</th> <!-- Cột mới -->
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -69,6 +70,7 @@
                     <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
+                    <td class="px-4 py-2 border font-bold text-blue-600" th:text="${item.actualQuantity}"></td> <!-- Dữ liệu actualQuantity -->
                 </tr>
                 </tbody>
             </table>
@@ -96,7 +98,7 @@
             Tạo Hóa Đơn
         </button>
     </div>
-</div>
+
 
 <!-- Các đoạn script AJAX và toast -->
 <script th:inline="javascript">
@@ -142,9 +144,7 @@
       });
     });
 
-    function submitFilterForm() {
-      // Hàm xử lý lọc dữ liệu (nếu muốn dùng AJAX, bạn có thể bổ sung logic tại đây)
-    }
+
 
     function showToast(message, type = "success") {
       const toast = document.createElement("div");
@@ -153,6 +153,49 @@
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
     }
+
+function saveFilters() {
+    const filters = {
+        registrationId: document.getElementById("registrationId") ? document.getElementById("registrationId").value : "",
+        studentId: document.getElementById("studentId") ? document.getElementById("studentId").value : ""
+    };
+    localStorage.setItem("approvedRequestFilters", JSON.stringify(filters));
+}
+
+function loadFilters() {
+    const filters = JSON.parse(localStorage.getItem("approvedRequestFilters"));
+    if (filters) {
+        if (document.getElementById("registrationId"))
+            document.getElementById("registrationId").value = filters.registrationId || "";
+        if (document.getElementById("studentId"))
+            document.getElementById("studentId").value = filters.studentId || "";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadFilters);
+
+
+function submitFilterForm() {
+    saveFilters();
+    const form = document.getElementById("filterForm");
+    const formData = new FormData(form);
+    const queryString = new URLSearchParams(formData).toString();
+
+    fetch("/approved-requests?" + queryString, {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById("approved-requests-container").innerHTML = html;
+    })
+    .catch(error => console.error("Lỗi khi tải danh sách:", error));
+}
+
+
 </script>
+</div>
 </body>
 </html>
