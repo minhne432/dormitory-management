@@ -1,54 +1,27 @@
 <nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
     <!-- Logo / tiêu đề sidebar -->
-    <a href="/" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
+    <a th:href="@{/student/home}" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
         <svg class="mr-2" width="40" height="32">
             <use xlink:href="#bootstrap" />
         </svg>
-        <span class="text-xl font-semibold">Sidebar</span>
+        <span class="text-xl font-semibold">Trang Sinh Viên</span>
     </a>
+
     <hr class="my-4 border-gray-300">
+
     <!-- Danh sách menu -->
     <ul class="flex flex-col space-y-2">
+        <!-- Trang chủ -->
         <li>
-            <a href="/dashboard" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200 active:bg-blue-100">
+            <a th:href="@{/student/home}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#home" />
                 </svg>
-                Dashboard
+                Trang chủ
             </a>
         </li>
-        <li>
-            <a href="/profile" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#speedometer2" />
-                </svg>
-                Profile
-            </a>
-        </li>
-        <li>
-            <a href="/settings" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#table" />
-                </svg>
-                Settings
-            </a>
-        </li>
-        <li>
-            <a href="/reports" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#grid" />
-                </svg>
-                Reports
-            </a>
-        </li>
-        <li>
-            <a href="/help" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#people-circle" />
-                </svg>
-                Help
-            </a>
-        </li>
+
+        <!-- Đăng ký ký túc xá -->
         <li>
             <a th:href="@{/register-dormitory}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
@@ -57,8 +30,58 @@
                 Đăng ký ở KTX
             </a>
         </li>
+
+        <!-- Dịch vụ sinh viên -->
+        <li>
+            <a th:href="@{/student/services}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#grid" />
+                </svg>
+                Dịch vụ
+            </a>
+        </li>
+
+        <!-- Hóa đơn -->
+        <li>
+            <a th:href="@{/bills/filter}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#credit-card" />
+                </svg>
+                Hóa đơn
+            </a>
+        </li>
+
+        <!-- Cài đặt và tài khoản -->
+        <li>
+            <a th:href="@{/profile}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#speedometer2" />
+                </svg>
+                Hồ sơ cá nhân
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/settings}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#table" />
+                </svg>
+                Cài đặt
+            </a>
+        </li>
+
+        <!-- Trợ giúp -->
+        <li>
+            <a th:href="@{/help}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#people-circle" />
+                </svg>
+                Trợ giúp
+            </a>
+        </li>
     </ul>
+
     <hr class="my-4 border-gray-300">
+
     <!-- Dropdown user -->
     <div class="relative" id="dropdown">
         <button id="dropdownButton" class="flex items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none">
@@ -70,20 +93,17 @@
         </button>
         <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden" id="dropdownMenu">
             <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">New project...</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
             </li>
             <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
-            </li>
-            <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cài đặt</a>
             </li>
             <li>
                 <hr class="my-1 border-gray-200">
             </li>
             <li>
                 <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Sign out</button>
+                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</button>
                 </form>
             </li>
         </ul>
