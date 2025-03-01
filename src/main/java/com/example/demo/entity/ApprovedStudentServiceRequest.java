@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
+
 import java.time.LocalDate;
 
 @Entity
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ApprovedStudentServiceRequest {
 
-    @Id  // Chỉ định một trường duy nhất làm khóa chính (có thể cần điều chỉnh nếu view không có trường ID rõ ràng)
+    @Id  // Chỉ định khóa chính (có thể cần điều chỉnh nếu view không có trường ID rõ ràng)
     private Long registrationId;
 
     private Long studentId;
@@ -35,5 +36,8 @@ public class ApprovedStudentServiceRequest {
     private LocalDate serviceStartDate;
     private LocalDate serviceEndDate;
     private String serviceStatus;
+
+    private Integer actualQuantity; // Thêm cột actualQuantity vào Entity
+
     private String serviceName;
 }
