@@ -2,6 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
+<style>
+    .toast {
+      position: fixed !important;
+      top: 20px !important;
+      right: 20px !important;
+      padding: 15px !important;
+      border-radius: 5px !important;
+      opacity: 0.9 !important;
+      z-index: 9999 !important;
+    }
+    .toast.success {
+      background-color: green !important;
+      color: #fff !important;
+    }
+    .toast.error {
+      background-color: red !important;
+      color: #fff !important;
+    }
+</style>
 <head>
     <title layout:fragment="title">Danh sách Approved Student Service Requests</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,9 +89,22 @@
                     <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
-                    <td class="px-4 py-2 border font-bold text-blue-600" th:text="${item.actualQuantity}"></td> <!-- Dữ liệu actualQuantity -->
+                    <!-- Ô input cho actualQuantity -->
+                    <td class="px-4 py-2 border">
+                        <input type="number" class="actualQuantity-input w-full border border-gray-300 rounded p-1"
+                               th:attr="data-registration-id=${item.registrationId}"
+                               th:value="${item.actualQuantity}">
+                    </td>
+                    <!-- Nút cập nhật cho mỗi dòng -->
+                    <td class="px-4 py-2 border">
+                        <button type="button" class="update-btn bg-blue-500 text-white px-2 py-1 rounded"
+                                th:attr="data-registration-id=${item.registrationId}">
+                            Update
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
+
             </table>
         </div>
 
@@ -106,96 +138,164 @@
     var csrfTokenValue    = /*[[${_csrf.token}]]*/ 'dummyToken';
 </script>
 
-<script>
-    // Xử lý tạo hóa đơn
-    document.getElementById("createBillButton").addEventListener("click", function() {
-      const selectedRegistrations = Array.from(
-        document.querySelectorAll('input[name="registrationIds"]:checked')
-      ).map(el => el.value);
+    <script th:inline="javascript">
 
-      if (selectedRegistrations.length === 0) {
-        showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
-        return;
-      }
+        // Các biến CSRF (nếu sử dụng Spring Security)
+        var csrfParameterName = /*[[${_csrf.parameterName}]]*/ '_csrf';
+        var csrfTokenValue    = /*[[${_csrf.token}]]*/ 'dummyToken';
 
-      const bodyParams = new URLSearchParams({
-        registrationIds: selectedRegistrations
-      });
-      bodyParams.append(csrfParameterName, csrfTokenValue);
+        // Hàm hiển thị toast
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  // Thêm cả 3 class: "toast", "success"/"error", và "show"
+  toast.classList.add("toast", type, "show");
+  toast.innerText = message;
+  document.body.appendChild(toast);
 
-      fetch("/personal-bills/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest"
-        },
-        body: bodyParams
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message) {
-          showToast(data.message, "success");
-        } else if (data.error) {
-          showToast(data.error, "error");
-        }
-      })
-      .catch(error => {
-        showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
-      });
+  // Ví dụ: 3 giây sau xóa toast
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+
+  console.log(message);
+}
+
+
+        // Hàm gắn event click cho nút "Update"
+        // (để cập nhật actualQuantity cho từng dòng)
+      function attachUpdateEvents() {
+  document.querySelectorAll('.update-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        console.log("Update button clicked");
+        var regId = this.getAttribute('data-registration-id');
+        var input = document.querySelector('.actualQuantity-input[data-registration-id="' + regId + '"]');
+        var newQuantity = input.value;
+
+        // Chuẩn bị dữ liệu POST
+        var params = new URLSearchParams();
+        params.append('actualQuantity', newQuantity);
+        params.append(csrfParameterName, csrfTokenValue);
+
+        fetch('/manager/applications/' + regId + '/update-actual-quantity', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: params.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Hiển thị thông báo cập nhật thành công với studentId và actualQuantity
+                showToast(`Cập nhật thành công cho studentId ${regId} với số lượng ${newQuantity}.`, "success");
+            } else if(data.error) {
+                showToast(data.error, "error");
+            }
+        })
+        .catch(error => {
+            showToast("Lỗi: " + error.message, "error");
+        });
     });
-
-
-
-    function showToast(message, type = "success") {
-      const toast = document.createElement("div");
-      toast.className = "toast " + type;
-      toast.innerText = message;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-function saveFilters() {
-    const filters = {
-        registrationId: document.getElementById("registrationId") ? document.getElementById("registrationId").value : "",
-        studentId: document.getElementById("studentId") ? document.getElementById("studentId").value : ""
-    };
-    localStorage.setItem("approvedRequestFilters", JSON.stringify(filters));
+  });
 }
 
-function loadFilters() {
-    const filters = JSON.parse(localStorage.getItem("approvedRequestFilters"));
-    if (filters) {
-        if (document.getElementById("registrationId"))
-            document.getElementById("registrationId").value = filters.registrationId || "";
-        if (document.getElementById("studentId"))
-            document.getElementById("studentId").value = filters.studentId || "";
-    }
-}
 
-document.addEventListener("DOMContentLoaded", loadFilters);
-
-
-function submitFilterForm() {
-    saveFilters();
-    const form = document.getElementById("filterForm");
-    const formData = new FormData(form);
-    const queryString = new URLSearchParams(formData).toString();
-
-    fetch("/approved-requests?" + queryString, {
-        method: "GET",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
+        // Lưu bộ lọc vào localStorage
+        function saveFilters() {
+           const filters = {
+               registrationId: document.getElementById("registrationId") ? document.getElementById("registrationId").value : "",
+               studentId: document.getElementById("studentId") ? document.getElementById("studentId").value : ""
+           };
+           localStorage.setItem("approvedRequestFilters", JSON.stringify(filters));
         }
-    })
-    .then(response => response.text())
-    .then(html => {
-        document.getElementById("approved-requests-container").innerHTML = html;
-    })
-    .catch(error => console.error("Lỗi khi tải danh sách:", error));
-}
 
+        // Nạp lại bộ lọc từ localStorage
+        function loadFilters() {
+           const filters = JSON.parse(localStorage.getItem("approvedRequestFilters"));
+           if (filters) {
+               if (document.getElementById("registrationId"))
+                   document.getElementById("registrationId").value = filters.registrationId || "";
+               if (document.getElementById("studentId"))
+                   document.getElementById("studentId").value = filters.studentId || "";
+           }
+        }
 
-</script>
+        // Hàm AJAX gọi đến /approved-requests để lọc
+        // Sau khi nhận HTML mới, ta gắn lại event cho nút "Update"
+        function submitFilterForm() {
+           saveFilters();
+           const form = document.getElementById("filterForm");
+           const formData = new FormData(form);
+           const queryString = new URLSearchParams(formData).toString();
+
+           fetch("/approved-requests?" + queryString, {
+               method: "GET",
+               headers: {
+                   "X-Requested-With": "XMLHttpRequest"
+               }
+           })
+           .then(response => response.text())
+           .then(html => {
+               // Thay thế nội dung bảng
+               document.getElementById("approved-requests-container").innerHTML = html;
+
+               // GỌI LẠI HÀM attachUpdateEvents() để gắn sự kiện cho nút Update mới
+               attachUpdateEvents();
+           })
+           .catch(error => console.error("Lỗi khi tải danh sách:", error));
+        }
+
+        // Xử lý tạo hóa đơn (giữ nguyên như bạn đã có)
+        document.addEventListener("DOMContentLoaded", function() {
+           // Nạp bộ lọc cũ
+           loadFilters();
+
+           // Lần đầu trang load, gắn event cho nút Update
+           attachUpdateEvents();
+
+           // Gắn event cho nút “Tạo Hóa Đơn”
+           const createBillButton = document.getElementById("createBillButton");
+           if (createBillButton) {
+             createBillButton.addEventListener("click", function() {
+               const selectedRegistrations = Array.from(
+                 document.querySelectorAll('input[name="registrationIds"]:checked')
+               ).map(el => el.value);
+
+               if (selectedRegistrations.length === 0) {
+                 showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
+                 return;
+               }
+
+               const bodyParams = new URLSearchParams({
+                 registrationIds: selectedRegistrations
+               });
+               bodyParams.append(csrfParameterName, csrfTokenValue);
+
+               fetch("/personal-bills/create", {
+                 method: "POST",
+                 headers: {
+                   "Content-Type": "application/x-www-form-urlencoded",
+                   "X-Requested-With": "XMLHttpRequest"
+                 },
+                 body: bodyParams
+               })
+               .then(response => response.json())
+               .then(data => {
+                 if (data.message) {
+                   showToast(data.message, "success");
+                 } else if (data.error) {
+                   showToast(data.error, "error");
+                 }
+               })
+               .catch(error => {
+                 showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
+               });
+             });
+           }
+        });
+    </script>
+
 </div>
 </body>
 </html>
