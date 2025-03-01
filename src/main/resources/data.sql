@@ -127,8 +127,7 @@ VALUES
     (1, 'Internet cáp quang',      'Internet',         'ROOM',    'tháng',  100000),
     (2, 'Dịch vụ giặt ủi',         'Giặt ủi',          'PERSONAL','lần',    20000),
     (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000),
-    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000),
-    (5, 'Dịch vụ gưi xe',          'gửi xe',           'PERSONAL',    'tháng',     60000);
+    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000);
 
 -- =========================================
 -- 8. Gán sinh viên vào phòng (bảng room_assignments)
@@ -192,13 +191,6 @@ VALUES
     -- Lên lịch tu dong tao hoa don dien nuoc.
     INSERT INTO utility_billing_schedule (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
 
-
-
-    -- Lên lịch tu dong tao hoa don tien phong.
-    INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
-
-    -- Lên lịch tu dong tao hoa don dien nuoc.
-    INSERT INTO utility_billing_schedule (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
 
 
 -- HOÀN TẤT GIAO DỊCH
