@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student/layout}">
+
+<head>
+    <title layout:fragment="title">Bill Filter</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const storedFilters = JSON.parse(localStorage.getItem('billFilters'));
+            if (storedFilters) {
+                document.getElementById('studentId').value = storedFilters.studentId || '';
+                document.getElementById('status').value = storedFilters.status || '';
+                document.getElementById('billType').value = storedFilters.billType || '';
+                document.getElementById('startDate').value = storedFilters.startDate || '';
+                document.getElementById('endDate').value = storedFilters.endDate || '';
+                document.getElementById('page').value = storedFilters.page || 0;
+                document.getElementById('size').value = storedFilters.size || 10;
+            }
+        });
+
+        function saveFiltersToLocalStorage() {
+            const filters = {
+                studentId: document.getElementById('studentId').value,
+                status: document.getElementById('status').value,
+                billType: document.getElementById('billType').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                page: document.getElementById('page').value,
+                size: document.getElementById('size').value
+            };
+            localStorage.setItem('billFilters', JSON.stringify(filters));
+        }
+    </script>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h2>Filter Bills</h2>
+
+        <!-- Form Lọc -->
+        <form th:action="@{/bills/filter}" method="get" onsubmit="saveFiltersToLocalStorage()">
+            <div class="form-group">
+                <label for="studentId">Student ID</label>
+                <input type="text" class="form-control" id="studentId" name="studentId" th:value="${filter.studentId}">
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-control" id="status" name="status">
+                    <option value="" th:selected="${filter.status == null}">All</option>
+                    <option value="overdue" th:selected="${filter.status == 'overdue'}">Overdue</option>
+                    <option value="paid" th:selected="${filter.status == 'paid'}">Paid</option>
+                    <option value="unpaid" th:selected="${filter.status == 'unpaid'}">Unpaid</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="billType">Bill Type</label>
+                <select class="form-control" id="billType" name="billType">
+                    <option value="" th:selected="${filter.billType == null}">All</option>
+                    <option value="PHONG" th:selected="${filter.billType == 'PHONG'}">Room</option>
+                    <option value="DIEN_NUOC" th:selected="${filter.billType == 'DIEN_NUOC'}">Electricity & Water</option>
+                    <option value="DICH_VU" th:selected="${filter.billType == 'DICH_VU'}">Service</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${filter.startDate}">
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${filter.endDate}">
+            </div>
+
+            <input type="hidden" id="page" name="page" value="0">
+            <input type="hidden" id="size" name="size" value="10">
+
+            <button type="submit" class="btn btn-primary mt-2">Filter</button>
+        </form>
+
+        <!-- Hiển thị danh sách hóa đơn -->
+        <table class="table mt-4">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Bill Type</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Issue Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bill : ${bills.content}">
+                <td th:text="${bill.billId}"></td>
+                <td th:text="${bill.student != null ? bill.student.fullName : 'ERROR!'}"></td>
+                <td th:text="${bill.billType}"></td>
+                <td th:text="${bill.status}"></td>
+                <td th:text="${bill.totalAmount}"></td>
+                <td th:text="${bill.issueDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Phân trang -->
+        <div>
+            <ul class="pagination">
+                <li th:each="i : ${#numbers.sequence(0, bills.totalPages - 1)}">
+                    <a th:href="@{/bills/filter(page=${i}, size=${filter.size})}" th:text="${i + 1}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

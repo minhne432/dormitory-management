@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface BillRepository extends JpaRepository<Bill, Long>, JpaSpecificationExecutor<Bill> {
     List<Bill> findByStudentStudentIdAndIssueDateBetween(Long studentId, LocalDate startDate, LocalDate endDate);
-
+    List<Bill> findByStudentStudentId(Long studentId);
 }

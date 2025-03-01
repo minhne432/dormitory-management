@@ -1,13 +1,14 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.BillFilterRequest;
 import com.example.demo.entity.*;
-import com.example.demo.repository.BillRepository;
-import com.example.demo.repository.NotificationRepository;
-import com.example.demo.repository.RoomAssignmentRepository;
-import com.example.demo.repository.StudentServiceRegistrationRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.BillService;
+import com.example.demo.specifications.BillSpecificationForStudent;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,13 +25,15 @@ public class BillServiceImpl implements BillService {
     private final RoomAssignmentRepository roomAssignmentRepository;
     private final NotificationRepository notificationRepository;
 
+    private final StudentRepository studentRepository;
     private final StudentServiceRegistrationRepository registrationRepository;
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository) {
+    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository, StudentRepository studentRepository) {
         this.billRepository = billRepository;
         this.roomAssignmentRepository = roomAssignmentRepository;
         this.notificationRepository = notificationRepository;
         this.registrationRepository = registrationRepository;
+        this.studentRepository = studentRepository;
 
     }
 
@@ -164,5 +167,33 @@ notificationRepository.save(notification);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Lỗi khi tạo hóa đơn: " + e.getMessage());
         }
+    }
+
+    public List<Bill> getBillsByStudentId(Long studentId) {
+        // Kiểm tra xem sinh viên có tồn tại không
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên với ID: " + studentId));
+
+        // Lấy danh sách hóa đơn của sinh viên
+        List<Bill> bills = billRepository.findByStudentStudentId(studentId);
+
+        return bills;
+    }
+
+    public Page<Bill> getBillsByFilter(BillFilterRequest filterRequest) {
+        // Tạo Specification dựa trên filter
+        var spec = BillSpecificationForStudent.filter(
+                filterRequest.getStudentId(),
+                filterRequest.getStatus(),
+                filterRequest.getBillType(),
+                filterRequest.getStartDate(),
+                filterRequest.getEndDate()
+        );
+
+        // Tạo Pageable
+        var pageable = PageRequest.of(filterRequest.getPage(), filterRequest.getSize());
+
+        // Gọi findAll(spec, pageable)
+        return billRepository.findAll(spec, pageable);
     }
 }
