@@ -13,4 +13,6 @@ public interface ServiceUsageRepository extends JpaRepository<ServiceUsage, Long
     Optional<ServiceUsage> findTopByRoomAndServiceOrderByRecordDateDesc(Room room, DormitoryService service);
     Optional<ServiceUsage> findByRoomAndServiceAndRecordDate(Room room, DormitoryService service, LocalDate recordDate);
     List<ServiceUsage> findByRoomAndRecordDateBetweenAndInvoiced(Room room, LocalDate periodStart, LocalDate periodEnd, ServiceUsage.InvoicedStatus invoicedStatus);
+
+    List<ServiceUsage> findByRecordDateBetween(LocalDate startDate, LocalDate endDate);
 }

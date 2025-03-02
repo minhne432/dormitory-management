@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+    <title layout:fragment="title">Personal Service Usage Chart</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+    <h1 class="mb-4">Personal Service Usage Chart</h1>
+    <p>From: <span th:text="${startDate}"></span> To: <span th:text="${endDate}"></span></p>
+    <canvas id="usageChart"></canvas>
+</div>
+
+
+<script th:inline="javascript" layout:fragment="script">
+    /*<![CDATA[*/
+    var chartData = /*[[${chartData}]]*/ '[]';
+    chartData = JSON.parse(JSON.stringify(chartData));
+
+    var labelsSet = new Set();
+    var dataByService = {};
+
+    chartData.forEach(function(item) {
+        labelsSet.add(item.date);
+        if (!dataByService[item.serviceName]) {
+            dataByService[item.serviceName] = {};
+        }
+        dataByService[item.serviceName][item.date] = item.usageCount;
+    });
+    var labels = Array.from(labelsSet).sort();
+
+    var datasets = [];
+    // Định nghĩa màu sắc riêng cho dịch vụ cá nhân (tùy chỉnh)
+    var colors = {
+        "Giặt ủi": "rgba(153, 102, 255, 1)",
+        "Gửi xe": "rgba(255, 159, 64, 1)"
+    };
+
+    Object.keys(dataByService).forEach(function(serviceName) {
+        var dataArray = [];
+        labels.forEach(function(date) {
+            dataArray.push(dataByService[serviceName][date] || 0);
+        });
+        datasets.push({
+            label: serviceName,
+            data: dataArray,
+            fill: false,
+            borderColor: colors[serviceName] || 'rgba(0,0,0,1)',
+            tension: 0.1
+        });
+    });
+
+    var ctx = document.getElementById('usageChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Date' } },
+                y: { title: { display: true, text: 'Usage' }, beginAtZero: true }
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
