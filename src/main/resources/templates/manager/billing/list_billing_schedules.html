@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+    <title layout:fragment="title">Billing Schedule List</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="mb-4">Billing Schedules</h1>
+
+        <a th:href="@{/billing-schedule/new}" class="btn btn-success mb-3">Add New Schedule</a>
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Schedule ID</th>
+                <th>Schedule Time</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="schedule : ${schedules}">
+                <td th:text="${schedule.scheduleId}"></td>
+                <td th:text="${schedule.scheduleTime}"></td>
+                <td th:text="${schedule.active}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

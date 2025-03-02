@@ -58,13 +58,32 @@
         </li>
 
         <!-- Quản lý hóa đơn -->
-
         <li>
             <a th:href="@{/bills/manager/filter}" class="flex items-center p-2 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#filter" />
                 </svg>
                 Quản lý hóa đơn
+            </a>
+        </li>
+
+        <!-- Quản lý lịch thanh toán hóa đơn -->
+        <li>
+            <a th:href="@{/billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#calendar" />
+                </svg>
+                Lịch thanh toán tiền phòng
+            </a>
+        </li>
+
+        <!-- Quản lý lịch thanh toán điện nước -->
+        <li>
+            <a th:href="@{/utility-billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#calendar-check" />
+                </svg>
+                Lịch thanh toán điện nước
             </a>
         </li>
 
@@ -83,7 +102,7 @@
             Quản lý tiêu thụ dịch vụ cá nhân
         </a>
         </li>
-        <li>
+
         <!-- Ghi nhận sử dụng dịch vụ -->
         <li>
             <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-200">
