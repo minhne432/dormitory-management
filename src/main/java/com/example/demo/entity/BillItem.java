@@ -34,6 +34,14 @@ public class BillItem {
     @JoinColumn(name = "registration_id", nullable = true)
     private StudentServiceRegistration registration;
 
+
+
+    @Column(name = "unit_price")
+    private Double unitPrice;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
     @Column(name = "amount")
     private Double amount;
 }

@@ -91,6 +91,8 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
                     BillItem billItem = BillItem.builder()
                             .service(service)
                             .amount(cost)
+                            .quantity((int) consumptionSum)
+                            .unitPrice(unitPrice)
                             .build();
                     billItems.add(billItem);
                 }
