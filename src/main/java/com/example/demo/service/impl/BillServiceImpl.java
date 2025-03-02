@@ -152,6 +152,8 @@ notificationRepository.save(notification);
                             .service(registration.getDormitoryService())
                             .amount(registration.getDormitoryService().getUnitPrice()
                                     * (registration.getActualQuantity() != null ? registration.getActualQuantity() : 1))
+                            .unitPrice(registration.getDormitoryService().getUnitPrice())
+                            .quantity(registration.getActualQuantity() != null ? registration.getActualQuantity() : 1)
                             .build()
             ).collect(Collectors.toList());
 
