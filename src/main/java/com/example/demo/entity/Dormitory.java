@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = "rooms")
 @EqualsAndHashCode
 public class Dormitory {
 
@@ -32,6 +32,7 @@ public class Dormitory {
 
     @OneToMany(mappedBy = "dormitory", cascade = CascadeType.ALL)
     private List<Room> rooms;
+
 
     // Constructors, getters, setters...
 }

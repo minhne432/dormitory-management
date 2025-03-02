@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Danh sách Service Usage</title>
+    <script>
+        // Khi trang load, khôi phục dữ liệu bộ lọc từ localStorage
+        window.addEventListener("DOMContentLoaded", function(){
+            const filterData = JSON.parse(localStorage.getItem("serviceUsageFilter") || "{}");
+            for (const key in filterData) {
+                const input = document.querySelector(`[name="${key}"]`);
+                if (input) {
+                    input.value = filterData[key];
+                }
+            }
+        });
+
+        // Lưu dữ liệu bộ lọc vào localStorage khi form submit
+        function saveFilter() {
+            const formData = {};
+            document.querySelectorAll("#filterForm input, #filterForm select").forEach(function(input){
+                formData[input.name] = input.value;
+            });
+            localStorage.setItem("serviceUsageFilter", JSON.stringify(formData));
+        }
+    </script>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="text-2xl font-bold">Danh sách Service Usage (Dịch vụ phòng)</h1>
+
+        <!-- Form Lọc -->
+        <form id="filterForm" th:action="@{/electricity-water-bill/list}" method="get" onsubmit="saveFilter()" class="mt-4 p-4 bg-white shadow-md rounded-lg">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="roomId" class="form-label">Room ID:</label>
+                    <input type="text" name="roomId" id="roomId" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="currentReading" class="form-label">Current Reading:</label>
+                    <input type="text" name="currentReading" id="currentReading" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="previousReading" class="form-label">Previous Reading:</label>
+                    <input type="text" name="previousReading" id="previousReading" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="recordDate" class="form-label">Record Date (yyyy-MM-dd):</label>
+                    <input type="date" name="recordDate" id="recordDate" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="invoiced" class="form-label">Invoiced:</label>
+                    <select name="invoiced" id="invoiced" class="form-control">
+                        <option value="">--Chọn--</option>
+                        <option value="NO">NO</option>
+                        <option value="YES">YES</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </form>
+
+        <!-- Bảng dữ liệu -->
+        <table class="table mt-4 table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>Usage ID</th>
+                <th>Room</th>
+                <th>Service</th>
+                <th>Current Reading</th>
+                <th>Previous Reading</th>
+                <th>Record Date</th>
+                <th>Invoiced</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="usage : ${usages}">
+                <td th:text="${usage.usageId}"></td>
+                <td th:text="${usage.room.roomNumber}"></td>
+                <td th:text="${usage.service.serviceName}"></td>
+                <td th:text="${usage.currentReading}"></td>
+                <td th:text="${usage.previousReading}"></td>
+                <td th:text="${usage.recordDate}"></td>
+                <td th:text="${usage.invoiced}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+</html>

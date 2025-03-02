@@ -129,61 +129,135 @@ VALUES
     (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000),
     (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000);
 
--- =========================================
--- 8. Gán sinh viên vào phòng (bảng room_assignments)
---   Ví dụ: 4 sinh viên nam đầu tiên vào phòng 1 (loại nam 4 người),
---          4 sinh viên nữ tiếp theo vào phòng 2, ...
---   (Tùy chỉnh theo nhu cầu)
--- =========================================
-
--- Cập nhật lại current_occupancy cho các phòng đã có người ở:
-
--- =========================================
--- 9. Tạo hóa đơn (bills) mẫu để test
---   - Tạo hóa đơn 'phòng' (tiền phòng)
---   - Tạo hóa đơn 'điện-nước'
---   - Tạo hóa đơn 'dịch-vụ'
--- =========================================
 
 
--- =========================================
--- 10. Thêm chi tiết hóa đơn (bill_items) cho hóa đơn 'dịch-vụ'
---     Mỗi bill_item gắn với một service cụ thể
--- =========================================
+
+-- 1. Thêm đơn đăng ký ở ký túc xá đã được duyệt cho 6 học sinh
+-- (Ở đây dùng CURDATE() cho ngày duyệt và ngày nộp đơn;
+--  approved_by = 1 (giả sử quản lý 1 duyệt), và dorm_id = 1 (theo phòng được xếp))
+INSERT INTO applications (approval_date, status, submission_date, approved_by, dorm_id, student_id)
+VALUES
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 4),
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 5),
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 6),
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 7),
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 8),
+  (CURDATE(), 'approved', CURDATE(), 1, 1, 10);
+
+-- 2. Cập nhật số người hiện tại (current_occupancy) cho các phòng được phân bổ
+-- Giả sử 2 phòng được sử dụng là room_id = 1 và room_id = 2, mỗi phòng có 3 học sinh
+UPDATE rooms
+SET current_occupancy = 3
+WHERE room_id IN (1, 2);
+
+-- 3. Gán học sinh vào các phòng (bảng room_assignments)
+-- Giả sử:
+-- - Học sinh 4, 5, 6 (nam) được xếp vào phòng room_id = 1 (phù hợp với room_type 'Nam')
+INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
+VALUES
+  (CURDATE(), NULL, 1, 4),
+  (CURDATE(), NULL, 1, 5),
+  (CURDATE(), NULL, 1, 6);
+
+-- - Học sinh 7, 8, 10 (nữ) được xếp vào phòng room_id = 2 (phù hợp với room_type 'Nữ')
+INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
+VALUES
+  (CURDATE(), NULL, 2, 7),
+  (CURDATE(), NULL, 2, 8),
+  (CURDATE(), NULL, 2, 10);
+
+-- 4. Ghi số điện và số nước cho 2 phòng với thời điểm là "ngày này của tháng trước"
+-- Dùng DATE_SUB(CURDATE(), INTERVAL 1 MONTH) để tính ngày ghi
+-- Giả sử:
+--   - Với điện: previous_reading = 100, current_reading = 150, service_id = 3 (Điện sinh hoạt)
+--   - Với nước: previous_reading = 50,  current_reading = 60,  service_id = 4 (Nước sinh hoạt)
+INSERT INTO service_usage (current_reading, invoiced, previous_reading, record_date, room_id, service_id, student_id)
+VALUES
+  -- Ghi số cho phòng room_id = 1
+  (150, 'NO', 100, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 3, NULL),  -- Điện
+  (60,  'NO', 50,  DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 4, NULL),  -- Nước
+
+  -- Ghi số cho phòng room_id = 2
+  (150, 'NO', 100, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 3, NULL),  -- Điện
+  (60,  'NO', 50,  DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 4, NULL);  -- Nước
 
 
--- =========================================
--- X. Thêm service_usage (tất cả đều chưa lập hóa đơn, 'NO')
---     student_id giữ nguyên nhưng đặt = NULL
--- =========================================
-
--- =========================================
--- 12. Thêm một vài payment (thanh toán) mẫu
---     (Tham chiếu tới các bill_id đã có)
--- =========================================
 
 
--- =========================================
--- 13. Tùy chọn: thêm ví dụ về notifications
--- =========================================
+-- 1. Thêm 10 sinh viên mới (user_id: 21 -> 30)
+
+-- a) Thêm vào bảng `users`
+INSERT INTO users (user_id, created_at, password_hash, role, status, updated_at, username)
+VALUES
+  (21, '2025-01-02 14:00:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:00:00', 'student21'),
+  (22, '2025-01-02 14:10:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:10:00', 'student22'),
+  (23, '2025-01-02 14:20:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:20:00', 'student23'),
+  (24, '2025-01-02 14:30:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:30:00', 'student24'),
+  (25, '2025-01-02 14:40:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:40:00', 'student25'),
+  (26, '2025-01-02 14:50:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 14:50:00', 'student26'),
+  (27, '2025-01-02 15:00:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:00:00', 'student27'),
+  (28, '2025-01-02 15:10:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:10:00', 'student28'),
+  (29, '2025-01-02 15:20:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:20:00', 'student29'),
+  (30, '2025-01-02 15:30:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:30:00', 'student30');
+
+-- b) Thêm vào bảng `students`
+INSERT INTO students (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
+VALUES
+  (21, '123 New St', '2003-03-01', 'CNTT', 'student21@univ.edu', 'Student Twenty One', 'Nam', '0901000021', 'CNTT1'),
+  (22, '123 New St', '2003-03-02', 'CNTT', 'student22@univ.edu', 'Student Twenty Two', 'Nữ',  '0901000022', 'CNTT1'),
+  (23, '234 New St', '2003-03-03', 'KinhTe', 'student23@univ.edu', 'Student Twenty Three', 'Nam', '0901000023', 'KT1'),
+  (24, '234 New St', '2003-03-04', 'KinhTe', 'student24@univ.edu', 'Student Twenty Four', 'Nữ',  '0901000024', 'KT1'),
+  (25, '345 New St', '2003-03-05', 'XHNV', 'student25@univ.edu', 'Student Twenty Five', 'Nam', '0901000025', 'XH1'),
+  (26, '345 New St', '2003-03-06', 'XHNV', 'student26@univ.edu', 'Student Twenty Six', 'Nữ',  '0901000026', 'XH1'),
+  (27, '456 New St', '2003-03-07', 'CNTT', 'student27@univ.edu', 'Student Twenty Seven', 'Nam', '0901000027', 'CNTT2'),
+  (28, '456 New St', '2003-03-08', 'CNTT', 'student28@univ.edu', 'Student Twenty Eight', 'Nữ',  '0901000028', 'CNTT2'),
+  (29, '567 New St', '2003-03-09', 'KinhTe', 'student29@univ.edu', 'Student Twenty Nine', 'Nam', '0901000029', 'KT2'),
+  (30, '567 New St', '2003-03-10', 'KinhTe', 'student30@univ.edu', 'Student Thirty',      'Nữ',  '0901000030', 'KT2');
 
 
--- (Có thể thêm dữ liệu cho các bảng khác như applications, approved_applications,
---  student_service_registrations... nếu bạn cần)
---------------------------------------------------------------------------------
--- 1) THÊM CÁC ĐƠN ĐĂNG KÝ KÝ TÚC XÁ Ở BẢNG GỐC `applications`
---    (Xem chú thích bên dưới về cách VIEW pending_applications / approved_applications hoạt động)
---------------------------------------------------------------------------------
+-- 2. Thêm dữ liệu mẫu cho 5 đơn đăng ký ở ký túc xá (status 'pending') cho 5 sinh viên
+-- (Ở đây sử dụng student_id từ 21 đến 25, submission_date = CURDATE(), chưa được duyệt nên không có approved_by và approval_date)
+INSERT INTO applications (approval_date, status, submission_date, approved_by, dorm_id, student_id)
+VALUES
+  (NULL, 'pending', CURDATE(), NULL, 1, 21),
+  (NULL, 'pending', CURDATE(), NULL, 1, 22),
+  (NULL, 'pending', CURDATE(), NULL, 1, 23),
+  (NULL, 'pending', CURDATE(), NULL, 1, 24),
+  (NULL, 'pending', CURDATE(), NULL, 1, 25);
 
 
---------------------------------------------------------------------------------
--- 2) THÊM CÁC ĐƠN ĐĂNG KÝ SỬ DỤNG DỊCH VỤ Ở BẢNG GỐC `student_service_registrations`
---    (Xem chú thích bên dưới về cách VIEW student_service_requests hoạt động)
---------------------------------------------------------------------------------
+-- 3. Thêm dữ liệu mẫu cho 6 yêu cầu đăng ký sử dụng dịch vụ giặt ủi (service_id = 2)
+-- Giả sử 6 sinh viên ở phòng 1 và 2 là: student_id 4, 5, 6 (phòng 1) và student_id 7, 8, 10 (phòng 2)
+INSERT INTO student_service_registrations (actual_quantity, approval_date, end_date, start_date, status, approved_by, service_id, student_id, invoiced)
+VALUES
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 4, 'NO'),
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 5, 'NO'),
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 6, 'NO'),
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 7, 'NO'),
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 8, 'NO'),
+  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 10, 'NO');
 
 
--- Hoàn tất script dữ liệu mẫu.
--- Bạn có thể chỉnh sửa/cơi nới thêm để phù hợp hơn với mục đích test của mình.
+
+
+-- 5 sinh viên được duyệt, ví dụ student_id từ 21 -> 25
+-- Dịch vụ cá nhân: Giặt ủi (service_id = 2)
+-- actual_quantity = NULL (chưa nhập số lượng sử dụng thực tế)
+-- status = 'approved'
+-- approved_by = 1 (giả sử là manager_id = 1)
+-- approval_date = CURDATE(), start_date = CURDATE(), end_date = NULL
+-- invoiced = 'NO' (chưa lên hóa đơn)
+
+INSERT INTO student_service_registrations
+    (actual_quantity, approval_date, end_date, start_date, status, approved_by, service_id, student_id, invoiced)
+VALUES
+    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 21, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 22, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 23, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 24, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 25, 'NO');
+
+
 
 -- Lên lịch tu dong tao hoa don tien phong.
     INSERT INTO billing_schedules (active, schedule_time) VALUES (b'1', NOW() + INTERVAL 1 MINUTE);
