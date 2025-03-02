@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ServiceUsageStatistic;
 import com.example.demo.entity.ServiceUsage;
 import com.example.demo.entity.Room;
 import com.example.demo.entity.DormitoryService;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.DormitoryServiceRepository;
 import com.example.demo.service.ServiceUsageService;
+import com.example.demo.service.UsageStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +24,17 @@ public class ServiceUsageController {
     private final RoomRepository roomRepository;
     private final DormitoryServiceRepository dormitoryServiceRepository;
 
+    private final UsageStatisticService usageStatisticService;
+
     @Autowired
     public ServiceUsageController(ServiceUsageService serviceUsageService,
                                   RoomRepository roomRepository,
-                                  DormitoryServiceRepository dormitoryServiceRepository) {
+                                  DormitoryServiceRepository dormitoryServiceRepository,
+                                  UsageStatisticService usageStatisticService) {
         this.serviceUsageService = serviceUsageService;
         this.roomRepository = roomRepository;
         this.dormitoryServiceRepository = dormitoryServiceRepository;
+        this.usageStatisticService = usageStatisticService;
     }
 
     // Hiển thị form ghi số điện/nước
@@ -58,5 +65,45 @@ List<Room> rooms = roomRepository.findAll().stream()
             model.addAttribute("error", e.getMessage());
             return "manager/record_meter_reading";
         }
+    }
+
+    // Biểu đồ dịch vụ phòng
+    @GetMapping("/room/chart")
+    public String showRoomUsageChart(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            Model model) {
+
+        if (startDate == null) {
+            startDate = LocalDate.now().minusMonths(1);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+        List<ServiceUsageStatistic> stats = usageStatisticService.getRoomUsageStatistics(startDate, endDate);
+        model.addAttribute("chartData", stats);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        return "manager/service/room_usage_chart";
+    }
+
+    // Biểu đồ dịch vụ cá nhân
+    @GetMapping("/personal/chart")
+    public String showPersonalUsageChart(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            Model model) {
+
+        if (startDate == null) {
+            startDate = LocalDate.now().minusMonths(1);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+        List<ServiceUsageStatistic> stats = usageStatisticService.getPersonalUsageStatistics(startDate, endDate);
+        model.addAttribute("chartData", stats);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        return "manager/service/personal_usage_chart";
     }
 }
