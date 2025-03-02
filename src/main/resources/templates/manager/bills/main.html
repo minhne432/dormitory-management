@@ -1,122 +1,146 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
 <head>
+  <title layout:fragment="title">Quản lý hóa đơn</title>
   <meta charset="UTF-8">
-  <title>Quản lý hóa đơn</title>
   <meta name="_csrf" th:content="${_csrf.token}" />
-
 </head>
+
 <body>
-<h1>Quản lý hóa đơn</h1>
+<div layout:fragment="content">
+  <div class="container mt-4">
+    <h1 class="text-2xl font-bold">Quản lý hóa đơn</h1>
 
-<!-- Form lọc hóa đơn -->
-<form id="filterForm" th:action="@{/bills/manager/filter}" th:object="${billFilterRequest}" method="post">
-  <div>
-    <label>Bill ID:</label>
-    <input type="number" th:field="*{billId}" placeholder="Nhập Bill ID" />
-  </div>
-  <div>
-    <label>Mã sinh viên:</label>
-    <input type="number" th:field="*{studentId}" placeholder="Nhập mã sinh viên" />
-  </div>
-  <div>
-    <label>Trạng thái:</label>
-    <select th:field="*{status}">
-      <option th:value="${null}">-- Tất cả --</option>
-      <option th:value="overdue">overdue</option>
-      <option th:value="paid">paid</option>
-      <option th:value="unpaid">unpaid</option>
-    </select>
-  </div>
-  <div>
-    <label>Loại hóa đơn:</label>
-    <select th:field="*{billType}">
-      <option th:value="${null}">-- Tất cả --</option>
-      <option th:value="PHONG">PHONG</option>
-      <option th:value="DIEN_NUOC">DIEN_NUOC</option>
-      <option th:value="DICH_VU">DICH_VU</option>
-    </select>
-  </div>
-  <div>
-    <label>Ngày phát hành từ:</label>
-    <input type="date" th:field="*{startDate}" />
-  </div>
-  <div>
-    <label>Ngày phát hành đến:</label>
-    <input type="date" th:field="*{endDate}" />
-  </div>
-  <div>
-    <button type="submit">Lọc</button>
-  </div>
-</form>
+    <!-- Form lọc hóa đơn -->
+    <form id="filterForm" th:action="@{/bills/manager/filter}" th:object="${billFilterRequest}" method="post" class="p-4 bg-white shadow-md rounded-lg">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label>Bill ID:</label>
+          <input type="number" th:field="*{billId}" placeholder="Nhập Bill ID" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label>Mã sinh viên:</label>
+          <input type="number" th:field="*{studentId}" placeholder="Nhập mã sinh viên" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label>Trạng thái:</label>
+          <select th:field="*{status}" class="form-control">
+            <option th:value="${null}">-- Tất cả --</option>
+            <option th:value="overdue">overdue</option>
+            <option th:value="paid">paid</option>
+            <option th:value="unpaid">unpaid</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label>Loại hóa đơn:</label>
+          <select th:field="*{billType}" class="form-control">
+            <option th:value="${null}">-- Tất cả --</option>
+            <option th:value="PHONG">PHONG</option>
+            <option th:value="DIEN_NUOC">DIEN_NUOC</option>
+            <option th:value="DICH_VU">DICH_VU</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label>Ngày phát hành từ:</label>
+          <input type="date" th:field="*{startDate}" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label>Ngày phát hành đến:</label>
+          <input type="date" th:field="*{endDate}" class="form-control" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Lọc</button>
+    </form>
 
-<!-- Vùng chứa danh sách hóa đơn -->
-<div id="billListContainer">
-  <div th:replace="manager/bills/list :: billListFragment"></div>
+    <!-- Vùng chứa danh sách hóa đơn -->
+    <div id="billListContainer">
+      <table border="1" class="table table-striped mt-3">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Mã sinh viên</th>
+          <th>Ngày phát hành</th>
+          <th>Ngày đến hạn</th>
+          <th>Trạng thái</th>
+          <th>Loại hóa đơn</th>
+          <th>Tổng tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bill : ${bills.content}">
+          <td th:text="${bill.billId}"></td>
+          <td>
+            <span th:text="${bill.student != null ? bill.student.studentId : 'Hóa đơn phòng'}"></span>
+          </td>
+          <td th:text="${bill.issueDate}"></td>
+          <td th:text="${bill.dueDate}"></td>
+          <td>
+            <select class="bill-status" th:data-bill-id="${bill.billId}">
+              <option value="unpaid" th:selected="${bill.status.name() == 'unpaid'}">unpaid</option>
+              <option value="paid" th:selected="${bill.status.name() == 'paid'}">paid</option>
+              <option value="overdue" th:selected="${bill.status.name() == 'overdue'}">overdue</option>
+            </select>
+          </td>
+          <td th:text="${bill.billType}"></td>
+          <td th:text="${bill.totalAmount}"></td>
+        </tr>
+        </tbody>
+      </table>
+      <div>
+        <span th:text="'Trang ' + (${bills.number} + 1) + ' trên ' + ${bills.totalPages}"></span>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<!-- Script xử lý AJAX -->
-<script>
 
-  function getCsrfToken() {
-     return document.querySelector("meta[name='_csrf']").content;
- }
 
- function updateBillStatusListeners() {
-     document.querySelectorAll('.bill-status').forEach(select => {
-         select.addEventListener('change', function() {
-             const billId = parseInt(this.dataset.billId); // Đảm bảo gửi đúng kiểu số
-             const status = this.value;
-             fetch('/bills/manager/updateStatus', {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/x-www-form-urlencoded',
-                     'X-Requested-With': 'XMLHttpRequest',
-                     'X-CSRF-TOKEN': getCsrfToken() // Gửi CSRF token để Spring Security xác thực
-                 },
-                 body: `billId=${billId}&status=${status}`
-             })
-             .then(response => {
-                 if (!response.ok) {
-                     throw new Error('Có lỗi xảy ra khi cập nhật trạng thái.');
-                 }
-                 return response.text();
-             })
-             .then(message => {
-                 console.log(message);
-                 refreshBillList();
-             })
-             .catch(error => {
-                 console.error(error);
-             });
-         });
-     });
- }
-
- function refreshBillList() {
-     const form = document.getElementById("filterForm");
-     const formData = new FormData(form);
-     fetch(form.action, {
-         method: 'POST',
-         body: formData,
-         headers: {
-             'X-Requested-With': 'XMLHttpRequest'
-         }
-     })
-     .then(response => response.text())
-     .then(html => {
-         document.getElementById("billListContainer").innerHTML = html;
-         updateBillStatusListeners(); // Gán lại event listener sau khi danh sách được cập nhật
-     })
-     .catch(error => console.error('Error:', error));
- }
-
- document.getElementById("filterForm").addEventListener("submit", function(event) {
-     event.preventDefault();
-     refreshBillList();
- });
-
- document.addEventListener("DOMContentLoaded", updateBillStatusListeners);
-</script>
 </body>
+<!-- Script cập nhật trạng thái hóa đơn -->
+<script layout:fragment="script">
+  function getCsrfToken() {
+      return document.querySelector("meta[name='_csrf']").content;
+  }
+
+  function updateBillStatusListeners() {
+      document.querySelectorAll('.bill-status').forEach(select => {
+          select.removeEventListener('change', handleStatusChange);
+          select.addEventListener('change', handleStatusChange);
+      });
+  }
+
+  function handleStatusChange(event) {
+      console.log('Change status triggered');
+      const billId = parseInt(event.target.dataset.billId);
+      const status = event.target.value;
+      fetch('/bills/manager/updateStatus', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRF-TOKEN': getCsrfToken()
+          },
+          body: `billId=${billId}&status=${status}`
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Có lỗi xảy ra khi cập nhật trạng thái.');
+          }
+          return response.text();
+      })
+      .then(message => {
+          console.log(message);
+      })
+      .catch(error => {
+          console.error(error);
+      });
+  }
+
+  // Đảm bảo rằng sự kiện sẽ được gán lại sau mỗi lần trang render lại danh sách hóa đơn
+  document.addEventListener("DOMContentLoaded", updateBillStatusListeners);
+</script>
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Add New Room</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h1 class="text-2xl font-bold mb-4">Add New Room</h1>
+
+        <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="p-4 bg-white shadow-sm rounded">
+            <div class="mb-3">
+                <label for="roomNumber" class="form-label">Room Number</label>
+                <input type="text" class="form-control" id="roomNumber" th:field="*{roomNumber}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="dormitory" class="form-label">Dormitory</label>
+                <select class="form-select" id="dormitory" name="dormitoryId" required>
+                    <option value="" disabled selected>--- Chọn KTX ---</option>
+                    <option th:each="dorm : ${dormitories}"
+                            th:value="${dorm.dormId}"
+                            th:text="${dorm.dormName}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="roomType" class="form-label">Room Type</label>
+                <select class="form-select" id="roomType" name="roomTypeId" required>
+                    <option value="" disabled selected>--- Chọn Loại Phòng ---</option>
+                    <option th:each="rt : ${roomTypes}"
+                            th:value="${rt.roomTypeId}"
+                            th:text="${rt.typeName}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

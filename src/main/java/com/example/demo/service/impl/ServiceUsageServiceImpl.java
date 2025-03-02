@@ -11,6 +11,7 @@ import com.example.demo.repository.DormitoryServiceRepository;
 import com.example.demo.repository.RoomAssignmentRepository;
 import com.example.demo.service.ServiceUsageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -62,12 +63,6 @@ if (lastRecordOpt.isPresent() && lastRecordOpt.get().getRecordDate().getMonth() 
 }
 Double previousReading = lastRecordOpt.map(ServiceUsage::getCurrentReading).orElse(0.0);
 
-        // Xác định sinh viên cho bản ghi: lấy một sinh viên từ danh sách phân phòng đang active của phòng
-//        List<RoomAssignment> assignments = roomAssignmentRepository.findByRoomRoomIdAndEndDateIsNull(roomId);
-//        if(assignments.isEmpty()){
-//            throw new RuntimeException("Không có sinh viên nào được phân vào phòng id: " + roomId);
-//        }
-//        Student student = assignments.get(0).getStudent();
 
         // Tạo bản ghi ServiceUsage mới
         ServiceUsage usage = ServiceUsage.builder()
@@ -81,5 +76,10 @@ Double previousReading = lastRecordOpt.map(ServiceUsage::getCurrentReading).orEl
                 .build();
 
         return serviceUsageRepository.save(usage);
+    }
+
+    @Override
+    public List<ServiceUsage> searchServiceUsages(Specification<ServiceUsage> spec) {
+        return serviceUsageRepository.findAll(spec);
     }
 }

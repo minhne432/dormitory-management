@@ -1,4 +1,3 @@
-<!--filepath: src/main/resources/templates/layout/manager/fragment/sidebar.html-->
 <nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
     <!-- Tiêu đề / logo sidebar -->
     <a href="/" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
@@ -58,7 +57,17 @@
             </a>
         </li>
 
-        <!-- Quản lý Yêu cầu dịch vụ -->
+        <!-- Quản lý hóa đơn -->
+
+        <li>
+            <a th:href="@{/bills/manager/filter}" class="flex items-center p-2 rounded hover:bg-gray-200">
+                <svg class="mr-2" width="16" height="16">
+                    <use xlink:href="#filter" />
+                </svg>
+                Quản lý hóa đơn
+            </a>
+        </li>
+
         <li>
             <a th:href="@{/student-service-requests}" class="flex items-center p-2 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
@@ -67,80 +76,32 @@
                 Yêu cầu dịch vụ
             </a>
         </li>
-        <li>
-            <a th:href="@{/approved-requests}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#check-square" />
-                </svg>
-                Yêu cầu đã duyệt
-            </a>
+        <a th:href="@{/approved-requests}" class="flex items-center p-2 rounded hover:bg-gray-200">
+            <svg class="mr-2" width="16" height="16">
+                <use xlink:href="#check-square" />
+            </svg>
+            Quản lý tiêu thụ dịch vụ cá nhân
+        </a>
         </li>
-
+        <li>
         <!-- Ghi nhận sử dụng dịch vụ -->
-        <li>
-            <a th:href="@{/room-service-usage}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#clipboard" />
-                </svg>
-                Sử dụng dịch vụ
-            </a>
-        </li>
         <li>
             <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
                     <use xlink:href="#edit" />
                 </svg>
-                Ghi nhận số liệu
+                Ghi số điện - nước
             </a>
         </li>
 
-        <!-- Quản lý hóa đơn -->
+        <!-- Thông tin điện nước -->
         <li>
-            <a th:href="@{/bills/create}" class="flex items-center p-2 rounded hover:bg-gray-200">
+            <a th:href="@{/electricity-water-bill/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
                 <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#credit-card" />
+                    <use xlink:href="#info-circle" />
                 </svg>
-                Tạo hóa đơn
+                Thông tin điện nước
             </a>
         </li>
-
     </ul>
-
-    <hr class="my-4 border-gray-300">
-
-    <!-- Dropdown User -->
-    <div class="relative" id="dropdown">
-        <button id="dropdownButton" class="flex items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none">
-            <img src="https://via.placeholder.com/32" alt="User" class="w-8 h-8 rounded-full mr-2">
-            <strong class="font-semibold">User</strong>
-            <svg class="ml-auto w-4 h-4 transform transition-transform duration-200" id="dropdownIcon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd"></path>
-            </svg>
-        </button>
-        <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden" id="dropdownMenu">
-            <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cài đặt</a>
-            </li>
-            <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
-            </li>
-            <li>
-                <hr class="my-1 border-gray-200">
-            </li>
-            <li>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</button>
-                </form>
-            </li>
-        </ul>
-    </div>
 </nav>
-
-<!-- Script xử lý dropdown -->
-<script>
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-      const menu = document.getElementById('dropdownMenu');
-      menu.classList.toggle('hidden');
-      document.getElementById('dropdownIcon').classList.toggle('rotate-180');
-    });
-</script>

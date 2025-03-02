@@ -24,47 +24,21 @@ public class BillController {
         this.billService = billService;
     }
 
-    // Hiển thị form tạo hóa đơn
-    @GetMapping("/create")
-    public String showCreateBillForm() {
-        return "manager/bill_form";
-    }
-
-    // Xử lý tạo hóa đơn khi submit form
-    @PostMapping("/create")
-    public String createBill(@RequestParam("studentId") Long studentId, Model model) {
-        try {
-            Bill bill = billService.createRoomBill(studentId);
-            model.addAttribute("bill", bill);
-            return "manager/bill_detail";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "manager/bill_form";
-        }
-    }
 
 
     @GetMapping("/filter")
     public String showFilterForm(Model model) {
-        // Giả sử nếu filter rỗng sẽ trả về tất cả hóa đơn
-        model.addAttribute("billFilterRequest", new BillFilterRequestForManager());
-        Page<Bill> bills = billService.getBillsByFilterForanager(new BillFilterRequestForManager());
-        model.addAttribute("bills", bills);
-        return "manager/bills/main";  // View chứa form và danh sách hóa đơn
+        return filterBills(new BillFilterRequestForManager(), model);
     }
 
-    // Xử lý lọc hóa đơn và hiển thị kết quả
     @PostMapping("/filter")
-    public String filterBills(@ModelAttribute BillFilterRequestForManager filterRequest, Model model, HttpServletRequest request) {
+    public String filterBills(@ModelAttribute BillFilterRequestForManager filterRequest, Model model) {
         Page<Bill> bills = billService.getBillsByFilterForanager(filterRequest);
         model.addAttribute("bills", bills);
-        // Nếu là AJAX request, trả về fragment
-        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-            return "manager/bills/list :: billListFragment";
-        }
-        // Nếu không, trả về view đầy đủ
-        return "manager/bills/list";
+        model.addAttribute("billFilterRequest", filterRequest);
+        return "manager/bills/main"; // Trả về view đầy đủ
     }
+
 
     @PostMapping("/updateStatus")
     @ResponseBody
