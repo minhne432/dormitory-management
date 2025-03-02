@@ -225,4 +225,12 @@ notificationRepository.save(notification);
     }
 
 
+    @Override
+    public Bill updateBillStatus(Long billId, Bill.BillStatus status) {
+        Bill bill = billRepository.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id: " + billId));
+        bill.setStatus(status);
+        return billRepository.save(bill);
+    }
+
 }

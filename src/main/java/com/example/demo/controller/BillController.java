@@ -7,6 +7,8 @@ import com.example.demo.service.BillService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +65,23 @@ public class BillController {
         // Nếu không, trả về view đầy đủ
         return "manager/bills/list";
     }
+
+    @PostMapping("/updateStatus")
+    @ResponseBody
+    public ResponseEntity<String> updateBillStatus(@RequestParam("billId") Long billId,
+                                                   @RequestParam("status") String status) {
+        try {
+            // Chuyển đổi chuỗi status thành enum nếu cần
+            Bill.BillStatus billStatus = Bill.BillStatus.valueOf(status);
+            // Gọi service cập nhật trạng thái (bạn có thể cài đặt thêm phương thức updateBillStatus trong BillService)
+            billService.updateBillStatus(billId, billStatus);
+            return ResponseEntity.ok("Cập nhật trạng thái thành công.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Trạng thái không hợp lệ.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi cập nhật trạng thái.");
+        }
+    }
+
 
 }
