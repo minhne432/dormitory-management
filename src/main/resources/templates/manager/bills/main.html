@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý hóa đơn</title>
+</head>
+<body>
+<h1>Quản lý hóa đơn</h1>
+
+<!-- Form lọc hóa đơn -->
+<form id="filterForm" th:action="@{/bills/manager/filter}" th:object="${billFilterRequest}" method="post">
+  <div>
+    <label>Bill ID:</label>
+    <input type="number" th:field="*{billId}" placeholder="Nhập Bill ID" />
+  </div>
+  <div>
+    <label>Mã sinh viên:</label>
+    <input type="number" th:field="*{studentId}" placeholder="Nhập mã sinh viên" />
+  </div>
+  <div>
+    <label>Trạng thái:</label>
+    <select th:field="*{status}">
+      <option th:value="${null}">-- Tất cả --</option>
+      <option th:value="overdue">overdue</option>
+      <option th:value="paid">paid</option>
+      <option th:value="unpaid">unpaid</option>
+    </select>
+  </div>
+  <div>
+    <label>Loại hóa đơn:</label>
+    <select th:field="*{billType}">
+      <option th:value="${null}">-- Tất cả --</option>
+      <option th:value="PHONG">PHONG</option>
+      <option th:value="DIEN_NUOC">DIEN_NUOC</option>
+      <option th:value="DICH_VU">DICH_VU</option>
+    </select>
+  </div>
+  <div>
+    <label>Ngày phát hành từ:</label>
+    <input type="date" th:field="*{startDate}" />
+  </div>
+  <div>
+    <label>Ngày phát hành đến:</label>
+    <input type="date" th:field="*{endDate}" />
+  </div>
+  <div>
+    <button type="submit">Lọc</button>
+  </div>
+</form>
+
+<!-- Vùng chứa danh sách hóa đơn -->
+<div id="billListContainer">
+  <div th:replace="manager/bills/list :: billListFragment"></div>
+</div>
+
+<!-- Script xử lý AJAX -->
+<script>
+  document.getElementById("filterForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+          }
+      })
+      .then(response => response.text())
+      .then(html => {
+          document.getElementById("billListContainer").innerHTML = html;
+      })
+      .catch(error => console.error('Error:', error));
+  });
+</script>
+</body>
+</html>

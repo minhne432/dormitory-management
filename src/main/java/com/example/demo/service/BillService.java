@@ -1,6 +1,8 @@
+//filepath: src\main\java\com\example\demo\service\BillService.java
 package com.example.demo.service;
 
 import com.example.demo.dto.BillFilterRequest;
+import com.example.demo.dto.BillFilterRequestForManager;
 import com.example.demo.entity.Bill;
 import org.springframework.data.domain.Page;
 
@@ -17,4 +19,6 @@ public interface BillService {
     public List<Bill> getBillsByStudentId(Long studentId);
 
     public Page<Bill> getBillsByFilter(BillFilterRequest filterRequest);
+
+    public Page<Bill> getBillsByFilterForanager(BillFilterRequestForManager filterRequest);
 }

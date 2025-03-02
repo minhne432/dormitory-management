@@ -1,9 +1,12 @@
+//filepath: src/main/java/com/example/demo/service/impl/BillServiceImpl.java
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.BillFilterRequest;
+import com.example.demo.dto.BillFilterRequestForManager;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.BillService;
+import com.example.demo.specifications.BillSpecificationForManager;
 import com.example.demo.specifications.BillSpecificationForStudent;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,4 +208,21 @@ notificationRepository.save(notification);
         // Gọi findAll(spec, pageable)
         return billRepository.findAll(spec, pageable);
     }
+
+    @Override
+    public Page<Bill> getBillsByFilterForanager(BillFilterRequestForManager filterRequest) {
+        var spec = BillSpecificationForManager.filter(
+                filterRequest.getBillId(),
+                filterRequest.getStudentId(),
+                filterRequest.getStatus(),
+                filterRequest.getBillType(),
+                filterRequest.getStartDate(),
+                filterRequest.getEndDate()
+        );
+
+        var pageable = PageRequest.of(filterRequest.getPage(), filterRequest.getSize());
+        return billRepository.findAll(spec, pageable);
+    }
+
+
 }
