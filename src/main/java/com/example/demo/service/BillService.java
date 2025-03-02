@@ -21,4 +21,7 @@ public interface BillService {
     public Page<Bill> getBillsByFilter(BillFilterRequest filterRequest);
 
     public Page<Bill> getBillsByFilterForanager(BillFilterRequestForManager filterRequest);
+
+    Bill updateBillStatus(Long billId, Bill.BillStatus status);
+
 }

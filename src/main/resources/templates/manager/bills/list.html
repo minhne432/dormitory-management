@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Danh sách hóa đơn</title>
-</head>
-<body>
 <div id="billListContainer" th:fragment="billListFragment">
     <table border="1">
         <thead>
@@ -24,7 +17,13 @@
             <td th:text="${bill.student.studentId}"></td>
             <td th:text="${bill.issueDate}"></td>
             <td th:text="${bill.dueDate}"></td>
-            <td th:text="${bill.status}"></td>
+            <td>
+                <select class="bill-status" th:data-bill-id="${bill.billId}">
+                    <option value="unpaid" th:selected="${bill.status.name() == 'unpaid'}">unpaid</option>
+                    <option value="paid" th:selected="${bill.status.name() == 'paid'}">paid</option>
+                    <option value="overdue" th:selected="${bill.status.name() == 'overdue'}">overdue</option>
+                </select>
+            </td>
             <td th:text="${bill.billType}"></td>
             <td th:text="${bill.totalAmount}"></td>
         </tr>
@@ -34,5 +33,3 @@
         <span th:text="'Trang ' + ${bills.number + 1} + ' trên ' + ${bills.totalPages}"></span>
     </div>
 </div>
-</body>
-</html>
