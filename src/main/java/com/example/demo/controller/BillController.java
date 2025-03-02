@@ -1,14 +1,18 @@
+//filepath: src\main\java\com\example\demo\controller\BillController.java
 package com.example.demo.controller;
 
+import com.example.demo.dto.BillFilterRequestForManager;
 import com.example.demo.entity.Bill;
 import com.example.demo.service.BillService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/bills")
+@RequestMapping("/bills/manager")
 public class BillController {
 
     private final BillService billService;
@@ -36,4 +40,28 @@ public class BillController {
             return "manager/bill_form";
         }
     }
+
+
+    @GetMapping("/filter")
+    public String showFilterForm(Model model) {
+        // Giả sử nếu filter rỗng sẽ trả về tất cả hóa đơn
+        model.addAttribute("billFilterRequest", new BillFilterRequestForManager());
+        Page<Bill> bills = billService.getBillsByFilterForanager(new BillFilterRequestForManager());
+        model.addAttribute("bills", bills);
+        return "manager/bills/main";  // View chứa form và danh sách hóa đơn
+    }
+
+    // Xử lý lọc hóa đơn và hiển thị kết quả
+    @PostMapping("/filter")
+    public String filterBills(@ModelAttribute BillFilterRequestForManager filterRequest, Model model, HttpServletRequest request) {
+        Page<Bill> bills = billService.getBillsByFilterForanager(filterRequest);
+        model.addAttribute("bills", bills);
+        // Nếu là AJAX request, trả về fragment
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            return "manager/bills/list :: billListFragment";
+        }
+        // Nếu không, trả về view đầy đủ
+        return "manager/bills/list";
+    }
+
 }

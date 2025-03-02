@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách hóa đơn</title>
+</head>
+<body>
+<div id="billListContainer" th:fragment="billListFragment">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Mã sinh viên</th>
+            <th>Ngày phát hành</th>
+            <th>Ngày đến hạn</th>
+            <th>Trạng thái</th>
+            <th>Loại hóa đơn</th>
+            <th>Tổng tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bill : ${bills.content}">
+            <td th:text="${bill.billId}"></td>
+            <td th:text="${bill.student.studentId}"></td>
+            <td th:text="${bill.issueDate}"></td>
+            <td th:text="${bill.dueDate}"></td>
+            <td th:text="${bill.status}"></td>
+            <td th:text="${bill.billType}"></td>
+            <td th:text="${bill.totalAmount}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <span th:text="'Trang ' + ${bills.number + 1} + ' trên ' + ${bills.totalPages}"></span>
+    </div>
+</div>
+</body>
+</html>
