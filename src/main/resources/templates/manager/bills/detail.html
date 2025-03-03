@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+    <title layout:fragment="title">Chi tiết hóa đơn</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+    <h1 class="mb-4">Chi tiết hóa đơn</h1>
+
+    <div class="mb-3">
+        <strong>Mã hóa đơn:</strong> <span th:text="${bill.billId}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Kỳ thanh toán:</strong> <span th:text="${bill.billingPeriod}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Ngày phát hành:</strong> <span th:text="${bill.issueDate}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Ngày đến hạn:</strong> <span th:text="${bill.dueDate}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Trạng thái:</strong> <span th:text="${bill.status}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Tổng số tiền:</strong> <span th:text="${bill.totalAmount}"></span>
+    </div>
+    <div class="mb-3">
+        <strong>Loại hóa đơn:</strong> <span th:text="${bill.billType}"></span>
+    </div>
+
+    <h2 class="mt-5">Chi tiết hóa đơn</h2>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Tên dịch vụ</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Số tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${bill.billItems}">
+            <td th:text="${item.service.serviceName}"></td>
+            <td th:text="${item.unitPrice}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.amount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/bills/manager/filter}" class="btn btn-secondary mt-3">Quay lại danh sách</a>
+</div>
+</body>
+</html>

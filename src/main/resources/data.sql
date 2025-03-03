@@ -122,12 +122,13 @@ VALUES
 -- 7. Thêm dữ liệu cho bảng `services`
 --  Tạo một số dịch vụ để test tạo hóa đơn
 -- =========================================
-INSERT INTO services (service_id, description, service_name, service_type, unit, unit_price)
+INSERT INTO services (service_id, description, service_name, service_type, unit, unit_price, visible_for_student)
 VALUES
-    (1, 'Internet cáp quang',      'Internet',         'ROOM',    'tháng',  100000),
-    (2, 'Dịch vụ giặt ủi',         'Giặt ủi',          'PERSONAL','lần',    20000),
-    (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000),
-    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000);
+    (1, 'Internet cáp quang',      'Internet',         'ROOM',    'tháng',  100000,true),
+    (2, 'Dịch vụ giặt ủi',         'Giặt ủi',          'PERSONAL','lần',    20000,true),
+    (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000,true),
+    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000,true),
+    (5, 'Phòng ở',          'Phòng ở',             'PERSONAL',    'tháng',   1000,false);
 
 
 
