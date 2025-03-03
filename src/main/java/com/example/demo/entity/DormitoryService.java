@@ -24,6 +24,9 @@ public class DormitoryService {
     @Enumerated(EnumType.STRING) // Chỉ định kiểu ENUM
     private ServiceType serviceType; // Thêm trường mới
 
+    @Column(columnDefinition = "boolean default true") // Mặc định là true
+    private Boolean visibleForStudent; // Trường xác định có hiển thị với sinh viên hay không
+
     // Enum để định nghĩa các loại dịch vụ
     public enum ServiceType {
         PERSONAL,

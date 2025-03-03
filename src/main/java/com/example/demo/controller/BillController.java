@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.BillFilterRequestForManager;
 import com.example.demo.entity.Bill;
+import com.example.demo.repository.BillRepository;
 import com.example.demo.service.BillService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ public class BillController {
 
     private final BillService billService;
 
+    private final BillRepository billRepository;
     @Autowired
-    public BillController(BillService billService) {
+    public BillController(BillService billService,
+                          BillRepository billRepository) {
         this.billService = billService;
+        this.billRepository = billRepository;
     }
 
 
@@ -57,5 +61,13 @@ public class BillController {
         }
     }
 
+    // Hiển thị chi tiết hóa đơn
+    @GetMapping("/detail/{billId}")
+    public String viewBillDetail(@PathVariable("billId") Long billId, Model model) {
+        Bill bill = billRepository.findById(billId)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+        model.addAttribute("bill", bill);
+        return "manager/bills/detail";
+    }
 
 }

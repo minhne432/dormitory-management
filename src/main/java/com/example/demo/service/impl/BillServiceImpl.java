@@ -30,13 +30,17 @@ public class BillServiceImpl implements BillService {
 
     private final StudentRepository studentRepository;
     private final StudentServiceRegistrationRepository registrationRepository;
+
+    private final DormitoryServiceRepository dormitoryServiceRepository;
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository, StudentRepository studentRepository) {
+    public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository, StudentRepository studentRepository,
+                           DormitoryServiceRepository dormitoryServiceRepository) {
         this.billRepository = billRepository;
         this.roomAssignmentRepository = roomAssignmentRepository;
         this.notificationRepository = notificationRepository;
         this.registrationRepository = registrationRepository;
         this.studentRepository = studentRepository;
+        this.dormitoryServiceRepository = dormitoryServiceRepository;
 
     }
 
@@ -72,6 +76,16 @@ public class BillServiceImpl implements BillService {
                 .dueDate(dueDate)
                 .status(Bill.BillStatus.unpaid)
                 .build();
+
+        BillItem billItem = BillItem.builder()
+                .bill(bill)
+                .service(dormitoryServiceRepository.findByServiceName("Phòng ở"))
+                .amount(monthlyRent)
+                .unitPrice(monthlyRent)
+                .quantity(1)
+                .build();
+
+        bill.setBillItems(List.of(billItem));
 
 String title = "Thông báo hóa đơn tiền phòng mới";
 String message = String.format("Hóa đơn tiền phòng %s cho tháng %d/%d đã được tạo. Tổng tiền: %.0f VND. Hạn đóng: %s",

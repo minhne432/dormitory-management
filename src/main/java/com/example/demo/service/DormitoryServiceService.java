@@ -81,7 +81,7 @@ public class DormitoryServiceService {
     // Lấy danh sách tất cả dịch vụ
     @Transactional(readOnly = true)
     public List<DormitoryServiceDTO> getAllServices() {
-        return dormitoryServiceRepository.findAll()
+        return dormitoryServiceRepository.findByVisibleForStudentTrue()
                 .stream()
                 .map(service -> DormitoryServiceDTO.builder()
                         .serviceId(service.getServiceId())
