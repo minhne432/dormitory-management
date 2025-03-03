@@ -1,4 +1,11 @@
-<!--filepath: src/main/resources/templates/layout/student/fragment/sidebar.html-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:fragment="sidebar">
+<head>
+    <!-- Các thẻ meta và link CSS đã có trong layout cha -->
+</head>
+<body>
 <nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
     <!-- Logo / tiêu đề sidebar -->
     <a th:href="@{/student/home}" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
@@ -6,6 +13,13 @@
             <use xlink:href="#bootstrap" />
         </svg>
         <span class="text-xl font-semibold">Trang Sinh Viên</span>
+    </a>
+
+    <!-- Thêm khối thông báo -->
+    <a th:href="@{/notifications/student/{studentId}(studentId=${session.student?.studentId})}"
+       class="flex items-center justify-between bg-white p-2 rounded shadow mb-4 hover:bg-gray-50">
+        <span class="font-semibold text-gray-700">Thông báo</span>
+        <div id="notificationBadge" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">0</div>
     </a>
 
     <hr class="my-4 border-gray-300">
@@ -119,3 +133,28 @@
         document.getElementById('dropdownIcon').classList.toggle('rotate-180');
     });
 </script>
+
+<!-- Script AJAX Polling để cập nhật số thông báo -->
+<script>
+    // Script AJAX Polling để cập nhật số lượng thông báo
+function pollNotifications() {
+    var studentId = 4;  // Lấy studentId từ session hoặc từ JavaScript
+    fetch('/notifications/poll?studentId=' + studentId)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Dữ liệu trả về từ server:", data); // Kiểm tra dữ liệu trả về
+            document.getElementById('notificationBadge').innerText = data.length; // Cập nhật số lượng thông báo
+        })
+        .catch(error => console.error('Lỗi khi polling thông báo:', error));
+}
+
+// Poll notifications mỗi 3 giây
+setInterval(pollNotifications, 3000);
+
+// Gọi ngay khi trang load
+pollNotifications();
+
+
+</script>
+</body>
+</html>
