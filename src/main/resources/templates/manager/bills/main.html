@@ -67,6 +67,7 @@
           <th>Trạng thái</th>
           <th>Loại hóa đơn</th>
           <th>Tổng tiền</th>
+          <th>Action</th> <!-- Cột Action mới -->
         </tr>
         </thead>
         <tbody>
@@ -86,9 +87,14 @@
           </td>
           <td th:text="${bill.billType}"></td>
           <td th:text="${bill.totalAmount}"></td>
+          <td>
+            <!-- Nút Xem chi tiết -->
+            <a th:href="@{/bills/manager/detail/{billId}(billId=${bill.billId})}" class="btn btn-info">Xem chi tiết</a>
+          </td>
         </tr>
         </tbody>
       </table>
+
       <div>
         <span th:text="'Trang ' + (${bills.number} + 1) + ' trên ' + ${bills.totalPages}"></span>
       </div>

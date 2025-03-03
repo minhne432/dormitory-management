@@ -10,7 +10,8 @@
 </head>
 <body>
 <div layout:fragment="content" class="container mx-auto mt-10 text-center">
-  <h1 class="text-3xl font-bold">Hello, this is Student Home Page!</h1>
+  <h1>Xin chào, <span th:text="${session.student?.fullName}"></span></h1>
+  <p>Mã sinh viên: <span th:text="${session.student?.studentId}"></span></p>
 </div>
 </body>
 </html>
