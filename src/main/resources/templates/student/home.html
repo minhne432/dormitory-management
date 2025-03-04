@@ -1,4 +1,3 @@
-<!--filepath: src/main/resources/templates/student/home.html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -6,12 +5,11 @@
 <head>
   <meta charset="UTF-8">
   <title layout:fragment="title">Home</title>
-  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div layout:fragment="content" class="container mx-auto mt-10 text-center">
-  <h1>Xin chào, <span th:text="${session.student?.fullName}"></span></h1>
-  <p>Mã sinh viên: <span th:text="${session.student?.studentId}"></span></p>
+<div layout:fragment="content" class="mx-auto mt-10 text-center">
+  <h1>Xin chào, <span th:text="${session.student?.fullName}">Student Name</span></h1>
+  <p>Mã sinh viên: <span th:text="${session.student?.studentId}">Student ID</span></p>
 </div>
 </body>
 </html>

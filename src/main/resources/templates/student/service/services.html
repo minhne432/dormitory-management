@@ -1,19 +1,28 @@
-<!--filepath: src/main/resources/templates/student/service/services.html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/student/layout}">
 <head>
-    <title layout:fragment="title">Danh sách dịch vụ</title>
     <meta charset="UTF-8">
-    <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title layout:fragment="title">Đăng ký dịch vụ</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script>
+        function openModal(serviceId, serviceName) {
+            document.getElementById('modalServiceName').textContent = serviceName;
+            document.getElementById('confirmButton').setAttribute("onclick", `registerService(${serviceId})`);
+            document.getElementById('modal').classList.remove("hidden");
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add("hidden");
+        }
+
         function registerService(serviceId) {
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-            fetch(`/student/register-service/${serviceId}`, {
+
+            fetch(`/student/register-service/` + serviceId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,41 +38,40 @@
                 console.error('Lỗi:', error);
                 alert("Đã xảy ra lỗi khi đăng ký dịch vụ.");
             });
+
+            closeModal();
         }
     </script>
 </head>
 <body>
-<div layout:fragment="content" class="container mx-auto mt-10">
-    <h1 class="text-2xl font-bold mb-6">Danh sách dịch vụ</h1>
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-            <tr>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">ID</th>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Tên dịch vụ</th>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Đơn giá</th>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Đơn vị</th>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Mô tả</th>
-                <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Hành động</th>
-            </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            <tr th:each="service : ${services}">
-                <td class="px-4 py-2 border" th:text="${service.serviceId}"></td>
-                <td class="px-4 py-2 border" th:text="${service.serviceName}"></td>
-                <td class="px-4 py-2 border" th:text="${service.unitPrice}"></td>
-                <td class="px-4 py-2 border" th:text="${service.unit}"></td>
-                <td class="px-4 py-2 border" th:text="${service.description}"></td>
-                <td class="px-4 py-2 border">
-                    <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                            th:attr="onclick='registerService(' + ${service.serviceId} + ')'">
-                        Đăng ký
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<div layout:fragment="content" class="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-6 text-blue-700 text-center">Đăng ký dịch vụ</h1>
+
+    <!-- Danh sách dịch vụ -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div th:each="service : ${services}" class="border p-4 rounded-lg shadow-md bg-gray-100 transition-transform hover:scale-105">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2" th:text="${service.serviceName}"></h2>
+            <p class="text-sm text-gray-600">Giá: <span th:text="${service.unitPrice}"></span> / <span th:text="${service.unit}"></span></p>
+            <p class="text-sm text-gray-500 mt-1" th:text="${service.description}"></p>
+            <button class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    th:attr="onclick='openModal(' + ${service.serviceId} + ', `' + ${service.serviceName} + '`)'">
+                Đăng ký
+            </button>
+        </div>
     </div>
 </div>
+
+<!-- Modal xác nhận đăng ký -->
+<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+        <h2 class="text-xl font-semibold mb-4">Xác nhận đăng ký</h2>
+        <p class="text-gray-700">Bạn có chắc chắn muốn đăng ký dịch vụ <strong id="modalServiceName"></strong>?</p>
+        <div class="mt-4 flex justify-end space-x-2">
+            <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Hủy</button>
+            <button id="confirmButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -1,11 +1,12 @@
-<!--filepath: src/main/resources/templates/student/bills/filter.html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/student/layout}">
-
 <head>
+    <meta charset="UTF-8">
     <title layout:fragment="title">Bill Filter</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const storedFilters = JSON.parse(localStorage.getItem('billFilters'));
@@ -19,7 +20,6 @@
                 document.getElementById('size').value = storedFilters.size || 10;
             }
         });
-
         function saveFiltersToLocalStorage() {
             const filters = {
                 studentId: document.getElementById('studentId').value,
@@ -34,89 +34,119 @@
         }
     </script>
 </head>
-
 <body>
-<div layout:fragment="content">
-    <div class="container mt-4">
-        <h2>Filter Bills</h2>
+<div layout:fragment="content" class="max-w-full mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
+    <h2 class="text-xl md:text-2xl font-bold mb-5 text-blue-700 text-center">Filter Bills</h2>
 
-        <!-- Form Lọc -->
-        <form th:action="@{/bills/filter}" method="get" onsubmit="saveFiltersToLocalStorage()">
-            <div class="form-group">
-                <label for="studentId">Student ID</label>
-                <input type="text" class="form-control" id="studentId" name="studentId" th:value="${filter.studentId}">
-            </div>
+    <!-- Form Lọc (sử dụng grid 2 cột) -->
+    <form th:action="@{/bills/filter}" method="get" onsubmit="saveFiltersToLocalStorage()"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status">
-                    <option value="" th:selected="${filter.status == null}">All</option>
-                    <option value="overdue" th:selected="${filter.status == 'overdue'}">Overdue</option>
-                    <option value="paid" th:selected="${filter.status == 'paid'}">Paid</option>
-                    <option value="unpaid" th:selected="${filter.status == 'unpaid'}">Unpaid</option>
-                </select>
-            </div>
+        <!-- Student ID -->
+        <div>
+            <label for="studentId" class="block text-gray-700 font-semibold">Student ID</label>
+            <input type="text" id="studentId" name="studentId"
+                   th:value="${filter.studentId}"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
 
-            <div class="form-group">
-                <label for="billType">Bill Type</label>
-                <select class="form-control" id="billType" name="billType">
-                    <option value="" th:selected="${filter.billType == null}">All</option>
-                    <option value="PHONG" th:selected="${filter.billType == 'PHONG'}">Room</option>
-                    <option value="DIEN_NUOC" th:selected="${filter.billType == 'DIEN_NUOC'}">Electricity & Water</option>
-                    <option value="DICH_VU" th:selected="${filter.billType == 'DICH_VU'}">Service</option>
-                </select>
-            </div>
+        <!-- Status -->
+        <div>
+            <label for="status" class="block text-gray-700 font-semibold">Status</label>
+            <select id="status" name="status"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2
+                           focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <option value="" th:selected="${filter.status == null}">All</option>
+                <option value="overdue" th:selected="${filter.status == 'overdue'}">Overdue</option>
+                <option value="paid" th:selected="${filter.status == 'paid'}">Paid</option>
+                <option value="unpaid" th:selected="${filter.status == 'unpaid'}">Unpaid</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="startDate">Start Date</label>
-                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${filter.startDate}">
-            </div>
+        <!-- Bill Type -->
+        <div>
+            <label for="billType" class="block text-gray-700 font-semibold">Bill Type</label>
+            <select id="billType" name="billType"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2
+                           focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <option value="" th:selected="${filter.billType == null}">All</option>
+                <option value="PHONG" th:selected="${filter.billType == 'PHONG'}">Room</option>
+                <option value="DIEN_NUOC" th:selected="${filter.billType == 'DIEN_NUOC'}">Electricity & Water</option>
+                <option value="DICH_VU" th:selected="${filter.billType == 'DICH_VU'}">Service</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="endDate">End Date</label>
-                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${filter.endDate}">
-            </div>
+        <!-- Start Date -->
+        <div>
+            <label for="startDate" class="block text-gray-700 font-semibold">Start Date</label>
+            <input type="date" id="startDate" name="startDate"
+                   th:value="${filter.startDate}"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
 
-            <input type="hidden" id="page" name="page" value="0">
-            <input type="hidden" id="size" name="size" value="10">
+        <!-- End Date -->
+        <div>
+            <label for="endDate" class="block text-gray-700 font-semibold">End Date</label>
+            <input type="date" id="endDate" name="endDate"
+                   th:value="${filter.endDate}"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2
+                          focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
 
-            <button type="submit" class="btn btn-primary mt-2">Filter</button>
-        </form>
+        <!-- hidden input: page & size -->
+        <input type="hidden" id="page" name="page" value="0">
+        <input type="hidden" id="size" name="size" value="10">
 
-        <!-- Hiển thị danh sách hóa đơn -->
-        <table class="table mt-4">
-            <thead>
+        <!-- Filter Button -->
+        <div class="md:col-span-3">
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold
+                           hover:bg-blue-600 focus:outline-none transition-colors mt-2">
+                Filter
+            </button>
+        </div>
+    </form>
+
+    <!-- Khu vực hiển thị danh sách hóa đơn -->
+    <div class="overflow-x-auto mt-4">
+        <table class="min-w-full divide-y divide-gray-200 border text-sm">
+            <thead class="bg-gray-50">
             <tr>
-                <th>#</th>
-                <th>Student</th>
-                <th>Bill Type</th>
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Issue Date</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">#</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Student</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Bill Type</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Status</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Amount</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Issue Date</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-200">
             <tr th:each="bill : ${bills.content}">
-                <td th:text="${bill.billId}"></td>
-                <td th:text="${bill.student != null ? bill.student.fullName : 'ERROR!'}"></td>
-                <td th:text="${bill.billType}"></td>
-                <td th:text="${bill.status}"></td>
-                <td th:text="${bill.totalAmount}"></td>
-                <td th:text="${bill.issueDate}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.billId}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.billType}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.status}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.totalAmount}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.issueDate}"></td>
             </tr>
             </tbody>
         </table>
+    </div>
 
-        <!-- Phân trang -->
-        <div>
-            <ul class="pagination">
-                <li th:each="i : ${#numbers.sequence(0, bills.totalPages - 1)}">
-                    <a th:href="@{/bills/filter(page=${i}, size=${filter.size})}" th:text="${i + 1}"></a>
-                </li>
-            </ul>
-        </div>
+    <!-- Phân trang -->
+    <div class="mt-4 flex space-x-2 justify-center">
+        <ul class="flex items-center gap-2">
+            <li th:each="i : ${#numbers.sequence(0, bills.totalPages - 1)}">
+                <a th:href="@{/bills/filter(page=${i}, size=${filter.size})}"
+                   th:text="${i + 1}"
+                   class="px-3 py-1 border rounded-lg hover:bg-blue-100 focus:outline-none transition-colors"
+                   th:classappend="${i == bills.number} ? 'bg-blue-200 font-bold' : ''">
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 </body>
-
 </html>

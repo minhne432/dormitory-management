@@ -1,96 +1,71 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:fragment="sidebar">
-<head>
-    <!-- Các thẻ meta và link CSS đã có trong layout cha -->
-</head>
-<body>
-<nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
-    <!-- Logo / tiêu đề sidebar -->
-    <a th:href="@{/student/home}" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
-        <svg class="mr-2" width="40" height="32">
-            <use xlink:href="#bootstrap" />
-        </svg>
-        <span class="text-xl font-semibold">Trang Sinh Viên</span>
-    </a>
+<!-- sidebar.html -->
+<nav layout:fragment="sidebar" id="sidebar"
+     class="bg-gray-800 text-white w-64 min-h-screen transition-all duration-300 ease-in-out overflow-hidden p-4">
 
-    <!-- Thêm khối thông báo -->
+    <!-- Header Sidebar -->
+    <div class="flex justify-between items-center">
+        <h1 id="sidebarTitle" class="text-xl font-bold transition-all duration-300">Trang Sinh Viên</h1>
+        <button id="toggleBtn" class="text-white focus:outline-none">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Thông báo -->
     <a th:href="@{/notifications/student/{studentId}(studentId=${session.student?.studentId})}"
-       class="flex items-center justify-between bg-white p-2 rounded shadow mb-4 hover:bg-gray-50">
-        <span class="font-semibold text-gray-700">Thông báo</span>
-        <div id="notificationBadge" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">0</div>
+       class="flex items-center justify-between bg-white p-2 rounded shadow my-4 hover:bg-gray-50">
+        <span class="text-gray-700 sidebar-text">Thông báo</span>
+        <div id="notificationBadge"
+             class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">0
+        </div>
     </a>
 
     <hr class="my-4 border-gray-300">
 
     <!-- Danh sách menu -->
-    <ul class="flex flex-col space-y-2">
-        <!-- Trang chủ -->
+    <ul class="space-y-2">
         <li>
-            <a th:href="@{/student/home}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#home" />
-                </svg>
-                Trang chủ
-            </a>
-        </li>
-
-        <!-- Đăng ký ký túc xá -->
-        <li>
-            <a th:href="@{/register-dormitory}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#people-circle" />
-                </svg>
-                Đăng ký ở KTX
-            </a>
-        </li>
-
-        <!-- Dịch vụ sinh viên -->
-        <li>
-            <a th:href="@{/student/services}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#grid" />
-                </svg>
-                Dịch vụ
-            </a>
-        </li>
-
-        <!-- Hóa đơn -->
-        <li>
-            <a th:href="@{/bills/filter}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#credit-card" />
-                </svg>
-                Hóa đơn
-            </a>
-        </li>
-
-        <!-- Cài đặt và tài khoản -->
-        <li>
-            <a th:href="@{/profile}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#speedometer2" />
-                </svg>
-                Hồ sơ cá nhân
+            <a th:href="@{/student/home}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🏠</span>
+                <span class="ml-3 sidebar-text">Trang chủ</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/settings}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#table" />
-                </svg>
-                Cài đặt
+            <a th:href="@{/register-dormitory}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🏢</span>
+                <span class="ml-3 sidebar-text">Đăng ký ở KTX</span>
             </a>
         </li>
-
-        <!-- Trợ giúp -->
         <li>
-            <a th:href="@{/help}" class="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#people-circle" />
-                </svg>
-                Trợ giúp
+            <a th:href="@{/student/services}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🔧</span>
+                <span class="ml-3 sidebar-text">Dịch vụ</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/bills/filter}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">💳</span>
+                <span class="ml-3 sidebar-text">Hóa đơn</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/profile}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">👤</span>
+                <span class="ml-3 sidebar-text">Hồ sơ cá nhân</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/settings}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">⚙️</span>
+                <span class="ml-3 sidebar-text">Cài đặt</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/help}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">❓</span>
+                <span class="ml-3 sidebar-text">Trợ giúp</span>
             </a>
         </li>
     </ul>
@@ -98,63 +73,68 @@
     <hr class="my-4 border-gray-300">
 
     <!-- Dropdown user -->
-    <div class="relative" id="dropdown">
-        <button id="dropdownButton" class="flex items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none">
-            <img src="https://via.placeholder.com/32" alt="User avatar" class="w-8 h-8 rounded-full mr-2">
-            <span class="font-semibold">User</span>
-            <svg class="ml-auto w-4 h-4 transform transition-transform duration-200" id="dropdownIcon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+    <div class="relative mt-4">
+        <button id="dropdownButton" class="flex items-center w-full p-2 rounded hover:bg-gray-700 focus:outline-none">
+            <img src="https://via.placeholder.com/32" alt="User avatar" class="w-8 h-8 rounded-full">
+            <span class="ml-3 sidebar-text">User</span>
+            <svg class="ml-auto w-4 h-4 transition-transform duration-200 sidebar-icon" fill="currentColor"
+                 viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z"
+                      clip-rule="evenodd"/>
             </svg>
         </button>
-        <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden" id="dropdownMenu">
-            <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a>
-            </li>
-            <li>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cài đặt</a>
-            </li>
-            <li>
-                <hr class="my-1 border-gray-200">
-            </li>
+        <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden"
+            id="dropdownMenu">
+            <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a></li>
+            <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cài đặt</a></li>
+            <li><hr class="my-1 border-gray-200"></li>
             <li>
                 <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</button>
+                    <button type="submit"
+                            class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        Đăng xuất
+                    </button>
                 </form>
             </li>
         </ul>
     </div>
+    <!-- Script xử lý Sidebar -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarText = document.querySelectorAll('.sidebar-text');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('w-64');
+            sidebar.classList.toggle('w-16');
+            sidebarTitle.classList.toggle('hidden');
+            sidebarText.forEach(text => text.classList.toggle('hidden'));
+        });
+    </script>
+
+    <!-- Script xử lý Dropdown -->
+    <script>
+        document.getElementById('dropdownButton').addEventListener('click', function() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+
+    <!-- Script cập nhật số lượng thông báo -->
+    <script>
+        function pollNotifications() {
+            fetch('/notifications/poll?studentId=4')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('notificationBadge').innerText = data.length;
+                })
+                .catch(error => console.error('Lỗi khi polling thông báo:', error));
+        }
+        setInterval(pollNotifications, 3000);
+        pollNotifications();
+    </script>
+
 </nav>
 
-<!-- Script xử lý dropdown -->
-<script>
-    document.getElementById('dropdownButton').addEventListener('click', function() {
-        const menu = document.getElementById('dropdownMenu');
-        menu.classList.toggle('hidden');
-        document.getElementById('dropdownIcon').classList.toggle('rotate-180');
-    });
-</script>
-
-<!-- Script AJAX Polling để cập nhật số thông báo -->
-<script>
-    // Script AJAX Polling để cập nhật số lượng thông báo
-function pollNotifications() {
-    var studentId = 4;  // Lấy studentId từ session hoặc từ JavaScript
-    fetch('/notifications/poll?studentId=' + studentId)
-        .then(response => response.json())
-        .then(data => {
-            console.log("Dữ liệu trả về từ server:", data); // Kiểm tra dữ liệu trả về
-            document.getElementById('notificationBadge').innerText = data.length; // Cập nhật số lượng thông báo
-        })
-        .catch(error => console.error('Lỗi khi polling thông báo:', error));
-}
-
-// Poll notifications mỗi 3 giây
-setInterval(pollNotifications, 3000);
-
-// Gọi ngay khi trang load
-pollNotifications();
-
-
-</script>
-</body>
-</html>
