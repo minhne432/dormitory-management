@@ -1,17 +1,24 @@
-<!--filepath: src/main/resources/templates/student/application/registerDormitorySuccess.html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/student/layout}">
 <head>
+  <meta charset="UTF-8">
   <title layout:fragment="title">Đăng ký thành công</title>
-  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div layout:fragment="content" class="mx-auto mt-10 max-w-xl text-center">
-  <h2 class="text-2xl font-bold mb-4">Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
-  <p class="mb-6 text-gray-700">Vui lòng chờ quản lý duyệt đơn.</p>
-  <a th:href="@{/student/home}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Quay về Trang chủ</a>
+<div layout:fragment="content" class="mx-auto mt-10 max-w-md p-6 bg-white shadow-md rounded text-center">
+  <!-- Icon vui vẻ -->
+  <div class="text-6xl mb-4">✅</div>
+  <h2 class="text-2xl font-bold mb-4 text-green-600">Bạn đã gửi đơn đăng ký ở KTX thành công!</h2>
+  <p class="mb-6 text-gray-700">
+    Vui lòng chờ quản lý duyệt đơn. <br>
+    Cảm ơn bạn đã sử dụng hệ thống!
+  </p>
+  <a th:href="@{/student/home}"
+     class="inline-block bg-blue-500 text-white px-5 py-2 rounded font-semibold hover:bg-blue-600 transition-colors">
+    Quay về Trang chủ
+  </a>
 </div>
 </body>
 </html>

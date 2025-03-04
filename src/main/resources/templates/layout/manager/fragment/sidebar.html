@@ -1,126 +1,99 @@
-<nav class="flex flex-col p-4 bg-gray-100 h-full" layout:fragment="sidebar">
-    <!-- Tiêu đề / logo sidebar -->
-    <a href="/" class="flex items-center mb-4 text-gray-800 hover:text-blue-500">
-        <svg class="mr-2" width="40" height="32">
-            <use xlink:href="#bootstrap" />
-        </svg>
-        <span class="text-xl font-semibold">Quản lý KTX</span>
-    </a>
+<nav layout:fragment="sidebar" id="sidebar" class="bg-gray-800 text-white w-64 min-h-screen transition-all duration-300 ease-in-out overflow-hidden p-4">
+    <!-- Header Sidebar -->
+    <div class="flex justify-between items-center">
+        <h1 id="sidebarTitle" class="text-xl font-bold transition-all duration-300">Quản lý KTX</h1>
+        <button id="toggleBtn" class="text-white focus:outline-none">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
 
-    <hr class="my-4 border-gray-300">
+    <hr class="my-4 border-gray-600">
 
     <!-- Danh sách menu -->
-    <ul class="flex flex-col space-y-2">
-        <!-- Dashboard -->
+    <ul class="space-y-2">
         <li>
-            <a th:href="@{/manager/home}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#home" />
-                </svg>
-                Trang chủ
-            </a>
-        </li>
-
-        <!-- Quản lý Đơn đăng ký -->
-        <li>
-            <a th:href="@{/manager/applications/pending-applications}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#people-circle" />
-                </svg>
-                Đơn chờ duyệt
+            <a th:href="@{/manager/home}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🏠</span>
+                <span class="ml-3 sidebar-text">Trang chủ</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/approved-applications}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#check-circle" />
-                </svg>
-                Đơn đã duyệt
-            </a>
-        </li>
-
-        <!-- Quản lý Dịch vụ -->
-        <li>
-            <a th:href="@{/manager/services}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#grid" />
-                </svg>
-                Danh sách dịch vụ
+            <a th:href="@{/manager/applications/pending-applications}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📋</span>
+                <span class="ml-3 sidebar-text">Đơn chờ duyệt</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/manager/services/add}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#plus-circle" />
-                </svg>
-                Thêm dịch vụ
+            <a th:href="@{/approved-applications}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">✅</span>
+                <span class="ml-3 sidebar-text">Đơn đã duyệt</span>
             </a>
         </li>
-
-        <!-- Quản lý hóa đơn -->
         <li>
-            <a th:href="@{/bills/manager/filter}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#filter" />
-                </svg>
-                Quản lý hóa đơn
+            <a th:href="@{/manager/services}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🛠</span>
+                <span class="ml-3 sidebar-text">Danh sách dịch vụ</span>
             </a>
         </li>
-
-        <!-- Quản lý lịch thanh toán hóa đơn -->
         <li>
-            <a th:href="@{/billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#calendar" />
-                </svg>
-                Lịch thanh toán tiền phòng
+            <a th:href="@{/manager/services/add}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">➕</span>
+                <span class="ml-3 sidebar-text">Thêm dịch vụ</span>
             </a>
         </li>
-
-        <!-- Quản lý lịch thanh toán điện nước -->
         <li>
-            <a th:href="@{/utility-billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#calendar-check" />
-                </svg>
-                Lịch thanh toán điện nước
+            <a th:href="@{/bills/manager/filter}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">💳</span>
+                <span class="ml-3 sidebar-text">Quản lý hóa đơn</span>
             </a>
         </li>
-
         <li>
-            <a th:href="@{/student-service-requests}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#list" />
-                </svg>
-                Yêu cầu dịch vụ
+            <a th:href="@{/billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📆</span>
+                <span class="ml-3 sidebar-text">Lịch thanh toán tiền phòng</span>
             </a>
         </li>
-        <a th:href="@{/approved-requests}" class="flex items-center p-2 rounded hover:bg-gray-200">
-            <svg class="mr-2" width="16" height="16">
-                <use xlink:href="#check-square" />
-            </svg>
-            Quản lý tiêu thụ dịch vụ cá nhân
-        </a>
-        </li>
-
-        <!-- Ghi nhận sử dụng dịch vụ -->
         <li>
-            <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#edit" />
-                </svg>
-                Ghi số điện - nước
+            <a th:href="@{/utility-billing-schedule/list}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">⚡</span>
+                <span class="ml-3 sidebar-text">Lịch thanh toán điện nước</span>
             </a>
         </li>
-
-        <!-- Thông tin điện nước -->
         <li>
-            <a th:href="@{/electricity-water-bill/list}" class="flex items-center p-2 rounded hover:bg-gray-200">
-                <svg class="mr-2" width="16" height="16">
-                    <use xlink:href="#info-circle" />
-                </svg>
-                Thông tin điện nước
+            <a th:href="@{/student-service-requests}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📌</span>
+                <span class="ml-3 sidebar-text">Yêu cầu dịch vụ</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📝</span>
+                <span class="ml-3 sidebar-text">Ghi số điện - nước</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/electricity-water-bill/list}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">ℹ️</span>
+                <span class="ml-3 sidebar-text">Thông tin điện nước</span>
             </a>
         </li>
     </ul>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarText = document.querySelectorAll('.sidebar-text');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('w-64');
+            sidebar.classList.toggle('w-16');
+            sidebarTitle.classList.toggle('hidden');
+            sidebarText.forEach(text => text.classList.toggle('hidden'));
+        });
+    </script>
 </nav>
+
+<!-- Script xử lý Sidebar -->
+
