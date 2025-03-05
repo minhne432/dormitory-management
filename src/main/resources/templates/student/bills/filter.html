@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/student/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/student/layout}">
 <head>
     <meta charset="UTF-8">
     <title layout:fragment="title">Bill Filter</title>
@@ -11,7 +9,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             const storedFilters = JSON.parse(localStorage.getItem('billFilters'));
             if (storedFilters) {
-                document.getElementById('studentId').value = storedFilters.studentId || '';
                 document.getElementById('status').value = storedFilters.status || '';
                 document.getElementById('billType').value = storedFilters.billType || '';
                 document.getElementById('startDate').value = storedFilters.startDate || '';
@@ -35,81 +32,45 @@
     </script>
 </head>
 <body>
-<div layout:fragment="content" class="max-w-full mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl">
     <h2 class="text-xl md:text-2xl font-bold mb-5 text-blue-700 text-center">Filter Bills</h2>
 
-    <!-- Form Lọc (sử dụng grid 2 cột) -->
-    <form th:action="@{/bills/filter}" method="get" onsubmit="saveFiltersToLocalStorage()"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-        <!-- Student ID -->
-        <div>
-            <label for="studentId" class="block text-gray-700 font-semibold">Student ID</label>
-            <input type="text" id="studentId" name="studentId"
-                   th:value="${filter.studentId}"
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2
-                          focus:outline-none focus:ring-2 focus:ring-blue-300">
-        </div>
-
-        <!-- Status -->
+    <!-- Form Lọc -->
+    <form th:action="@{/bills/filter}" method="get" onsubmit="saveFiltersToLocalStorage()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
             <label for="status" class="block text-gray-700 font-semibold">Status</label>
-            <select id="status" name="status"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2
-                           focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <select id="status" name="status" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
                 <option value="" th:selected="${filter.status == null}">All</option>
                 <option value="overdue" th:selected="${filter.status == 'overdue'}">Overdue</option>
                 <option value="paid" th:selected="${filter.status == 'paid'}">Paid</option>
                 <option value="unpaid" th:selected="${filter.status == 'unpaid'}">Unpaid</option>
             </select>
         </div>
-
-        <!-- Bill Type -->
         <div>
             <label for="billType" class="block text-gray-700 font-semibold">Bill Type</label>
-            <select id="billType" name="billType"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2
-                           focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <select id="billType" name="billType" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
                 <option value="" th:selected="${filter.billType == null}">All</option>
                 <option value="PHONG" th:selected="${filter.billType == 'PHONG'}">Room</option>
                 <option value="DIEN_NUOC" th:selected="${filter.billType == 'DIEN_NUOC'}">Electricity & Water</option>
                 <option value="DICH_VU" th:selected="${filter.billType == 'DICH_VU'}">Service</option>
             </select>
         </div>
-
-        <!-- Start Date -->
         <div>
             <label for="startDate" class="block text-gray-700 font-semibold">Start Date</label>
-            <input type="date" id="startDate" name="startDate"
-                   th:value="${filter.startDate}"
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2
-                          focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <input type="date" id="startDate" name="startDate" th:value="${filter.startDate}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
         </div>
-
-        <!-- End Date -->
         <div>
             <label for="endDate" class="block text-gray-700 font-semibold">End Date</label>
-            <input type="date" id="endDate" name="endDate"
-                   th:value="${filter.endDate}"
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2
-                          focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <input type="date" id="endDate" name="endDate" th:value="${filter.endDate}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
         </div>
-
-        <!-- hidden input: page & size -->
         <input type="hidden" id="page" name="page" value="0">
         <input type="hidden" id="size" name="size" value="10">
-
-        <!-- Filter Button -->
         <div class="md:col-span-3">
-            <button type="submit"
-                    class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold
-                           hover:bg-blue-600 focus:outline-none transition-colors mt-2">
-                Filter
-            </button>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 focus:outline-none transition-colors mt-2">Filter</button>
         </div>
     </form>
 
-    <!-- Khu vực hiển thị danh sách hóa đơn -->
+    <!-- Danh sách hóa đơn -->
     <div class="overflow-x-auto mt-4">
         <table class="min-w-full divide-y divide-gray-200 border text-sm">
             <thead class="bg-gray-50">
@@ -139,11 +100,7 @@
     <div class="mt-4 flex space-x-2 justify-center">
         <ul class="flex items-center gap-2">
             <li th:each="i : ${#numbers.sequence(0, bills.totalPages - 1)}">
-                <a th:href="@{/bills/filter(page=${i}, size=${filter.size})}"
-                   th:text="${i + 1}"
-                   class="px-3 py-1 border rounded-lg hover:bg-blue-100 focus:outline-none transition-colors"
-                   th:classappend="${i == bills.number} ? 'bg-blue-200 font-bold' : ''">
-                </a>
+                <a th:href="@{/bills/filter(page=${i}, size=${filter.size})}" th:text="${i + 1}" class="px-3 py-1 border rounded-lg hover:bg-blue-100 focus:outline-none transition-colors" th:classappend="${i == bills.number} ? 'bg-blue-200 font-bold' : ''"></a>
             </li>
         </ul>
     </div>

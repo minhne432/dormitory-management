@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/student/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/student/layout}">
 <head>
     <meta charset="UTF-8">
     <title layout:fragment="title">Đăng ký dịch vụ</title>
@@ -13,15 +11,12 @@
             document.getElementById('confirmButton').setAttribute("onclick", `registerService(${serviceId})`);
             document.getElementById('modal').classList.remove("hidden");
         }
-
         function closeModal() {
             document.getElementById('modal').classList.add("hidden");
         }
-
         function registerService(serviceId) {
             const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
             const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
             fetch(`/student/register-service/` + serviceId, {
                 method: 'POST',
                 headers: {
@@ -38,30 +33,24 @@
                 console.error('Lỗi:', error);
                 alert("Đã xảy ra lỗi khi đăng ký dịch vụ.");
             });
-
             closeModal();
         }
     </script>
 </head>
 <body>
-<div layout:fragment="content" class="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl">
     <h1 class="text-2xl font-bold mb-6 text-blue-700 text-center">Đăng ký dịch vụ</h1>
-
-    <!-- Danh sách dịch vụ -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div th:each="service : ${services}" class="border p-4 rounded-lg shadow-md bg-gray-100 transition-transform hover:scale-105">
             <h2 class="text-lg font-semibold text-gray-800 mb-2" th:text="${service.serviceName}"></h2>
             <p class="text-sm text-gray-600">Giá: <span th:text="${service.unitPrice}"></span> / <span th:text="${service.unit}"></span></p>
             <p class="text-sm text-gray-500 mt-1" th:text="${service.description}"></p>
-            <button class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                    th:attr="onclick='openModal(' + ${service.serviceId} + ', `' + ${service.serviceName} + '`)'">
-                Đăng ký
-            </button>
+            <button class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors" th:attr="onclick='openModal(' + ${service.serviceId} + ', `' + ${service.serviceName} + '`)'">Đăng ký</button>
         </div>
     </div>
 </div>
 
-<!-- Modal xác nhận đăng ký -->
+<!-- Modal xác nhận -->
 <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
         <h2 class="text-xl font-semibold mb-4">Xác nhận đăng ký</h2>
@@ -72,6 +61,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

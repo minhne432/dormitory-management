@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.BillFilterRequest;
 import com.example.demo.entity.Bill;
 import com.example.demo.service.BillService;
+import com.example.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,9 +22,11 @@ public class BillControllerForStudent {
     @Autowired
     private BillService billService;
 
+    @Autowired
+    private StudentService studentService;
+
     @GetMapping("/filter")
     public String filterBills(
-            @RequestParam(required = false) Long studentId,
             @RequestParam(required = false) Bill.BillStatus status,
             @RequestParam(required = false) Bill.BillType billType,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -32,6 +35,8 @@ public class BillControllerForStudent {
             @RequestParam(defaultValue = "10") int size,
             Model model
     ) {
+        // Lấy ID của sinh viên hiện tại
+        Long studentId = studentService.getCurrentStudentId();
         // Map param vào DTO
         BillFilterRequest filter = new BillFilterRequest();
         filter.setStudentId(studentId);

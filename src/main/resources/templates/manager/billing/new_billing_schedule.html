@@ -6,22 +6,19 @@
     <title layout:fragment="title">New Billing Schedule</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <div class="container mt-4">
-        <h1 class="mb-4">Create Billing Schedule</h1>
-        <form th:action="@{/billing-schedule/save}" th:object="${schedule}" method="post" class="p-4 bg-white shadow-sm rounded">
-            <div class="mb-3">
-                <label for="scheduleTime" class="form-label">Schedule Time</label>
-                <!-- Sử dụng input type="datetime-local" với step="1" để cho phép nhập giây -->
-                <input type="datetime-local" id="scheduleTime" th:field="*{scheduleTime}" class="form-control" step="1" required />
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" id="active" th:field="*{active}" class="form-check-input"/>
-                <label for="active" class="form-check-label">Active</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Save Schedule</button>
-        </form>
-    </div>
+<div layout:fragment="content" class="mt-4">
+    <h1 class="mb-4 text-2xl font-bold">Create Billing Schedule</h1>
+    <form th:action="@{/billing-schedule/save}" th:object="${schedule}" method="post" class="p-4 bg-white shadow-sm rounded space-y-4">
+        <div>
+            <label for="scheduleTime" class="block text-sm font-medium text-gray-700">Schedule Time</label>
+            <input type="datetime-local" id="scheduleTime" th:field="*{scheduleTime}" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" step="1" required />
+        </div>
+        <div class="flex items-center">
+            <input type="checkbox" id="active" th:field="*{active}" class="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+            <label for="active" class="ml-2 text-sm text-gray-700">Active</label>
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save Schedule</button>
+    </form>
 </div>
 </body>
 </html>
