@@ -63,19 +63,9 @@
     <tr>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Registration ID</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Student ID</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Full Name</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Email</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Gender</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Phone Number</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Class</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Department</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Date of Birth</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Address</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room ID</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Assigned Date</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Room End Date</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Start Date</th>
-      <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service End Date</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Status</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Service Name</th>
       <th class="px-4 py-2 border text-left text-sm font-medium text-gray-600">Actions</th>
@@ -85,19 +75,9 @@
     <tr th:each="request : ${result.content}">
       <td class="px-4 py-2 border" th:text="${request.registrationId}"></td>
       <td class="px-4 py-2 border" th:text="${request.studentId}"></td>
-      <td class="px-4 py-2 border" th:text="${request.fullName}"></td>
       <td class="px-4 py-2 border" th:text="${request.email}"></td>
-      <td class="px-4 py-2 border" th:text="${request.gender}"></td>
       <td class="px-4 py-2 border" th:text="${request.phoneNumber}"></td>
-      <td class="px-4 py-2 border" th:text="${request.studentClass}"></td>
-      <td class="px-4 py-2 border" th:text="${request.department}"></td>
-      <td class="px-4 py-2 border" th:text="${request.dateOfBirth}"></td>
-      <td class="px-4 py-2 border" th:text="${request.address}"></td>
-      <td class="px-4 py-2 border" th:text="${request.roomId}"></td>
-      <td class="px-4 py-2 border" th:text="${request.assignedDate}"></td>
-      <td class="px-4 py-2 border" th:text="${request.roomEndDate}"></td>
       <td class="px-4 py-2 border" th:text="${request.serviceStartDate}"></td>
-      <td class="px-4 py-2 border" th:text="${request.serviceEndDate}"></td>
       <td class="px-4 py-2 border" th:text="${request.serviceStatus}"></td>
       <td class="px-4 py-2 border" th:text="${request.serviceName}"></td>
       <td class="px-4 py-2 border">

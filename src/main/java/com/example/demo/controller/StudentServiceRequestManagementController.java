@@ -30,7 +30,7 @@ public class StudentServiceRequestManagementController {
             @RequestParam(required = false) String toDate,
             @RequestParam(required = false) String serviceName,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "4") int size,
             Model model
     ) {
         LocalDate from = null;

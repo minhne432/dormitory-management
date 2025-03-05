@@ -8,91 +8,84 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
-<div layout:fragment="content">
-    <h1>Pending Applications</h1>
-
-    <form th:action="@{/manager/applications/pending-applications}" method="get">
+<div layout:fragment="content" class="mt-4">
+    <h1 class="text-2xl font-bold mb-4">Pending Applications</h1>
+    <form th:action="@{/manager/applications/pending-applications}" method="get" class="space-y-4 mb-4">
         <div>
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" th:value="${address}">
+            <label for="address" class="block text-sm font-medium text-gray-700">Address:</label>
+            <input type="text" id="address" name="address" th:value="${address}" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
         </div>
-
         <div>
-            <label for="department">Department:</label>
-            <select id="department" name="department">
+            <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
+            <select id="department" name="department" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
                 <option value="">All</option>
-                <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"
-                        th:selected="${dept} == ${department}">Department</option>
+                <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}" th:selected="${dept} == ${department}"></option>
             </select>
         </div>
-
-        <button type="submit">Filter</button>
-        <a th:href="@{/manager/applications/pending-applications}">Reset</a>
+        <div class="flex space-x-2">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Filter</button>
+            <a th:href="@{/manager/applications/pending-applications}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reset</a>
+        </div>
     </form>
-
-    <table border="1">
-        <thead>
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
         <tr>
-            <th>Application ID</th>
-            <th>Submission Date</th>
-            <th>Dormitory Area</th>
-            <th>Full Name</th>
-            <th>Address</th>
-            <th>Department</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Application ID</th>
+            <!-- Other headers -->
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dormitory Area</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-white divide-y divide-gray-200">
         <tr th:each="app : ${applicationPage.content}">
-            <td th:text="${app.applicationId}">ID</td>
-            <td th:text="${app.submissionDate}">Date</td>
-            <td th:text="${app.dormitoryArea}">Dormitory Area</td>
-            <td th:text="${app.fullName}">Full Name</td>
-            <td th:text="${app.address}">Address</td>
-            <td th:text="${app.department}">Department</td>
-            <td th:text="${app.phoneNumber}">Phone Number</td>
-            <td>
-                <div>
-                    <!-- Link Xem -->
-                    <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" style="display: inline;">
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.applicationId}"></td>
+            <!-- Other cells -->
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.submissionDate}">Date</td>
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.dormitoryArea}">Dormitory Area</td>
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.fullName}">Full Name</td>
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.address}">Address</td>
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.department}">Department</td>
+            <td class="px-6 py-4 whitespace-nowrap" th:text="${app.phoneNumber}">Phone Number</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex space-x-2">
+                    <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" class="inline">
                         <input type="hidden" name="address" th:value="${address}">
                         <input type="hidden" name="department" th:value="${department}">
                         <input type="hidden" name="page" th:value="${applicationPage.number}">
-                        <button type="submit">Xem</button>
+                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xem</button>
                     </form>
-
-                    <!-- Form phê duyệt -->
-                    <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" style="display: inline;">
+                    <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" class="inline">
                         <input type="hidden" name="address" th:value="${address}">
                         <input type="hidden" name="department" th:value="${department}">
                         <input type="hidden" name="page" th:value="${applicationPage.number}">
-                        <button type="submit">Phê duyệt</button>
+                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Phê duyệt</button>
                     </form>
-
-                    <!-- Form từ chối -->
-                    <form th:action="@{/manager/applications/{id}/reject(id=${app.applicationId})}" method="post" style="display: inline;">
+                    <form th:action="@{/manager/applications/{id}/reject(id=${app.applicationId})}" method="post" class="inline">
                         <input type="hidden" name="address" th:value="${address}">
                         <input type="hidden" name="department" th:value="${department}">
                         <input type="hidden" name="page" th:value="${applicationPage.number}">
-                        <button type="submit">Từ chối</button>
+                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Từ chối</button>
                     </form>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-
-    <div>
-        <span th:text="'Page ' + ${applicationPage.number + 1} + ' of ' + ${applicationPage.totalPages}">Page info</span>
+    <div class="mt-2">
+        <span th:text="'Page ' + ${applicationPage.number + 1} + ' of ' + ${applicationPage.totalPages}"></span>
     </div>
-    <div>
-        <ul>
+    <div class="mt-2">
+        <ul class="flex space-x-2">
             <li th:if="${applicationPage.hasPrevious()}">
-                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number - 1}, address=${address}, department=${department})}">Previous</a>
+                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number - 1}, address=${address}, department=${department})}" class="text-blue-500 hover:underline">Previous</a>
             </li>
             <li th:if="${applicationPage.hasNext()}">
-                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, address=${address}, department=${department})}">Next</a>
+                <a th:href="@{/manager/applications/pending-applications(page=${applicationPage.number + 1}, address=${address}, department=${department})}" class="text-blue-500 hover:underline">Next</a>
             </li>
         </ul>
     </div>

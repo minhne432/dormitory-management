@@ -32,7 +32,7 @@ public class PendingApplicationController {
             String address,
             String department,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
 

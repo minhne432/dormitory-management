@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/student/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/student/layout}">
 <head>
   <meta charset="UTF-8">
   <title layout:fragment="title">Home</title>
 </head>
 <body>
-<div layout:fragment="content" class="mx-auto mt-10 text-center">
-  <h1>Xin chào, <span th:text="${session.student?.fullName}">Student Name</span></h1>
-  <p>Mã sinh viên: <span th:text="${session.student?.studentId}">Student ID</span></p>
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl">
+  <h1 class="text-3xl font-bold text-gray-800">Xin chào, <span th:text="${session.student?.fullName}">Student Name</span></h1>
+  <p class="text-lg text-gray-600 mt-2">Mã sinh viên: <span th:text="${session.student?.studentId}">Student ID</span></p>
 </div>
 </body>
 </html>

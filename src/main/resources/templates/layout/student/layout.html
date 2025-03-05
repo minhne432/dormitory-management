@@ -1,29 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title layout:fragment="title">My Application</title>
-    <!-- Nhúng Tailwind CSS một lần duy nhất -->
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-
-<!-- Container chính: flex chia sidebar và main content, chiều cao full màn hình -->
 <div class="flex h-screen">
-    <!-- Sidebar Fragment (chèn sidebar.html) -->
-    <div class="overflow-y-auto" layout:insert="~{layout/student/fragment/sidebar :: sidebar}"></div>
-
-    <!-- Khu vực nội dung chính -->
-    <div class="flex-1 p-5 overflow-y-auto" layout:fragment="content">
-        <!-- Nội dung mặc định (nếu trang con không override) -->
-        <p class="text-gray-700">This is default content.</p>
+    <div class="w-64 bg-gray-800 overflow-y-auto" layout:insert="~{layout/student/fragment/sidebar :: sidebar}"></div>
+    <div class="flex-1 p-5 grid place-items-center" layout:fragment="content">
+        <!-- Nội dung từ trang con sẽ nằm giữa -->
     </div>
 </div>
-
-<!-- Khu vực dành cho script nếu cần (trang con có thể override) -->
 <div layout:fragment="script"></div>
-
 </body>
 </html>

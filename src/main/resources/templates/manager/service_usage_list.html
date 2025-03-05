@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
-
 <head>
     <title layout:fragment="title">Danh sách Service Usage</title>
     <script>
@@ -31,66 +30,65 @@
 <body>
 <div layout:fragment="content">
     <div class="container mt-4">
-        <h1 class="text-2xl font-bold">Danh sách Service Usage (Dịch vụ phòng)</h1>
+        <h1 class="text-2xl font-bold text-gray-700">Danh sách Service Usage (Dịch vụ phòng)</h1>
 
         <!-- Form Lọc -->
-        <form id="filterForm" th:action="@{/electricity-water-bill/list}" method="get" onsubmit="saveFilter()" class="mt-4 p-4 bg-white shadow-md rounded-lg">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="roomId" class="form-label">Room ID:</label>
-                    <input type="text" name="roomId" id="roomId" class="form-control">
+        <form id="filterForm" th:action="@{/electricity-water-bill/list}" method="get" onsubmit="saveFilter()" class="mt-4 p-4 bg-white shadow-lg rounded-lg space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="mb-3">
+                    <label for="roomId" class="block text-sm font-medium text-gray-700">Room ID:</label>
+                    <input type="text" name="roomId" id="roomId" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="currentReading" class="form-label">Current Reading:</label>
-                    <input type="text" name="currentReading" id="currentReading" class="form-control">
+                <div class="mb-3">
+                    <label for="currentReading" class="block text-sm font-medium text-gray-700">Current Reading:</label>
+                    <input type="text" name="currentReading" id="currentReading" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="previousReading" class="form-label">Previous Reading:</label>
-                    <input type="text" name="previousReading" id="previousReading" class="form-control">
+                <div class="mb-3">
+                    <label for="previousReading" class="block text-sm font-medium text-gray-700">Previous Reading:</label>
+                    <input type="text" name="previousReading" id="previousReading" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="recordDate" class="form-label">Record Date (yyyy-MM-dd):</label>
-                    <input type="date" name="recordDate" id="recordDate" class="form-control">
+                <div class="mb-3">
+                    <label for="recordDate" class="block text-sm font-medium text-gray-700">Record Date (yyyy-MM-dd):</label>
+                    <input type="date" name="recordDate" id="recordDate" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label for="invoiced" class="form-label">Invoiced:</label>
-                    <select name="invoiced" id="invoiced" class="form-control">
+                <div class="mb-3">
+                    <label for="invoiced" class="block text-sm font-medium text-gray-700">Invoiced:</label>
+                    <select name="invoiced" id="invoiced" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2">
                         <option value="">--Chọn--</option>
                         <option value="NO">NO</option>
                         <option value="YES">YES</option>
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Lọc</button>
+            <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
         </form>
 
         <!-- Bảng dữ liệu -->
-        <table class="table mt-4 table-bordered">
-            <thead class="table-dark">
+        <table class="min-w-full mt-6 table-auto border-collapse bg-white shadow-lg rounded-lg">
+            <thead class="bg-gray-700 text-white">
             <tr>
-                <th>Usage ID</th>
-                <th>Room</th>
-                <th>Service</th>
-                <th>Current Reading</th>
-                <th>Previous Reading</th>
-                <th>Record Date</th>
-                <th>Invoiced</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Usage ID</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Room</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Service</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Current Reading</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Previous Reading</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Record Date</th>
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Invoiced</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-200">
             <tr th:each="usage : ${usages}">
-                <td th:text="${usage.usageId}"></td>
-                <td th:text="${usage.room.roomNumber}"></td>
-                <td th:text="${usage.service.serviceName}"></td>
-                <td th:text="${usage.currentReading}"></td>
-                <td th:text="${usage.previousReading}"></td>
-                <td th:text="${usage.recordDate}"></td>
-                <td th:text="${usage.invoiced}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.usageId}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.room.roomNumber}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.service.serviceName}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.currentReading}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.previousReading}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.recordDate}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.invoiced}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
 </body>
-
 </html>
