@@ -51,7 +51,7 @@ public class ApplicationService {
         application.setStudent(student);
         application.setSubmissionDate(LocalDate.now());
         application.setStatus(Application.ApplicationStatus.pending);
-//        application.setDormitoryArea(form.getDormitoryArea());
+        application.setDormitoryArea(form.getDormitoryArea());
         application.setNote(form.getNote());
 
         applicationRepository.save(application);

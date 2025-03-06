@@ -26,11 +26,9 @@ public class ApprovedApplication {
     @Column(name = "student_id")
     private Long studentId;
 
-    @Column(name = "full_name")
-    private String fullName;
 
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+
+
 
     @Column(name = "gender")
     private String gender;
@@ -53,14 +51,6 @@ public class ApprovedApplication {
     @Column(name = "submission_date")
     private LocalDate submissionDate;
 
-    /**
-     * Nếu muốn map enum status, ta dùng lại enum của Application,
-     * hoặc tạo enum riêng có giá trị y hệt (approved, pending, rejected, completed).
-     * Ở đây ví dụ dùng chung enum của Application.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private Application.ApplicationStatus status;
 
     @Column(name = "approved_by")
     private Long approvedBy;
@@ -71,6 +61,4 @@ public class ApprovedApplication {
     @Column(name = "dormitory_area")
     private String dormitoryArea;
 
-    @Column(name = "note")
-    private String note;
 }

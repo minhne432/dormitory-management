@@ -47,6 +47,8 @@ public class Application {
     @Column(name = "note", length = 255)
     private String note;
 
+    @Column(name = "dormitory_area")
+    private String dormitoryArea;
 
     public enum ApplicationStatus {
         approved,
