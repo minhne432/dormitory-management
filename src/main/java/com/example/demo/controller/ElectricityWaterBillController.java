@@ -30,22 +30,28 @@ public class ElectricityWaterBillController {
             @RequestParam(required = false) Long roomId,
             @RequestParam(required = false) Double currentReading,
             @RequestParam(required = false) Double previousReading,
-            @RequestParam(required = false) String recordDate,
+            @RequestParam(required = false) String startDate, // Thay đổi thành startDate
+            @RequestParam(required = false) String endDate,   // Thêm endDate
             @RequestParam(required = false) String invoiced,
             Model model) {
 
-        // Chuyển đổi recordDate an toàn để tránh lỗi định dạng
-        LocalDate parsedRecordDate = Optional.ofNullable(recordDate)
+        // Chuyển đổi startDate và endDate an toàn
+        LocalDate parsedStartDate = Optional.ofNullable(startDate)
                 .filter(date -> !date.isBlank())
                 .map(LocalDate::parse)
                 .orElse(null);
 
-        // Xây dựng Specification theo thứ tự: mặc định có serviceType ROOM + các bộ lọc nếu có
+        LocalDate parsedEndDate = Optional.ofNullable(endDate)
+                .filter(date -> !date.isBlank())
+                .map(LocalDate::parse)
+                .orElse(null);
+
+        // Xây dựng Specification với bộ lọc khoảng thời gian recordDate
         Specification<ServiceUsage> spec = ServiceUsageSpecification.hasRoomServiceType()
                 .and(ServiceUsageSpecification.hasRoomId(roomId))
                 .and(ServiceUsageSpecification.hasCurrentReading(currentReading))
                 .and(ServiceUsageSpecification.hasPreviousReading(previousReading))
-                .and(ServiceUsageSpecification.hasRecordDate(recordDate))
+                .and(ServiceUsageSpecification.hasRecordDateBetween(parsedStartDate, parsedEndDate)) // Thay đổi bộ lọc recordDate
                 .and(ServiceUsageSpecification.hasInvoiced(invoiced));
 
         model.addAttribute("usages", serviceUsageService.searchServiceUsages(spec));

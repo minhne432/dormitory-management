@@ -16,4 +16,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Page<Application> findBySubmissionDateBetweenAndStatus(LocalDate startDate, LocalDate endDate,Application.ApplicationStatus status ,Pageable pageable);
     List<Application> findByStatus(Application.ApplicationStatus status);
 
+
+    boolean existsByStudent_StudentId(Long studentId);
+
 }

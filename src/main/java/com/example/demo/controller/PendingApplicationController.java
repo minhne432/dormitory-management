@@ -31,25 +31,23 @@ public class PendingApplicationController {
             String dormitoryArea,
             String address,
             String department,
+            String applicationId, // Thêm tham số applicationId
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
 
-        // Giả sử service trả về Page<PendingApplication> có trường dormitory
-        Page<PendingApplication> applicationPage = service.getPendingApplications(dormitoryArea, address, department, pageable);
+        Page<PendingApplication> applicationPage = service.getPendingApplications(dormitoryArea, address, department, applicationId, pageable); // Thêm applicationId vào service
 
-        // Thêm dữ liệu vào model
         model.addAttribute("applicationPage", applicationPage);
         model.addAttribute("dormitoryArea", dormitoryArea);
         model.addAttribute("address", address);
         model.addAttribute("department", department);
+        model.addAttribute("applicationId", applicationId); // Thêm applicationId vào model
 
-        // Lấy danh sách các Dormitory từ service
         List<Dormitory> dormitoryAreas = dormitoryService.getAllDormitories();
         model.addAttribute("dormitoryAreas", dormitoryAreas);
 
-        // Thêm danh sách mẫu cho dropdown
         List<String> departments = Arrays.asList("Computer Science", "Electrical Engineering");
         model.addAttribute("departments", departments);
 
