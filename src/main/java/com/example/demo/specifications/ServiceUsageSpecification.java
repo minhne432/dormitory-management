@@ -5,6 +5,7 @@ import com.example.demo.entity.DormitoryService;
 import com.example.demo.entity.DormitoryService.ServiceType;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.*;
+import java.time.LocalDate;
 
 public class ServiceUsageSpecification {
 
@@ -46,15 +47,26 @@ public class ServiceUsageSpecification {
         };
     }
 
-    public static Specification<ServiceUsage> hasRecordDate(String recordDateStr) {
+    // Loại bỏ hoặc comment out hasRecordDate cũ
+    // public static Specification<ServiceUsage> hasRecordDate(String recordDateStr) { ... }
+
+    // Thêm Specification mới cho lọc theo khoảng thời gian recordDate
+    public static Specification<ServiceUsage> hasRecordDateBetween(LocalDate startDate, LocalDate endDate) {
         return (root, query, criteriaBuilder) -> {
-            if (recordDateStr == null || recordDateStr.isEmpty()) {
-                return criteriaBuilder.conjunction();
+            if (startDate == null && endDate == null) {
+                return criteriaBuilder.conjunction(); // Không lọc theo recordDate nếu cả hai đều null
             }
-            // Giả sử định dạng yyyy-MM-dd
-            return criteriaBuilder.equal(root.get("recordDate"), java.time.LocalDate.parse(recordDateStr));
+            if (startDate != null && endDate != null) {
+                return criteriaBuilder.between(root.get("recordDate"), startDate, endDate); // Lọc trong khoảng
+            }
+            if (startDate != null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("recordDate"), startDate); // Lọc từ startDate trở đi
+            }
+            // if (endDate != null) - chỉ còn trường hợp endDate != null
+            return criteriaBuilder.lessThanOrEqualTo(root.get("recordDate"), endDate); // Lọc đến endDate
         };
     }
+
 
     public static Specification<ServiceUsage> hasInvoiced(String invoiced) {
         return (root, query, criteriaBuilder) -> {

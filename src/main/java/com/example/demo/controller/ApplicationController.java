@@ -31,9 +31,19 @@ public class ApplicationController {
     @GetMapping("/register-dormitory")
     public String showDormForm(Model model) {
         Long currentStudentId = studentService.getCurrentStudentId();
-        DormApplicationForm form = applicationService.prepareDormApplicationForm(currentStudentId);
-        model.addAttribute("student", form);
-        return "student/application/registerDormitory";
+
+        // Kiểm tra xem sinh viên đã có đơn đăng ký nào chưa
+        boolean hasExistingApplication = applicationService.hasApplicationWithStudentId(currentStudentId);
+
+        if (hasExistingApplication) {
+            // Nếu đã có đơn đăng ký, chuyển hướng đến view thông báo
+            return "student/application/applicationPending"; // Tên view Thymeleaf cho thông báo
+        } else {
+            // Nếu chưa có đơn đăng ký, hiển thị form đăng ký như bình thường
+            DormApplicationForm form = applicationService.prepareDormApplicationForm(currentStudentId);
+            model.addAttribute("student", form);
+            return "student/application/registerDormitory"; // Tên view Thymeleaf cho form đăng ký
+        }
     }
 
     @PostMapping("/register-dormitory")

@@ -31,6 +31,14 @@
           <option th:value="unpaid">unpaid</option>
         </select>
       </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Từ ngày phát hành:</label>
+        <input type="date" th:field="*{startDate}" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Đến ngày phát hành:</label>
+        <input type="date" th:field="*{endDate}" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
       <!-- Other fields similarly -->
     </div>
     <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>

@@ -81,6 +81,8 @@
                 <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Status</th>
                 <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Amount</th>
                 <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Issue Date</th>
+                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Due Date</th>
+
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -91,6 +93,7 @@
                 <td class="py-2 px-4 border-b" th:text="${bill.status}"></td>
                 <td class="py-2 px-4 border-b" th:text="${bill.totalAmount}"></td>
                 <td class="py-2 px-4 border-b" th:text="${bill.issueDate}"></td>
+                <td class="py-2 px-4 border-b" th:text="${bill.dueDate}"></td>
             </tr>
             </tbody>
         </table>

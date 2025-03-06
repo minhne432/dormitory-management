@@ -13,5 +13,5 @@ public class BillFilterRequestForManager {
     private LocalDate startDate;
     private LocalDate endDate;
     private int page = 0;
-    private int size = 10;
+    private int size = 5;
 }

@@ -77,4 +77,8 @@ public class ApplicationService {
         applicationRepository.save(application);
     }
 
+    public boolean hasApplicationWithStudentId(Long studentId) {
+        return applicationRepository.existsByStudent_StudentId(studentId);
+    }
+
 }
