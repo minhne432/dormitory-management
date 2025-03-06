@@ -89,75 +89,215 @@
     </div>
 
     <!-- MODAL CHỌN PHÒNG -->
+    <!-- MODAL CHỌN PHÒNG (Bảng với ô lọc) -->
     <div id="assignRoomModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
             <h1 class="text-lg font-bold mb-4">Chọn phòng để xếp</h1>
-            <div>
-                <label for="roomSelect" class="block text-sm font-medium text-gray-700">Danh sách phòng</label>
-                <select id="roomSelect" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
-                    <option th:each="room : ${roomList}" th:value="${room.roomId}" th:text="${room.roomNumber + ' - ' + room.dormName}"></option>
-                </select>
-                <div id="errorMsg" class="text-red-500 mt-2 hidden"></div>
-                <div id="successMsg" class="text-green-500 mt-2 hidden"></div>
+            <div class="overflow-x-auto">
+                <table id="roomTable" class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2"></th>
+                        <th class="px-4 py-2">Room Number</th>
+                        <th class="px-4 py-2">Current Occupancy</th>
+                        <th class="px-4 py-2">Room Max Capacity</th>
+                        <th class="px-4 py-2">Dorm Name</th>
+                    </tr>
+                    <!-- Hàng lọc -->
+                    <tr>
+                        <th></th>
+                        <th class="px-4 py-2">
+                            <input type="text" id="filterRoomNumber" placeholder="Filter" onkeyup="filterTable()" class="border rounded px-2 py-1 w-full" />
+                        </th>
+                        <th class="px-4 py-2">
+                            <input type="text" id="filterCurrentOccupancy" placeholder="Filter" onkeyup="filterTable()" class="border rounded px-2 py-1 w-full" />
+                        </th>
+                        <th class="px-4 py-2">
+                            <input type="text" id="filterRoomMaxCapacity" placeholder="Filter" onkeyup="filterTable()" class="border rounded px-2 py-1 w-full" />
+                        </th>
+                        <th class="px-4 py-2">
+                            <input type="text" id="filterDormName" placeholder="Filter" onkeyup="filterTable()" class="border rounded px-2 py-1 w-full" />
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" th:each="room : ${roomList}">
+                    <tr>
+                        <td class="px-4 py-2 text-center">
+                            <input type="radio" name="selectedRoom" th:value="${room.roomId}" class="room-radio" />
+                        </td>
+                        <td class="px-4 py-2" th:text="${room.roomNumber}">Room Number</td>
+                        <td class="px-4 py-2" th:text="${room.currentOccupancy}">0</td>
+                        <td class="px-4 py-2" th:text="${room.roomMaxCapacity}">0</td>
+                        <td class="px-4 py-2" th:text="${room.dormName}">Dorm Name</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Thêm phân trang dưới bảng -->
+            <div class="mt-4 flex justify-between items-center">
+                <div id="paginationInfo" class="text-sm text-gray-600"></div>
+                <div id="paginationControls" class="flex space-x-2"></div>
+            </div>
+
+            <div id="errorMsg" class="text-red-500 mt-2 hidden"></div>
+            <div id="successMsg" class="text-green-500 mt-2 hidden"></div>
+
             <div class="mt-4 flex justify-end">
                 <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600" onclick="closeModal()">Đóng</button>
                 <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="confirmAssignRoom()">Xác nhận xếp phòng</button>
             </div>
         </div>
     </div>
+
     <script layout:fragment="script">
-        function openModal() {
-            document.getElementById('assignRoomModal').classList.remove('hidden');
-        }
-        function closeModal() {
-            document.getElementById('assignRoomModal').classList.add('hidden');
-        }
-        window.confirmAssignRoom = function() {
-            let checkboxes = document.querySelectorAll('.chk-app:checked');
-            if (checkboxes.length === 0) {
-                alert("Bạn chưa chọn sinh viên nào!");
-                return;
-            }
-            let selectedAppIds = Array.from(checkboxes).map(cb => cb.value);
-            let roomId = document.getElementById('roomSelect').value;
-            if (!roomId) {
-                alert("Bạn chưa chọn phòng!");
-                return;
-            }
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-            fetch('/assign-room', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [csrfHeader]: csrfToken
-                },
-                body: JSON.stringify({
-                    applicationIds: selectedAppIds,
-                    roomId: parseInt(roomId)
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('errorMsg').style.display = 'none';
-                    document.getElementById('successMsg').style.display = 'block';
-                    document.getElementById('successMsg').innerText = data.message;
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                } else {
-                    document.getElementById('successMsg').style.display = 'none';
-                    document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = data.message;
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert("Có lỗi xảy ra khi xếp phòng!");
-            });
-        }
+        let currentPage = 1;
+   let totalPages = 1;
+   const rowsPerPage = 5;
+
+   // Hàm áp dụng bộ lọc và trả về danh sách hàng phù hợp
+   function applyFilter() {
+       const filterRoomNumber = document.getElementById("filterRoomNumber").value.toLowerCase();
+       const filterCurrentOccupancy = document.getElementById("filterCurrentOccupancy").value.toLowerCase();
+       const filterRoomMaxCapacity = document.getElementById("filterRoomMaxCapacity").value.toLowerCase();
+       const filterDormName = document.getElementById("filterDormName").value.toLowerCase();
+
+       const rows = document.querySelectorAll("#roomTable tbody tr");
+       const visibleRows = [];
+
+       rows.forEach(row => {
+           const cells = row.querySelectorAll("td");
+           const roomNumber = cells[1].textContent.toLowerCase();
+           const currentOccupancy = cells[2].textContent.toLowerCase();
+           const maxCapacity = cells[3].textContent.toLowerCase();
+           const dormName = cells[4].textContent.toLowerCase();
+
+           const shouldShow = roomNumber.includes(filterRoomNumber) &&
+                            currentOccupancy.includes(filterCurrentOccupancy) &&
+                            maxCapacity.includes(filterRoomMaxCapacity) &&
+                            dormName.includes(filterDormName);
+
+           row.style.display = shouldShow ? "table-row" : "none";
+           if (shouldShow) visibleRows.push(row);
+       });
+
+       return visibleRows;
+   }
+
+   // Hiển thị trang cụ thể
+   function showPage(page) {
+       const visibleRows = applyFilter(); // Áp dụng bộ lọc trước
+       const startIdx = (page - 1) * rowsPerPage;
+       const endIdx = startIdx + rowsPerPage;
+
+       visibleRows.forEach((row, index) => {
+           row.style.display = (index >= startIdx && index < endIdx) ? "table-row" : "none";
+       });
+
+       currentPage = page;
+       updatePaginationControls(visibleRows.length);
+   }
+
+   // Cập nhật điều khiển phân trang
+   function updatePaginationControls(totalItems) {
+       const paginationDiv = document.getElementById("paginationControls");
+       const infoDiv = document.getElementById("paginationInfo");
+       paginationDiv.innerHTML = "";
+
+       // Tính toán tổng số trang mới
+       totalPages = Math.ceil(totalItems / rowsPerPage);
+
+       // Cập nhật thông tin hiển thị
+       infoDiv.textContent = `Hiển thị ${Math.min((currentPage-1)*rowsPerPage + 1, totalItems)}-${Math.min(currentPage*rowsPerPage, totalItems)} của ${totalItems}`;
+
+       // Tạo nút phân trang
+       const createButton = (content, pageNum, isActive = false, isDisabled = false) => {
+           const button = document.createElement("button");
+           button.innerHTML = content;
+           button.className = `px-3 py-1 rounded ${isActive ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"} ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`;
+           button.onclick = !isDisabled ? () => showPage(pageNum) : null;
+           return button;
+       };
+
+       // Nút Previous
+       paginationDiv.appendChild(createButton("&laquo;", currentPage - 1, false, currentPage === 1));
+
+       // Các nút trang
+       for (let i = 1; i <= totalPages; i++) {
+           paginationDiv.appendChild(createButton(i, i, i === currentPage));
+       }
+
+       // Nút Next
+       paginationDiv.appendChild(createButton("&raquo;", currentPage + 1, false, currentPage === totalPages));
+   }
+
+   // Hàm lọc dữ liệu
+   window.filterTable = function() {
+       currentPage = 1; // Reset về trang đầu khi lọc
+       updatePaginationControls(applyFilter().length);
+       showPage(1);
+   };
+
+   // Mở modal và khởi tạo
+   function openModal() {
+       document.getElementById('assignRoomModal').classList.remove('hidden');
+       currentPage = 1;
+       document.querySelectorAll("#roomTable tbody tr").forEach(row => row.style.display = "table-row");
+       updatePaginationControls(document.querySelectorAll("#roomTable tbody tr").length);
+       showPage(1);
+   }
+
+       function closeModal() {
+           document.getElementById('assignRoomModal').classList.add('hidden');
+       }
+
+       window.confirmAssignRoom = function() {
+           let checkboxes = document.querySelectorAll('.chk-app:checked');
+           if (checkboxes.length === 0) {
+               alert("Bạn chưa chọn sinh viên nào!");
+               return;
+           }
+           let selectedAppIds = Array.from(checkboxes).map(cb => cb.value);
+           let selectedRoomRadio = document.querySelector('input[name="selectedRoom"]:checked');
+           if (!selectedRoomRadio) {
+               alert("Bạn chưa chọn phòng!");
+               return;
+           }
+           let roomId = selectedRoomRadio.value;
+           const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+           const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+           fetch('/assign-room', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json',
+                       [csrfHeader]: csrfToken
+                   },
+                   body: JSON.stringify({
+                       applicationIds: selectedAppIds,
+                       roomId: parseInt(roomId)
+                   })
+               })
+               .then(response => response.json())
+               .then(data => {
+                   if (data.success) {
+                       document.getElementById('errorMsg').style.display = 'none';
+                       document.getElementById('successMsg').style.display = 'block';
+                       document.getElementById('successMsg').innerText = data.message;
+                       setTimeout(() => {
+                           window.location.reload();
+                       }, 1500);
+                   } else {
+                       document.getElementById('successMsg').style.display = 'none';
+                       document.getElementById('errorMsg').style.display = 'block';
+                       document.getElementById('errorMsg').innerText = data.message;
+                   }
+               })
+               .catch(err => {
+                   console.error(err);
+                   alert("Có lỗi xảy ra khi xếp phòng!");
+               });
+       }
     </script>
 </div>
 
