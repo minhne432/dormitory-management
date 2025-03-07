@@ -68,6 +68,13 @@
             </a>
         </li>
         <li>
+            <a th:href="@{/approved-requests}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">✅</span>
+                <span class="ml-3 sidebar-text">Ghi chỉ số dịch vụ cá nhân</span>
+            </a>
+        </li>
+
+        <li>
             <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-700">
                 <span class="w-6 h-6 flex items-center justify-center">📝</span>
                 <span class="ml-3 sidebar-text">Ghi số điện - nước</span>
@@ -78,6 +85,24 @@
                 <span class="w-6 h-6 flex items-center justify-center">ℹ️</span>
                 <span class="ml-3 sidebar-text">Thông tin điện nước</span>
             </a>
+        </li>
+        <li>
+            <a th:href="@{/service-usage/room/chart}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📈</span>
+                <span class="ml-3 sidebar-text">Thống kê điện nước</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/service-usage/personal/chart}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">📊</span>
+                <span class="ml-3 sidebar-text">Thống kê dịch vụ cá nhân</span>
+            </a>
+        </li>
+        <li>
+            <form th:action="@{/logout}" method="post" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🚪</span>
+                <button type="submit" class="ml-3 sidebar-text">Đăng xuất</button>
+            </form>
         </li>
     </ul>
     <script>

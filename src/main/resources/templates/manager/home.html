@@ -1,15 +1,95 @@
-<!--src/main/resources/templates/manager/home.html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
 <head>
   <meta charset="UTF-8">
-  <title layout:fragment="title">Home</title>
+  <title layout:fragment="title">Trang chủ</title>
 </head>
 <body>
-<div layout:fragment="content" class="text-center mt-10">
-  <h1 class="text-3xl font-bold">Hello, this is Manager Home page!</h1>
+<div layout:fragment="content" class="container mx-auto mt-10 px-4">
+  <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Tổng quan Ký túc xá</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center">
+          <i class="fas fa-users fa-lg"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-gray-500 font-semibold uppercase tracking-wider">Sinh viên hiện tại</p>
+          <p class="text-3xl font-bold text-indigo-600">
+            <span th:text="${totalStudents}">1500</span> </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center">
+          <i class="fas fa-door-open fa-lg"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-gray-500 font-semibold uppercase tracking-wider">Phòng trống</p>
+          <p class="text-3xl font-bold text-green-600">
+            <span th:text="${vacantRooms}">50</span> </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-yellow-500 text-white flex items-center justify-center">
+          <i class="fas fa-exclamation-triangle fa-lg"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-gray-500 font-semibold uppercase tracking-wider">Yêu cầu chờ xử lý</p>
+          <p class="text-3xl font-bold text-yellow-600">
+            <span th:text="${pendingRequests}">15</span> </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center">
+          <i class="fas fa-bell fa-lg"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-gray-500 font-semibold uppercase tracking-wider">Yêu cầu mới (Hôm nay/Tuần)</p>
+          <p class="text-3xl font-bold text-blue-600">
+            <span th:text="${newRequestsToday}">5</span> / <span th:text="${newRequestsWeek}">25</span> </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  </div> <div class="bg-white shadow-md rounded-lg p-6 mt-8">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Bảng tin Ký túc xá</h2>
+  <ul class="divide-y divide-gray-200">
+    <li th:each="news : ${newsList}" class="py-4">
+      <div class="flex space-x-3">
+        <div class="flex-none">
+          <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">
+            <i class="fas fa-bullhorn fa-sm"></i>
+          </div>
+        </div>
+        <div class="flex-grow">
+          <h3 class="text-lg font-medium text-gray-900" th:text="${news.title}"></h3>
+          <p class="text-gray-500" th:text="${news.content}"> </p>
+          <div class="mt-2">
+            <a href="#" class="text-indigo-600 hover:underline">Xem thêm</a>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="mt-4 text-center">
+    <a href="#" class="text-indigo-600 hover:underline">Xem tất cả bảng tin</a>
+  </div>
+</div>
+
 </div>
 </body>
 </html>

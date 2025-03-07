@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/manager/layout}">
+      layout:decorate="~{layout/student/layout}">
 
 <head>
     <title layout:fragment="title">Chi tiết hóa đơn</title>
@@ -11,20 +11,20 @@
 <div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-white shadow-lg rounded-lg p-6">
 
     <!-- Tiêu đề -->
-    <h1 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Chi tiết hóa đơn</h1>
+    <h1 class="text-3xl font-bold text-indigo-900 mb-6 border-b pb-2">Chi tiết hóa đơn</h1>
 
     <!-- Mã hóa đơn -->
     <div class="mb-4">
-        <strong class="text-gray-700">Mã hóa đơn:</strong>
-        <span class="text-gray-900 font-semibold" th:text="${bill.billId}"></span>
+        <strong class="text-indigo-700">Mã hóa đơn:</strong>
+        <span class="text-indigo-900 font-semibold" th:text="${bill.billId}"></span>
     </div>
 
     <!-- Danh sách chi tiết hóa đơn -->
-    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-4">Dịch vụ đã sử dụng</h2>
+    <h2 class="text-2xl font-semibold text-indigo-800 mt-6 mb-4">Chi tiết dịch vụ</h2>
 
     <div class="overflow-x-auto">
         <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
-            <thead class="bg-gray-700 text-white text-left">
+            <thead class="bg-indigo-700 text-white text-left">
             <tr>
                 <th class="px-6 py-3 font-medium uppercase">Tên dịch vụ</th>
                 <th class="px-6 py-3 font-medium uppercase">Đơn giá</th>
@@ -33,11 +33,11 @@
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-            <tr th:each="item : ${bill.billItems}" class="hover:bg-gray-100 transition">
+            <tr th:each="item : ${bill.billItems}" class="hover:bg-indigo-100 transition">
                 <td class="px-6 py-4" th:text="${item.service.serviceName}"></td>
                 <td class="px-6 py-4" th:text="${item.unitPrice}"></td>
                 <td class="px-6 py-4" th:text="${item.quantity}"></td>
-                <td class="px-6 py-4 font-bold text-gray-800" th:text="${item.amount}"></td>
+                <td class="px-6 py-4 font-bold text-indigo-800" th:text="${item.amount}"></td>
             </tr>
             </tbody>
         </table>
@@ -45,8 +45,8 @@
 
     <!-- Nút quay lại -->
     <div class="mt-6 text-right">
-        <a th:href="@{/bills/manager/filter}"
-           class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        <a th:href="@{/bills/filter}"
+           class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
             Quay lại danh sách
         </a>
     </div>
