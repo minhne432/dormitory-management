@@ -26,30 +26,16 @@
         <li><a th:href="@{/profile}" class="flex items-center p-2 rounded hover:bg-gray-700"><span class="w-6 h-6 flex items-center justify-center">👤</span><span class="ml-3 sidebar-text">Hồ sơ cá nhân</span></a></li>
         <li><a th:href="@{/settings}" class="flex items-center p-2 rounded hover:bg-gray-700"><span class="w-6 h-6 flex items-center justify-center">⚙️</span><span class="ml-3 sidebar-text">Cài đặt</span></a></li>
         <li><a th:href="@{/help}" class="flex items-center p-2 rounded hover:bg-gray-700"><span class="w-6 h-6 flex items-center justify-center">❓</span><span class="ml-3 sidebar-text">Trợ giúp</span></a></li>
+        <li>
+            <form th:action="@{/logout}" method="post" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🚪</span>
+                <button type="submit" class="ml-3 sidebar-text">Đăng xuất</button>
+            </form>
+        </li>
     </ul>
 
-    <hr class="my-4 border-gray-300">
 
-    <!-- Dropdown user -->
-    <div class="relative mt-4">
-        <button id="dropdownButton" class="flex items-center w-full p-2 rounded hover:bg-gray-700 focus:outline-none">
-            <img src="https://via.placeholder.com/32" alt="User avatar" class="w-8 h-8 rounded-full">
-            <span class="ml-3 sidebar-text">User</span>
-            <svg class="ml-auto w-4 h-4 transition-transform duration-200 sidebar-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd"/>
-            </svg>
-        </button>
-        <ul class="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg hidden" id="dropdownMenu">
-            <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Hồ sơ</a></li>
-            <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cài đặt</a></li>
-            <li><hr class="my-1 border-gray-200"></li>
-            <li>
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Đăng xuất</button>
-                </form>
-            </li>
-        </ul>
-    </div>
+
 
     <!-- Script xử lý Sidebar -->
     <script>

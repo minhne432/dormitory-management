@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class LoginController {
@@ -40,7 +42,7 @@ public class LoginController {
     }
 
     @GetMapping("/student/home")
-    public String studentDashboard(HttpSession session, Principal principal) {  // Thêm HttpSession
+    public String studentDashboard(HttpSession session, Principal principal, Model model) {  // Thêm HttpSession
         // 1) Lấy username (hoặc email) từ principal
         String username = principal.getName();
 
@@ -51,15 +53,78 @@ public class LoginController {
         // 3) Đưa student vào session
         session.setAttribute("student", student);
 
-        // 4) Không cần add vào model nữa nếu chỉ dùng ở sidebar
-        // model.addAttribute("student", student); // Có thể bỏ dòng này
+        // Giả lập kiểm tra xem sinh viên đã có phòng hay chưa (thay bằng logic thực tế của bạn)
+        boolean hasRoom = true; // Giả sử sinh viên CHƯA có phòng
+        // boolean hasRoom = true; // Giả sử sinh viên ĐÃ có phòng (để test hiển thị thông tin phòng)
+
+
+        if (hasRoom) {
+            // Giả lập thông tin phòng (nếu sinh viên đã có phòng)
+            String roomNumber = "A101";
+            String building = "Ký túc xá Khu A";
+
+            model.addAttribute("roomNumber", roomNumber);
+            model.addAttribute("building", building);
+            model.addAttribute("hasRoom", true); // Truyền biến hasRoom = true
+        } else {
+            model.addAttribute("hasRoom", false); // Truyền biến hasRoom = false
+        }
+
+
+        // 2. Giả lập dữ liệu cho bảng tin ký túc xá (vẫn hiển thị dù có phòng hay chưa)
+        List<NewsItem> newsList = new ArrayList<>();
+        newsList.add(new NewsItem("Lịch kiểm tra PCCC đột xuất", "Ban quản lý KTX thông báo lịch kiểm tra PCCC đột xuất vào sáng ngày 8/12 tại tất cả các khu."));
+        newsList.add(new NewsItem("Thông báo điều chỉnh giờ giới nghiêm", "Từ ngày 15/12, giờ giới nghiêm tại KTX sẽ được điều chỉnh thành 23h00."));
+//        newsList.add(new NewsItem("Tuyển волонтер cho chương trình Noel ấm áp", "CLB Tình nguyện KTX tuyển волонтер hỗ trợ chương trình Noel ấm áp, hạn đăng ký 10/12."));
+
+        model.addAttribute("newsList", newsList); // Truyền danh sách bảng tin
 
         // 5) Trả về view
         return "student/home";
     }
 
     @GetMapping("/manager/home")
-    public String managerDashboard() {
-        return "manager/home"; // Trang chính sau khi manager đăng nhập thành công
+    public String home(Model model) {
+        // 1. Giả lập dữ liệu cho các thông tin tổng quan
+        int totalStudents = 1350;
+        int vacantRooms = 68;
+        int pendingRequests = 12;
+        int newRequestsToday = 3;
+        int newRequestsWeek = 20;
+
+        // 2. Giả lập dữ liệu cho bảng tin ký túc xá
+        List<NewsItem> newsList = new ArrayList<>();
+        newsList.add(new NewsItem("Lịch kiểm tra PCCC đột xuất", "Ban quản lý KTX thông báo lịch kiểm tra PCCC đột xuất vào sáng ngày 8/12 tại tất cả các khu."));
+        newsList.add(new NewsItem("Thông báo điều chỉnh giờ giới nghiêm", "Từ ngày 15/12, giờ giới nghiêm tại KTX sẽ được điều chỉnh thành 23h00."));
+        newsList.add(new NewsItem("Tuyển tình nguyện viên cho chương trình Noel ấm áp", "CLB Tình nguyện KTX tuyển волонтер hỗ trợ chương trình Noel ấm áp, hạn đăng ký 10/12."));
+
+        // 3. Truyền dữ liệu sang template thông qua Model
+        model.addAttribute("totalStudents", totalStudents);
+        model.addAttribute("vacantRooms", vacantRooms);
+        model.addAttribute("pendingRequests", pendingRequests);
+        model.addAttribute("newRequestsToday", newRequestsToday);
+        model.addAttribute("newRequestsWeek", newRequestsWeek);
+        model.addAttribute("newsList", newsList); // Truyền danh sách bảng tin
+
+        return "manager/home"; // Trả về tên template 'home.html' (đặt trong thư mục 'manager')
+    }
+
+    // Class đại diện cho một mục tin bảng tin (News Item) - Inner Class
+    public static class NewsItem {
+        private String title;
+        private String content;
+
+        public NewsItem(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getContent() {
+            return content;
+        }
     }
 }

@@ -6,10 +6,10 @@
     <title layout:fragment="title">Room Service Usage Chart</title>
 </head>
 <body>
-<div layout:fragment="content" class="container mt-4">
+<div layout:fragment="content" class="mx-auto mt-4 max-w-6xl">
     <h1 class="mb-4">Room Service Usage Chart</h1>
     <p>From: <span th:text="${startDate}"></span> To: <span th:text="${endDate}"></span></p>
-    <canvas id="usageChart"></canvas>
+    <canvas id="usageChart" width="1000" height="600"></canvas>
 </div>
 
 
