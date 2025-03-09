@@ -32,38 +32,49 @@
     </script>
 </head>
 <body>
-<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl">
-    <h2 class="text-xl md:text-2xl font-bold mb-5 text-blue-700 text-center">Filter Bills</h2>
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-white shadow-md rounded-xl p-8">
+    <!-- Tiêu đề -->
+    <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">
+        🔎 Lịch sử hóa đơn
+    </h2>
 
     <!-- Danh sách hóa đơn -->
-    <div class="overflow-x-auto mt-4">
-        <table class="min-w-full divide-y divide-gray-200 border text-sm">
-            <thead class="bg-gray-50">
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full bg-white divide-y divide-gray-200">
+            <thead class="bg-blue-50 text-gray-700">
             <tr>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">#</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Student</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Bill Type</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Status</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Amount</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Issue Date</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Due Date</th>
-                <th class="py-2 px-4 border-b text-gray-700 font-semibold text-left">Action</th>
+                <th class="py-3 px-4 text-left font-semibold">#</th>
+                <th class="py-3 px-4 text-left font-semibold">Student</th>
+                <th class="py-3 px-4 text-left font-semibold">Bill Type</th>
+                <th class="py-3 px-4 text-left font-semibold">Status</th>
+                <th class="py-3 px-4 text-left font-semibold">Amount</th>
+                <th class="py-3 px-4 text-left font-semibold">Issue Date</th>
+                <th class="py-3 px-4 text-left font-semibold">Due Date</th>
+                <th class="py-3 px-4 text-center font-semibold">Action</th>
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-            <tr th:each="bill : ${bills.content}">
-                <td class="py-2 px-4 border-b" th:text="${bill.billId}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.billType}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.status}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.totalAmount}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.issueDate}"></td>
-                <td class="py-2 px-4 border-b" th:text="${bill.dueDate}"></td>
-                <td class="py-2 px-4 border-b text-center">
+            <tr th:each="bill : ${bills.content}" class="hover:bg-gray-50 transition duration-300">
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.billId}"></td>
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.billType}"></td>
+                <td class="py-3 px-4">
+                        <span th:classappend="${bill.status == 'unpaid' ? 'bg-red-100 text-red-600' :
+                                              bill.status == 'paid' ? 'bg-green-100 text-green-600' :
+                                              'bg-yellow-100 text-yellow-600'}"
+                              class="px-2 py-1 rounded-md text-xs font-medium">
+                            [[${bill.status}]]
+                        </span>
+                </td>
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.totalAmount}"></td>
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.issueDate}"></td>
+                <td class="py-3 px-4 text-gray-800" th:text="${bill.dueDate}"></td>
+                <td class="py-3 px-4 text-center">
                     <form th:action="@{/bills/detail}" method="post">
                         <input type="hidden" name="billId" th:value="${bill.billId}" />
-                        <button type="submit" class="text-blue-500 hover:underline bg-transparent border-none cursor-pointer">
-                            View
+                        <button type="submit"
+                                class="text-blue-500 hover:text-blue-700 font-semibold transition duration-300">
+                            View →
                         </button>
                     </form>
                 </td>
@@ -71,6 +82,17 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Phân trang -->
+    <div class="mt-6 flex justify-center space-x-2">
+        <button class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 transition duration-300">
+            Previous
+        </button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">
+            Next
+        </button>
+    </div>
 </div>
+
 </body>
 </html>

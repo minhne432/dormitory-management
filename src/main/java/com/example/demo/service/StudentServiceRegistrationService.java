@@ -1,17 +1,22 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RegistrationFilterDTO;
 import com.example.demo.entity.StudentServiceRegistration;
 import com.example.demo.repository.StudentServiceRegistrationRepository;
+import com.example.demo.specifications.StudentServiceRegistrationSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class StudentServiceRegistrationService {
 
     @Autowired
     private StudentServiceRegistrationRepository studentServiceRegistrationRepository;
+
 
     public void registerService(StudentServiceRegistration registration) {
         studentServiceRegistrationRepository.save(registration);
@@ -38,5 +43,13 @@ public class StudentServiceRegistrationService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Registration có id " + registrationId));
         registration.setActualQuantity(actualQuantity);
         studentServiceRegistrationRepository.save(registration);
+    }
+
+    public List<StudentServiceRegistration> getRegistrationsByStudentAndFilter(Long studentId, RegistrationFilterDTO filter) {
+        // Sử dụng Specification để lọc theo studentId, dormitoryServiceId và status
+        return studentServiceRegistrationRepository.findAll(
+                StudentServiceRegistrationSpecification.filter(filter, studentId),
+                Sort.by("startDate").descending()
+        );
     }
 }

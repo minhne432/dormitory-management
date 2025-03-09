@@ -59,4 +59,9 @@ public class StudentService {
     public List<Student> getStudentsByRoom(Room room) {
         return roomAssignmentRepository.findStudentsByRoom(room);
     }
+
+    public Student getStudentByUsername(String username) {
+        return studentRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
 }

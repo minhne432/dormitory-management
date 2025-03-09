@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student/layout}">
+
+<head>
+    <title layout:fragment="title">Hồ sơ cá nhân</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-white shadow-md rounded-xl p-8">
+    <!-- Tiêu đề -->
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+        Hồ sơ cá nhân của
+        <span th:text="${student.fullName}" class="text-blue-500">
+            Tên sinh viên
+        </span>
+    </h1>
+
+    <!-- Bảng thông tin sinh viên -->
+    <div class="overflow-hidden border border-gray-200 rounded-lg">
+        <table class="w-full divide-y divide-gray-200">
+            <tbody>
+            <tr class="bg-gray-50 hover:bg-gray-100 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Mã sinh viên
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.studentId}"></td>
+            </tr>
+
+            <tr class="hover:bg-gray-50 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Ngày sinh
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.dateOfBirth}"></td>
+            </tr>
+
+            <tr class="bg-gray-50 hover:bg-gray-100 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Giới tính
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.gender}"></td>
+            </tr>
+
+            <tr class="hover:bg-gray-50 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Khoa
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.department}"></td>
+            </tr>
+
+            <tr class="bg-gray-50 hover:bg-gray-100 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Lớp
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.studentClass}"></td>
+            </tr>
+
+            <tr class="hover:bg-gray-50 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Số điện thoại
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.phoneNumber}"></td>
+            </tr>
+
+            <tr class="bg-gray-50 hover:bg-gray-100 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Email
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.email}"></td>
+            </tr>
+
+            <tr class="hover:bg-gray-50 transition duration-300">
+                <th class="py-4 px-6 text-left font-semibold text-gray-700">
+                    Địa chỉ
+                </th>
+                <td class="py-4 px-6 text-gray-600" th:text="${student.address}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

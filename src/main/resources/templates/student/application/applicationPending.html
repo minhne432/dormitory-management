@@ -5,11 +5,30 @@
     <title layout:fragment="title">Đăng ký thành công</title>
 </head>
 <body>
-<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl">
-    <div class="text-6xl mb-4">✅</div>
-    <h2 class="text-2xl font-bold mb-4 text-green-600">Đơn đăng ký của bạn đang được xử lý!</h2>
-    <p class="mb-6 text-gray-700">Cảm ơn bạn đã đăng ký. Đơn đăng ký của bạn đang được xem xét. <br> Chúng tôi sẽ thông báo cho bạn khi có kết quả.</p>
-    <a th:href="@{/student/home}" class="inline-block bg-blue-500 text-white px-5 py-2 rounded font-semibold hover:bg-blue-600 transition-colors">Quay về Trang chủ</a>
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-white shadow-lg rounded-xl p-8 text-center">
+    <!-- Icon ✅ -->
+    <div class="text-green-500 text-7xl mb-6 animate-bounce">
+        ✅
+    </div>
+
+    <!-- Tiêu đề -->
+    <h2 class="text-3xl font-extrabold text-green-600 mb-4">
+        Đơn đăng ký của bạn đang được xử lý!
+    </h2>
+
+    <!-- Nội dung mô tả -->
+    <p class="text-gray-500 leading-relaxed mb-6">
+        Cảm ơn bạn đã đăng ký. Đơn đăng ký của bạn đang được xem xét.<br>
+        Chúng tôi sẽ thông báo cho bạn khi có kết quả.
+    </p>
+
+    <!-- Nút quay về trang chủ -->
+    <a th:href="@{/student/home}"
+       class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md
+              hover:bg-blue-600 hover:-translate-y-1 transform transition-all duration-300 ease-in-out">
+        Quay về Trang chủ
+    </a>
 </div>
+
 </body>
 </html>
