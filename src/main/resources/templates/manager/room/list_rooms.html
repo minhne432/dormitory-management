@@ -8,84 +8,115 @@
 </head>
 
 <body>
-<div layout:fragment="content">
-    <div class="container mt-4">
-        <h1 class="text-2xl font-bold mb-4">Room List</h1>
+<div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-white shadow-md rounded-xl p-8">
+    <!-- Tiêu đề -->
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+        🏠 Danh Sách Phòng
+    </h1>
 
-        <!-- Form lọc (GET method) -->
-        <form th:action="@{/rooms/list}" method="get" id="filterForm" class="row g-3 p-3 bg-white shadow-sm rounded">
-            <div class="col-md-3 mb-3">
-                <label for="roomNumber" class="form-label">Room Number:</label>
-                <input type="text" id="roomNumber" name="roomNumber" th:value="${filter.roomNumber}" class="form-control"/>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="dormName" class="form-label">Dorm Name:</label>
-                <input type="text" id="dormName" name="dormName" th:value="${filter.dormName}" class="form-control"/>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="maxCapacity" class="form-label">Max Capacity:</label>
-                <input type="number" id="maxCapacity" name="maxCapacity" th:value="${filter.maxCapacity}" class="form-control"/>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="gender" class="form-label">Gender:</label>
-                <select id="gender" name="gender" class="form-select">
-                    <option th:value="null" th:text="'--All--'"></option>
-                    <option th:value="Nam" th:text="'Nam'" th:selected="${filter.gender != null and filter.gender == 'Nam'}"></option>
-                    <option th:value="Nữ" th:text="'Nữ'" th:selected="${filter.gender != null and filter.gender == 'Nữ'}"></option>
-                </select>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="price" class="form-label">Price:</label>
-                <input type="number" step="0.01" id="price" name="price" th:value="${filter.price}" class="form-control"/>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="status" class="form-label">Status:</label>
-                <select id="status" name="status" class="form-select">
-                    <option th:value="null" th:text="'--All--'"></option>
-                    <option th:value="available" th:text="'available'" th:selected="${filter.status == 'available'}"></option>
-                    <option th:value="full" th:text="'full'" th:selected="${filter.status == 'full'}"></option>
-                    <option th:value="maintenance" th:text="'maintenance'" th:selected="${filter.status == 'maintenance'}"></option>
-                </select>
-            </div>
+    <!-- Form Lọc -->
+    <form th:action="@{/rooms/list}" method="get" id="filterForm" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 bg-gray-50 rounded-lg p-6 shadow-md">
+        <!-- Room Number -->
+        <div>
+            <label for="roomNumber" class="block text-sm font-medium text-gray-700 mb-1">Room Number</label>
+            <input type="text" id="roomNumber" name="roomNumber" th:value="${filter.roomNumber}"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
 
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
-        </form>
+        <!-- Dorm Name -->
+        <div>
+            <label for="dormName" class="block text-sm font-medium text-gray-700 mb-1">Dorm Name</label>
+            <input type="text" id="dormName" name="dormName" th:value="${filter.dormName}"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
 
-        <hr class="my-4"/>
+        <!-- Max Capacity -->
+        <div>
+            <label for="maxCapacity" class="block text-sm font-medium text-gray-700 mb-1">Max Capacity</label>
+            <input type="number" id="maxCapacity" name="maxCapacity" th:value="${filter.maxCapacity}"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
 
-        <!-- Bảng danh sách phòng -->
-        <table class="table table-bordered">
-            <thead class="table-dark">
-            <tr>
-                <th>Room ID</th>
-                <th>Room Number</th>
-                <th>Dorm Name</th>
-                <th>Max Capacity</th>
-                <th>Gender</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Action</th>
+        <!-- Gender -->
+        <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+            <select id="gender" name="gender"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option th:value="null">-- All --</option>
+                <option th:value="Nam" th:selected="${filter.gender == 'Nam'}">Nam</option>
+                <option th:value="Nữ" th:selected="${filter.gender == 'Nữ'}">Nữ</option>
+            </select>
+        </div>
+
+        <!-- Price -->
+        <div>
+            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+            <input type="number" step="0.01" id="price" name="price" th:value="${filter.price}"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <!-- Status -->
+        <div>
+            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <select id="status" name="status"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option th:value="null">-- All --</option>
+                <option th:value="available" th:selected="${filter.status == 'available'}">Available</option>
+                <option th:value="full" th:selected="${filter.status == 'full'}">Full</option>
+                <option th:value="maintenance" th:selected="${filter.status == 'maintenance'}">Maintenance</option>
+            </select>
+        </div>
+
+        <!-- Nút lọc -->
+        <div class="col-span-3 flex justify-end">
+            <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
+                🔍 Filter
+            </button>
+        </div>
+    </form>
+
+    <hr class="my-6 border-t border-gray-300">
+
+    <!-- Bảng danh sách phòng -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+            <tr class="bg-blue-500 text-white">
+                <th class="py-3 px-4 text-left font-semibold">Room ID</th>
+                <th class="py-3 px-4 text-left font-semibold">Room Number</th>
+                <th class="py-3 px-4 text-left font-semibold">Dorm Name</th>
+                <th class="py-3 px-4 text-left font-semibold">Max Capacity</th>
+                <th class="py-3 px-4 text-left font-semibold">Gender</th>
+                <th class="py-3 px-4 text-left font-semibold">Price</th>
+                <th class="py-3 px-4 text-left font-semibold">Status</th>
+                <th class="py-3 px-4 text-center font-semibold">Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="room : ${rooms}">
-                <td th:text="${room.roomId}"></td>
-                <td th:text="${room.roomNumber}"></td>
-                <td th:text="${room.dormitory.dormName}"></td>
-                <td th:text="${room.roomType.maxCapacity}"></td>
-                <td th:text="${room.roomType.gender}"></td>
-                <td th:text="${room.roomType.price}"></td>
-                <td th:text="${room.status}"></td>
-                <td>
+            <tr th:each="room : ${rooms}" class="hover:bg-gray-50 transition duration-300">
+                <td class="py-3 px-4" th:text="${room.roomId}"></td>
+                <td class="py-3 px-4" th:text="${room.roomNumber}"></td>
+                <td class="py-3 px-4" th:text="${room.dormitory.dormName}"></td>
+                <td class="py-3 px-4" th:text="${room.roomType.maxCapacity}"></td>
+                <td class="py-3 px-4" th:text="${room.roomType.gender}"></td>
+                <td class="py-3 px-4" th:text="${room.roomType.price}"></td>
+                <td class="py-3 px-4">
+                        <span th:classappend="${room.status == 'available' ? 'bg-green-100 text-green-600' :
+                                              room.status == 'full' ? 'bg-red-100 text-red-600' :
+                                              'bg-yellow-100 text-yellow-600'}"
+                              class="px-2 py-1 rounded-md text-xs font-medium">
+                            [[${room.status}]]
+                        </span>
+                </td>
+                <td class="py-3 text-center">
                     <a th:href="@{'/rooms/edit/' + ${room.roomId}}"
-                       class="btn btn-warning btn-sm">Edit</a>
+                       class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition duration-300">
+                        ✏️ Edit
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
-
     </div>
 </div>
 

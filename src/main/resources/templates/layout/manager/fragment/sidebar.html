@@ -74,6 +74,22 @@
             </a>
         </li>
 
+        <!-- Mới thêm -->
+        <li>
+            <a th:href="@{/rooms/list}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">🏢</span> <!-- Icon mới cho Danh sách phòng -->
+                <span class="ml-3 sidebar-text">Danh sách phòng</span>
+            </a>
+        </li>
+
+        <!-- Thêm phòng -->
+        <li>
+            <a th:href="@{/rooms/new}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                <span class="w-6 h-6 flex items-center justify-center">➕</span> <!-- Biểu tượng thêm phòng -->
+                <span class="ml-3 sidebar-text">Thêm phòng</span>
+            </a>
+        </li>
+
         <li>
             <a th:href="@{/service-usage/record}" class="flex items-center p-2 rounded hover:bg-gray-700">
                 <span class="w-6 h-6 flex items-center justify-center">📝</span>
@@ -88,13 +104,13 @@
         </li>
         <li>
             <a th:href="@{/service-usage/room/chart}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                <span class="w-6 h-6 flex items-center justify-center">📈</span>
+                <span class="w-6 h-6 flex items-center justify-center">📊</span> <!-- Icon thay đổi để không trùng với các mục khác -->
                 <span class="ml-3 sidebar-text">Thống kê điện nước</span>
             </a>
         </li>
         <li>
             <a th:href="@{/service-usage/personal/chart}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                <span class="w-6 h-6 flex items-center justify-center">📊</span>
+                <span class="w-6 h-6 flex items-center justify-center">📊</span> <!-- Giữ icon thống kê dịch vụ cá nhân -->
                 <span class="ml-3 sidebar-text">Thống kê dịch vụ cá nhân</span>
             </a>
         </li>
@@ -119,6 +135,3 @@
         });
     </script>
 </nav>
-
-<!-- Script xử lý Sidebar -->
-
