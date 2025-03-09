@@ -28,6 +28,7 @@ public class DormitoryServiceService {
                 .unitPrice(serviceDTO.getUnitPrice())
                 .unit(serviceDTO.getUnit())
                 .description(serviceDTO.getDescription())
+                .visibleForStudent(true)
                 .build();
 
         DormitoryService savedService = dormitoryServiceRepository.save(newService);
