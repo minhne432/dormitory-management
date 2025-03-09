@@ -11,4 +11,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     // Tìm Student thông qua username trong User
     @Query("SELECT s FROM Student s WHERE s.user.username = :username")
     Optional<Student> findByUsername(String username);
+
+    Optional<Student> findByUser_Username(String username);
+
 }

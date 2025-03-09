@@ -33,7 +33,7 @@ public class PendingApplicationController {
             String department,
             String applicationId, // Thêm tham số applicationId
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "7") int size
+            @RequestParam(defaultValue = "4") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
 
