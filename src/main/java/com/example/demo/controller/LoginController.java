@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Room;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.service.NewsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,16 @@ public class LoginController {
     private final StudentRepository studentRepository;
     private final StudentRoomService studentRoomService; // đã có trong dự án
 
+    private final NewsService newsService;
+
+
     @Autowired
-    public LoginController(StudentRepository studentRepository, StudentRoomService studentRoomService) {
+    public LoginController(StudentRepository studentRepository,
+                           StudentRoomService studentRoomService,
+                           NewsService newsService) {
         this.studentRepository = studentRepository;
-        this.studentRoomService = studentRoomService; // đã có trong dự án
+        this.studentRoomService = studentRoomService;
+        this.newsService = newsService;
     }
 
     @GetMapping("/login")
@@ -69,11 +76,8 @@ public class LoginController {
             model.addAttribute("hasRoom", false);
         }
 
-        // 5) Bảng tin ký túc xá (giả lập)
-        List<NewsItem> newsList = new ArrayList<>();
-        newsList.add(new NewsItem("Lịch kiểm tra PCCC đột xuất", "Ban quản lý KTX thông báo lịch kiểm tra PCCC đột xuất vào sáng ngày 8/12 tại tất cả các khu."));
-        newsList.add(new NewsItem("Thông báo điều chỉnh giờ giới nghiêm", "Từ ngày 15/12, giờ giới nghiêm tại KTX sẽ được điều chỉnh thành 23h00."));
-        model.addAttribute("newsList", newsList);
+        // Lấy 5 bản tin mới nhất
+        model.addAttribute("newsList", newsService.getLatest(5));
 
         // 6) Trả về view
         return "student/home";
