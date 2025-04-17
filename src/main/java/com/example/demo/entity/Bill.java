@@ -44,6 +44,7 @@ public class Bill {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = true)
+    @ToString.Exclude
     private Student student;
 
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)

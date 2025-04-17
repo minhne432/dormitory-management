@@ -23,4 +23,7 @@ public class BillFilterRequest {
     // Các tham số phân trang
     private int page = 0;     // Số trang (default 0)
     private int size = 10;    // Kích thước trang (default 10)
+
+    private Long roomId;  // optional - dùng cho filter theo phòng
+
 }

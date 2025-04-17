@@ -39,9 +39,14 @@ public class BillControllerForStudent {
     ) {
         // Lấy ID của sinh viên hiện tại
         Long studentId = studentService.getCurrentStudentId();
+
+        // Lấy roomId của sinh viên hiện tại (nếu có)
+        Long roomId = studentService.getCurrentRoomId();
+
         // Map param vào DTO
         BillFilterRequest filter = new BillFilterRequest();
         filter.setStudentId(studentId);
+        filter.setRoomId(roomId); // thêm dòng này
         filter.setStatus(status);
         filter.setBillType(billType);
         filter.setStartDate(startDate);
@@ -58,6 +63,7 @@ public class BillControllerForStudent {
 
         return "student/bills/filter"; // Trả về view Thymeleaf
     }
+
 
     @PostMapping("/detail")
     public String viewBillDetail(@RequestParam("billId") Long billId, Model model) {

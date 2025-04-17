@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Room;
+import com.example.demo.entity.RoomAssignment;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.RoomAssignmentRepository;
 import com.example.demo.repository.StudentRepository;
@@ -64,4 +65,21 @@ public class StudentService {
         return studentRepository.findByUser_Username(username)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
     }
+
+    public Long getCurrentRoomId() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Student student = studentRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        RoomAssignment currentAssignment = roomAssignmentRepository.findByStudentStudentIdAndEndDateIsNull(student.getStudentId());
+
+        if (currentAssignment != null) {
+            return currentAssignment.getRoom().getRoomId();
+        }
+
+        return null; // Sinh viên chưa được phân phòng
+    }
+
+
 }
