@@ -56,7 +56,14 @@
             <tbody class="divide-y divide-gray-200">
             <tr th:each="bill : ${bills.content}" class="hover:bg-gray-50 transition duration-300">
                 <td class="py-3 px-4 text-gray-800" th:text="${bill.billId}"></td>
-                <td class="py-3 px-4 text-gray-800" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>
+<!--                <td class="py-3 px-4 text-gray-800" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>-->
+                <td class="py-3 px-4 text-gray-800">
+                    <span th:if="${bill.billType.name() == 'DIEN_NUOC'}"
+                          th:text="'Room ' + ${bill.room != null ? bill.room.roomId : 'N/A'}"></span>
+                    <span th:unless="${bill.billType.name() == 'DIEN_NUOC'}"
+                          th:text="${bill.student != null ? bill.student.fullName : '-'}"></span>
+                </td>
+
                 <td class="py-3 px-4 text-gray-800" th:text="${bill.billType}"></td>
                 <td class="py-3 px-4">
                         <span th:classappend="${bill.status == 'unpaid' ? 'bg-red-100 text-red-600' :

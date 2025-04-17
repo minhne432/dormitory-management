@@ -212,6 +212,7 @@ notificationRepository.save(notification);
         // Tạo Specification dựa trên filter
         var spec = BillSpecificationForStudent.filter(
                 filterRequest.getStudentId(),
+                filterRequest.getRoomId(),
                 filterRequest.getStatus(),
                 filterRequest.getBillType(),
                 filterRequest.getStartDate(),

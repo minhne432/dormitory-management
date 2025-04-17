@@ -22,4 +22,5 @@ public interface RoomAssignmentRepository extends JpaRepository<RoomAssignment, 
     @Query("SELECT ra.student FROM RoomAssignment ra WHERE ra.room = :room")
     List<Student> findStudentsByRoom(@Param("room") Room room);
 
+
 }
