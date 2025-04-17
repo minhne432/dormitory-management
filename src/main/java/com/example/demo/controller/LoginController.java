@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Room;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepository;
 import jakarta.servlet.http.HttpSession;
@@ -8,19 +9,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.example.demo.service.StudentRoomService; // đã có trong dự án
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class LoginController {
 
     private final StudentRepository studentRepository;
+    private final StudentRoomService studentRoomService; // đã có trong dự án
 
     @Autowired
-    public LoginController(StudentRepository studentRepository) {
+    public LoginController(StudentRepository studentRepository, StudentRoomService studentRoomService) {
         this.studentRepository = studentRepository;
+        this.studentRoomService = studentRoomService; // đã có trong dự án
     }
 
     @GetMapping("/login")
@@ -42,7 +47,7 @@ public class LoginController {
     }
 
     @GetMapping("/student/home")
-    public String studentDashboard(HttpSession session, Principal principal, Model model) {  // Thêm HttpSession
+    public String studentDashboard(HttpSession session, Principal principal, Model model) {
         // 1) Lấy username (hoặc email) từ principal
         String username = principal.getName();
 
@@ -53,35 +58,27 @@ public class LoginController {
         // 3) Đưa student vào session
         session.setAttribute("student", student);
 
-        // Giả lập kiểm tra xem sinh viên đã có phòng hay chưa (thay bằng logic thực tế của bạn)
-        boolean hasRoom = true; // Giả sử sinh viên CHƯA có phòng
-        // boolean hasRoom = true; // Giả sử sinh viên ĐÃ có phòng (để test hiển thị thông tin phòng)
-
-
-        if (hasRoom) {
-            // Giả lập thông tin phòng (nếu sinh viên đã có phòng)
-            String roomNumber = "A101";
-            String building = "Ký túc xá Khu A";
-
-            model.addAttribute("roomNumber", roomNumber);
-            model.addAttribute("building", building);
-            model.addAttribute("hasRoom", true); // Truyền biến hasRoom = true
+        // 4) Lấy thông tin phòng thực tế
+        Optional<Room> roomOpt = studentRoomService.getCurrentRoomForLoggedStudent();
+        if (roomOpt.isPresent()) {
+            Room room = roomOpt.get();
+            model.addAttribute("hasRoom", true);
+            model.addAttribute("roomNumber", room.getRoomNumber());
+            model.addAttribute("building", room.getDormitory().getDormName());
         } else {
-            model.addAttribute("hasRoom", false); // Truyền biến hasRoom = false
+            model.addAttribute("hasRoom", false);
         }
 
-
-        // 2. Giả lập dữ liệu cho bảng tin ký túc xá (vẫn hiển thị dù có phòng hay chưa)
+        // 5) Bảng tin ký túc xá (giả lập)
         List<NewsItem> newsList = new ArrayList<>();
         newsList.add(new NewsItem("Lịch kiểm tra PCCC đột xuất", "Ban quản lý KTX thông báo lịch kiểm tra PCCC đột xuất vào sáng ngày 8/12 tại tất cả các khu."));
         newsList.add(new NewsItem("Thông báo điều chỉnh giờ giới nghiêm", "Từ ngày 15/12, giờ giới nghiêm tại KTX sẽ được điều chỉnh thành 23h00."));
-//        newsList.add(new NewsItem("Tuyển волонтер cho chương trình Noel ấm áp", "CLB Tình nguyện KTX tuyển волонтер hỗ trợ chương trình Noel ấm áp, hạn đăng ký 10/12."));
+        model.addAttribute("newsList", newsList);
 
-        model.addAttribute("newsList", newsList); // Truyền danh sách bảng tin
-
-        // 5) Trả về view
+        // 6) Trả về view
         return "student/home";
     }
+
 
     @GetMapping("/manager/home")
     public String home(Model model) {
