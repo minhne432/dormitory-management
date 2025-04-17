@@ -3,7 +3,11 @@ package com.example.demo.service;
 import com.example.demo.entity.*;
 import com.example.demo.exception.NotEnoughCapacityException;
 import com.example.demo.repository.*;
+import com.example.demo.specifications.RoomAssignmentSpecification;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -117,6 +121,39 @@ public class RoomAssignmentService {
         }
 
         // Lưu Room
+        roomRepository.save(room);
+    }
+
+    /** Lấy danh sách RoomAssignment đang hoạt động, có filter + phân trang */
+    public Page<RoomAssignment> getActiveAssignments(Long studentId,
+                                                     Long roomId,
+                                                     int page, int size) {
+        var spec = RoomAssignmentSpecification.filter(studentId, roomId);
+        return roomAssignmentRepository.findAll(spec, PageRequest.of(page, size));
+    }
+
+    /** Huỷ xếp phòng (set endDate = today, giảm occupancy & cập nhật status) */
+    @Transactional
+    public void cancelAssignment(RoomAssignmentId id) {
+        RoomAssignment ra = roomAssignmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+
+        if (ra.getEndDate() != null) return; // đã kết thúc
+
+        // 1. set endDate
+        ra.setEndDate(LocalDate.now());
+
+        // 2. giảm occupancy & cập nhật status phòng
+        Room room = ra.getRoom();
+        int newOcc = Math.max(0, room.getCurrentOccupancy() - 1);
+        room.setCurrentOccupancy(newOcc);
+
+        if (room.getStatus() == Room.RoomStatus.full && newOcc < room.getRoomType().getMaxCapacity()) {
+            room.setStatus(Room.RoomStatus.available);
+        }
+
+        // 3. lưu
+        roomAssignmentRepository.save(ra);
         roomRepository.save(room);
     }
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+<head>
+    <title>Room Assignments</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-6xl mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-6">🛏️ Danh sách sinh viên đang ở ký túc xá</h2>
+    <div th:if="${successMessage}" class="mb-4 p-4 rounded bg-green-100 text-green-800 border border-green-300">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <!-- Form filter -->
+    <form th:action="@{/manager/room-assignments}" method="get"
+          class="flex flex-wrap gap-4 mb-4">
+        <input type="number" name="studentId" placeholder="Student ID"
+               th:value="${studentId}" class="border p-2 rounded">
+        <input type="number" name="roomId" placeholder="Room ID"
+               th:value="${roomId}" class="border p-2 rounded">
+        <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded">Filter</button>
+    </form>
+
+    <!-- Table -->
+    <div class="overflow-x-auto border rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+            <tr>
+                <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Student</th>
+                <th class="px-4 py-3 text-left">Room</th>
+                <th class="px-4 py-3 text-left">Assigned Date</th>
+                <th class="px-4 py-3 text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200"
+                   th:each="ra, idx : ${assignments.content}">
+            <tr>
+                <td class="px-4 py-3" th:text="${idx.index + 1}"></td>
+                <td class="px-4 py-3" th:text="${ra.student.fullName}"></td>
+                <td class="px-4 py-3" th:text="${'Room ' + ra.room.roomNumber}"></td>
+                <td class="px-4 py-3" th:text="${ra.assignedDate}"></td>
+                <td class="px-4 py-3 text-center">
+                    <form th:action="@{/manager/room-assignments/cancel}" method="post"
+                          onsubmit="return confirm('Huỷ xếp phòng cho sinh viên này?');">
+                        <input type="hidden" name="roomId" th:value="${ra.room.roomId}">
+                        <input type="hidden" name="studentId" th:value="${ra.student.studentId}">
+                        <button type="submit"
+                                class="text-red-600 hover:underline">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between mt-4"
+         th:with="p=${assignments}">
+        <a th:href="@{/manager/room-assignments(page=${p.number-1},size=${p.size},
+                       studentId=${studentId},roomId=${roomId})}"
+           th:classappend="${p.first}? 'pointer-events-none opacity-50' : ''"
+           class="px-3 py-1 border rounded">Previous</a>
+
+        <a th:href="@{/manager/room-assignments(page=${p.number+1},size=${p.size},
+                       studentId=${studentId},roomId=${roomId})}"
+           th:classappend="${p.last}? 'pointer-events-none opacity-50' : ''"
+           class="px-3 py-1 border rounded">Next</a>
+    </div>
+</div>
+</body>
+</html>
