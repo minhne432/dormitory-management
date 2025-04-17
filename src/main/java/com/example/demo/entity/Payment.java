@@ -40,4 +40,6 @@ public class Payment {
     public enum PaymentStatus {
         completed, pending
     }
+    @Column(name = "vnp_txn_ref", length = 50)
+    private String vnpTxnRef;
 }

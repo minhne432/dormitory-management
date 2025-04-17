@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -114,7 +115,8 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
                     item.setBill(bill);
                 }
                 bill.setBillItems(billItems);
-
+                //set created date
+                bill.setCreatedDate(LocalDateTime.now());
                 Bill savedBill = billRepository.save(bill);
 
                 // Cập nhật các bản ghi ServiceUsage đã xử lý: đánh dấu invoiced = YES và liên kết hóa đơn

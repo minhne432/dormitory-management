@@ -86,6 +86,8 @@ public class BillServiceImpl implements BillService {
                 .build();
 
         bill.setBillItems(List.of(billItem));
+        //set created date
+        bill.setCreatedDate(LocalDateTime.now());
 
 String title = "Thông báo hóa đơn tiền phòng mới";
 String message = String.format("Hóa đơn tiền phòng %s cho tháng %d/%d đã được tạo. Tổng tiền: %.0f VND. Hạn đóng: %s",
@@ -173,6 +175,8 @@ notificationRepository.save(notification);
 
             bill.setBillItems(billItems);
             bill.calculateTotalAmount();
+            //set created date
+            bill.setCreatedDate(LocalDateTime.now());
 
             Notification notification = Notification.builder()
                     .student(student)

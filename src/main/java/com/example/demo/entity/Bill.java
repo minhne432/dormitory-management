@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,12 @@ public class Bill {
     @Convert(converter = BillTypeConverter.class)
     @Column(name = "bill_type", columnDefinition = "ENUM('phòng','điện-nước','dịch-vụ')")
     private BillType billType;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "paid_date")
+    private LocalDateTime paidDate;
 
     public enum BillStatus {
         overdue, paid, unpaid

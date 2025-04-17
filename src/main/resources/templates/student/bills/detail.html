@@ -43,6 +43,39 @@
         </table>
     </div>
 
+    <!-- Tổng tiền -->
+    <div class="mt-4">
+        <strong class="text-indigo-700">Tổng tiền:</strong>
+        <span class="text-indigo-900 font-semibold" th:text="${bill.totalAmount}"></span>
+    </div>
+    <!-- Trạng thái -->
+    <div class="mt-4">
+        <strong class="text-indigo-700">Trạng thái:</strong>
+        <span class="text-indigo-900 font-semibold" th:text="${bill.status}"></span>
+    </div>
+    <!-- Ngày tạo -->
+    <div class="mt-4">
+        <strong class="text-indigo-700">Ngày tạo:</strong>
+        <span class="text-indigo-900 font-semibold"
+              th:text="${bill.createdDate != null ? #temporals.format(bill.createdDate, 'dd/MM/yyyy HH:mm') : 'N/A'}">
+    </span>
+
+
+    </div>
+    <!-- Ngày thanh toán -->
+    <div class="mt-4">
+        <strong class="text-indigo-700">Ngày thanh toán:</strong>
+        <span class="text-indigo-900 font-semibold"
+              th:text="${bill.paidDate != null ? #temporals.format(bill.paidDate, 'dd/MM/yyyy HH:mm') : 'Chưa thanh toán'}">
+    </span>
+
+    </div>
+    <!-- Nút thanh toán VNPay -->
+    <form th:action="@{'/bills/' + ${bill.billId} + '/checkout'}" method="post">
+        <button class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+            Thanh toán VNPay
+        </button>
+    </form>
     <!-- Nút quay lại -->
     <div class="mt-6 text-right">
         <a th:href="@{/bills/filter}"
