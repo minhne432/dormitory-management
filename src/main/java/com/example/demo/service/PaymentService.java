@@ -3,8 +3,11 @@ package com.example.demo.service;
 import com.example.demo.config.VNPayConfig;
 import com.example.demo.entity.Bill;
 import com.example.demo.entity.Payment;
+import com.example.demo.entity.Room;
+import com.example.demo.entity.Student;
 import com.example.demo.repository.BillRepository;
 import com.example.demo.repository.PaymentRepository;
+import com.example.demo.repository.RoomAssignmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class PaymentService {
     PaymentRepository payRepo;
     @Autowired VNPayConfig vnpCfg;
     @Autowired BillRepository billRepo;
+
+    @Autowired
+    RoomAssignmentRepository roomAssignmentRepository;
 
     public String createVNPayCheckout(Long billId, HttpServletRequest req) {
         Bill bill = billRepo.findById(billId)
@@ -113,6 +119,18 @@ public class PaymentService {
             throw new RuntimeException("Không tạo được URL thanh toán VNPAY", e);
         }
     }
+
+    public List<Payment> getPaymentsByStudentAndRoom(Student student) {
+        // Lấy phòng hiện tại của sinh viên
+        Room currentRoom = roomAssignmentRepository
+                .findByStudentStudentIdAndEndDateIsNull(student.getStudentId())
+                .getRoom();
+
+        return payRepo.findByStudentOrRoom(student, currentRoom);
+    }
+
+
+
 
 }
 

@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Payment;
+import com.example.demo.entity.Student;
 import com.example.demo.service.PaymentService;
+import com.example.demo.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class PaymentController {
     private final PaymentService paymentService;
-    public PaymentController(PaymentService paymentService) {
+
+    private final StudentService studentService;
+
+    public PaymentController(PaymentService paymentService, StudentService studentService) {
         this.paymentService = paymentService;
+        this.studentService = studentService;
     }
     @PostMapping("/bills/{id}/checkout")
     public RedirectView checkout(@PathVariable Long id, HttpServletRequest req){
@@ -39,6 +48,18 @@ public class PaymentController {
 
         model.addAttribute("message","Thanh toán thành công!");
         return "student/bills/payment_result";
+    }
+
+
+    @GetMapping("/student/payments")
+    public String viewPaymentHistory(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = studentService.getStudentByUsername(username);
+
+        List<Payment> payments = paymentService.getPaymentsByStudentAndRoom(student);
+
+        model.addAttribute("payments", payments);
+        return "student/payment/history";
     }
 
 
