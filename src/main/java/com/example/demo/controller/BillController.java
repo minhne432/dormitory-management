@@ -1,4 +1,4 @@
-//filepath: src\main\java\com\example\demo\controller\BillController.java
+// filepath: src/main/java/com/example/demo/controller/BillController.java
 package com.example.demo.controller;
 
 import com.example.demo.dto.BillFilterRequestForManager;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class BillController {
 
     private final BillService billService;
-
     private final BillRepository billRepository;
+
     @Autowired
     public BillController(BillService billService,
                           BillRepository billRepository) {
@@ -28,30 +28,38 @@ public class BillController {
         this.billRepository = billRepository;
     }
 
+    /* -------------------- FILTER & PAGINATION -------------------- */
 
-
+    // 1. Hiển thị trang mặc định (page = 0)
     @GetMapping("/filter")
-    public String showFilterForm(Model model) {
-        return filterBills(new BillFilterRequestForManager(), model);
+    public String showFilterForm(@ModelAttribute("billFilterRequest") BillFilterRequestForManager filter,
+                                 Model model) {
+        return doFilter(filter, model);
     }
 
+    // 2. Submit filter (POST) hoặc phân trang (GET) đều đi vào hàm này
     @PostMapping("/filter")
-    public String filterBills(@ModelAttribute BillFilterRequestForManager filterRequest, Model model) {
-        Page<Bill> bills = billService.getBillsByFilterForanager(filterRequest);
-        model.addAttribute("bills", bills);
-        model.addAttribute("billFilterRequest", filterRequest);
-        return "manager/bills/main"; // Trả về view đầy đủ
+    public String filterBills(@ModelAttribute("billFilterRequest") BillFilterRequestForManager filter,
+                              Model model) {
+        return doFilter(filter, model);
     }
 
+    // 3. Hàm dùng chung để filter và phân trang
+    private String doFilter(BillFilterRequestForManager filter, Model model) {
+        Page<Bill> bills = billService.getBillsByFilterForanager(filter);
+        model.addAttribute("bills", bills);
+        model.addAttribute("billFilterRequest", filter); // giữ lại filter cũ trên form
+        return "manager/bills/main";
+    }
+
+    /* -------------------- UPDATE STATUS -------------------- */
 
     @PostMapping("/updateStatus")
     @ResponseBody
     public ResponseEntity<String> updateBillStatus(@RequestParam("billId") Long billId,
                                                    @RequestParam("status") String status) {
         try {
-            // Chuyển đổi chuỗi status thành enum nếu cần
             Bill.BillStatus billStatus = Bill.BillStatus.valueOf(status);
-            // Gọi service cập nhật trạng thái (bạn có thể cài đặt thêm phương thức updateBillStatus trong BillService)
             billService.updateBillStatus(billId, billStatus);
             return ResponseEntity.ok("Cập nhật trạng thái thành công.");
         } catch (IllegalArgumentException e) {
@@ -61,7 +69,8 @@ public class BillController {
         }
     }
 
-    // Hiển thị chi tiết hóa đơn
+    /* -------------------- CHI TIẾT HÓA ĐƠN -------------------- */
+
     @GetMapping("/detail/{billId}")
     public String viewBillDetail(@PathVariable("billId") Long billId, Model model) {
         Bill bill = billRepository.findById(billId)
@@ -69,5 +78,4 @@ public class BillController {
         model.addAttribute("bill", bill);
         return "manager/bills/detail";
     }
-
 }
