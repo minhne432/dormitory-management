@@ -93,11 +93,8 @@ public class LoginController {
         int newRequestsToday = 3;
         int newRequestsWeek = 20;
 
-        // 2. Giả lập dữ liệu cho bảng tin ký túc xá
-        List<NewsItem> newsList = new ArrayList<>();
-        newsList.add(new NewsItem("Lịch kiểm tra PCCC đột xuất", "Ban quản lý KTX thông báo lịch kiểm tra PCCC đột xuất vào sáng ngày 8/12 tại tất cả các khu."));
-        newsList.add(new NewsItem("Thông báo điều chỉnh giờ giới nghiêm", "Từ ngày 15/12, giờ giới nghiêm tại KTX sẽ được điều chỉnh thành 23h00."));
-        newsList.add(new NewsItem("Tuyển tình nguyện viên cho chương trình Noel ấm áp", "CLB Tình nguyện KTX tuyển волонтер hỗ trợ chương trình Noel ấm áp, hạn đăng ký 10/12."));
+        // Lấy 5 bản tin mới nhất
+        model.addAttribute("newsList", newsService.getLatest(5));
 
         // 3. Truyền dữ liệu sang template thông qua Model
         model.addAttribute("totalStudents", totalStudents);
@@ -105,7 +102,7 @@ public class LoginController {
         model.addAttribute("pendingRequests", pendingRequests);
         model.addAttribute("newRequestsToday", newRequestsToday);
         model.addAttribute("newRequestsWeek", newRequestsWeek);
-        model.addAttribute("newsList", newsList); // Truyền danh sách bảng tin
+
 
         return "manager/home"; // Trả về tên template 'home.html' (đặt trong thư mục 'manager')
     }
