@@ -221,23 +221,23 @@ VALUES
 -- (Ở đây sử dụng student_id từ 21 đến 25, submission_date = CURDATE(), chưa được duyệt nên không có approved_by và approval_date)
 INSERT INTO applications (approval_date, status, submission_date, approved_by, dorm_id, student_id)
 VALUES
-  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 21),
+  (NULL, 'pending',  CURDATE() - INTERVAL 1 DAY, NULL, 1, 21),
   (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 22),
-  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 23),
-  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 24),
-  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 25);
+  (NULL, 'pending',  CURDATE() - INTERVAL 3 DAY, NULL, 1, 23),
+  (NULL, 'pending',  CURDATE() - INTERVAL 4 DAY, NULL, 1, 24),
+  (NULL, 'pending',  CURDATE() - INTERVAL 5 DAY, NULL, 1, 25);
 
 
 -- 3. Thêm dữ liệu mẫu cho 6 yêu cầu đăng ký sử dụng dịch vụ giặt ủi (service_id = 2)
 -- Giả sử 6 sinh viên ở phòng 1 và 2 là: student_id 4, 5, 6 (phòng 1) và student_id 7, 8, 10 (phòng 2)
 INSERT INTO student_service_registrations (actual_quantity, approval_date, end_date, start_date, status, approved_by, service_id, student_id, invoiced)
 VALUES
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 4, 'NO'),
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 5, 'NO'),
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 6, 'NO'),
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 7, 'NO'),
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 8, 'NO'),
-  (1, NULL, NULL, CURDATE(), 'pending', NULL, 2, 10, 'NO');
+  (1, NULL, NULL, CURDATE() - INTERVAL 1 DAY, 'pending', NULL, 2, 4, 'NO'),
+  (1, NULL, NULL, CURDATE() - INTERVAL 2 DAY, 'pending', NULL, 2, 5, 'NO'),
+  (1, NULL, NULL, CURDATE() - INTERVAL 3 DAY, 'pending', NULL, 2, 6, 'NO'),
+  (1, NULL, NULL, CURDATE() - INTERVAL 4 DAY, 'pending', NULL, 2, 7, 'NO'),
+  (1, NULL, NULL, CURDATE() - INTERVAL 5 DAY, 'pending', NULL, 2, 8, 'NO'),
+  (1, NULL, NULL, CURDATE() - INTERVAL 6 DAY, 'pending', NULL, 2, 10, 'NO');
 
 
 
@@ -253,11 +253,11 @@ VALUES
 INSERT INTO student_service_registrations
     (actual_quantity, approval_date, end_date, start_date, status, approved_by, service_id, student_id, invoiced)
 VALUES
-    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 21, 'NO'),
-    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 22, 'NO'),
-    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 23, 'NO'),
-    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 24, 'NO'),
-    (NULL, CURDATE(), NULL, CURDATE(), 'approved', 1, 2, 25, 'NO');
+    (NULL, CURDATE(), NULL, CURDATE() - INTERVAL 1 DAY, 'approved', 1, 2, 4, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE() - INTERVAL 2 DAY, 'approved', 1, 2, 5, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE() - INTERVAL 3 DAY, 'approved', 1, 2, 6, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE() - INTERVAL 4 DAY, 'approved', 1, 2, 7, 'NO'),
+    (NULL, CURDATE(), NULL, CURDATE() - INTERVAL 5 DAY, 'approved', 1, 2, 8, 'NO');
 
 
 
