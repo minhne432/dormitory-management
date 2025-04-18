@@ -4,64 +4,85 @@
       layout:decorate="~{layout/manager/layout}">
 <head>
     <title layout:fragment="title">Room Service Usage Chart</title>
+
+    <!-- Chart.js CDN (bạn có thể tải cục bộ nếu muốn) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div layout:fragment="content" class="mx-auto mt-4 max-w-6xl">
-    <h1 class="mb-4">Thống kê sử dụng điện nướct</h1>
-    <p>From: <span th:text="${startDate}"></span> To: <span th:text="${endDate}"></span></p>
+    <h1 class="text-2xl font-bold mb-4">Thống kê sử dụng điện / nước</h1>
+
+    <!-- 👇 Bộ lọc ngày -->
+    <form th:action="@{/service-usage/room/chart}" method="get"
+          class="flex flex-wrap gap-4 items-end mb-6">
+        <div class="flex flex-col">
+            <label for="startDate" class="font-medium">Start date</label>
+            <input id="startDate" name="startDate" type="date"
+                   class="border rounded px-3 py-2"
+                   th:value="${startDate}">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="endDate" class="font-medium">End date</label>
+            <input id="endDate" name="endDate" type="date"
+                   class="border rounded px-3 py-2"
+                   th:value="${endDate}">
+        </div>
+
+        <button type="submit"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded">
+            Apply
+        </button>
+    </form>
+
+    <!-- Thông tin khoảng thời gian hiện tại -->
+    <p class="mb-2">
+        From: <span class="font-semibold" th:text="${startDate}"></span>
+        &nbsp;–&nbsp;
+        To: <span class="font-semibold" th:text="${endDate}"></span>
+    </p>
+
+    <!-- Vùng vẽ biểu đồ -->
     <canvas id="usageChart" width="1000" height="600"></canvas>
 </div>
 
-
+<!-- ===== Script dựng biểu đồ ===== -->
 <script th:inline="javascript" layout:fragment="script">
     /*<![CDATA[*/
-    var chartData = /*[[${chartData}]]*/ '[]';
-    chartData = JSON.parse(JSON.stringify(chartData));
-    console.log(chartData);
-    var labelsSet = new Set();
-    var dataByService = {};
+    const chartDataRaw = /*[[${chartData}]]*/ '[]';
+    const chartData = JSON.parse(JSON.stringify(chartDataRaw));
 
-    chartData.forEach(function(item) {
-        labelsSet.add(item.date);
-        if (!dataByService[item.serviceName]) {
-            dataByService[item.serviceName] = {};
-        }
-        dataByService[item.serviceName][item.date] = item.usageCount;
+    // Gom nhãn và dữ liệu
+    const labelSet = new Set();
+    const byService = {};
+
+    chartData.forEach(it => {
+        labelSet.add(it.date);
+        byService[it.serviceName] = byService[it.serviceName] || {};
+        byService[it.serviceName][it.date] = it.usageCount;
     });
-    var labels = Array.from(labelsSet).sort();
-    console.log("Labels: ", labels);
 
-    var datasets = [];
-    console.log("Datasets: ", datasets);
+    const labels = Array.from(labelSet).sort();
 
-    // Ví dụ định nghĩa màu sắc cho từng dịch vụ (có thể tùy chỉnh)
-    var colors = {
+    // Màu mặc định cho từng dịch vụ
+    const palette = {
         "Điện": "rgba(255, 99, 132, 1)",
         "Nước": "rgba(75, 192, 192, 1)"
     };
 
-    Object.keys(dataByService).forEach(function(serviceName) {
-        var dataArray = [];
-        labels.forEach(function(date) {
-            dataArray.push(dataByService[serviceName][date] || 0);
-        });
-        datasets.push({
-            label: serviceName,
-            data: dataArray,
-            fill: false,
-            borderColor: colors[serviceName] || 'rgba(0,0,0,1)',
-            tension: 0.1
-        });
-    });
+    const datasets = Object.keys(byService).map(name => ({
+        label: name,
+        data: labels.map(d => byService[name][d] || 0),
+        fill: false,
+        borderColor: palette[name] || 'rgba(0,0,0,1)',
+        tension: 0.1
+    }));
 
-    var ctx = document.getElementById('usageChart').getContext('2d');
-    new Chart(ctx, {
+    new Chart(document.getElementById('usageChart').getContext('2d'), {
         type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
+        data: { labels, datasets },
         options: {
+            responsive: true,
             scales: {
                 x: { title: { display: true, text: 'Date' } },
                 y: { title: { display: true, text: 'Usage' }, beginAtZero: true }

@@ -4,14 +4,43 @@
       layout:decorate="~{layout/manager/layout}">
 <head>
     <title layout:fragment="title">Personal Service Usage Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div layout:fragment="content" class="mx-auto mt-4 max-w-6xl">
-    <h1 class="mb-4">Thống kê sử dụng dịch vụ cá nhân</h1>
-    <p>From: <span th:text="${startDate}"></span> To: <span th:text="${endDate}"></span></p>
-    <canvas id="usageChart" width="1000" height="600" ></canvas>
-</div>
+    <h1 class="text-2xl font-bold mb-4">Thống kê sử dụng dịch vụ cá nhân</h1>
 
+    <!-- 👇 Form chọn ngày -->
+    <form th:action="@{/service-usage/personal/chart}" method="get"
+          class="flex flex-wrap gap-4 items-end mb-6">
+        <div class="flex flex-col">
+            <label for="startDate" class="font-medium">Start date</label>
+            <input id="startDate" name="startDate" type="date"
+                   class="border rounded px-3 py-2"
+                   th:value="${startDate}">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="endDate" class="font-medium">End date</label>
+            <input id="endDate" name="endDate" type="date"
+                   class="border rounded px-3 py-2"
+                   th:value="${endDate}">
+        </div>
+
+        <button type="submit"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded">
+            Apply
+        </button>
+    </form>
+
+    <p class="mb-2">
+        From: <span class="font-semibold" th:text="${startDate}"></span>
+        &nbsp;–&nbsp;
+        To: <span class="font-semibold" th:text="${endDate}"></span>
+    </p>
+
+    <canvas id="usageChart" width="1000" height="600"></canvas>
+</div>
 
 <script th:inline="javascript" layout:fragment="script">
     /*<![CDATA[*/
@@ -28,10 +57,10 @@
         }
         dataByService[item.serviceName][item.date] = item.usageCount;
     });
+
     var labels = Array.from(labelsSet).sort();
 
     var datasets = [];
-    // Định nghĩa màu sắc riêng cho dịch vụ cá nhân (tùy chỉnh)
     var colors = {
         "Giặt ủi": "rgba(153, 102, 255, 1)",
         "Gửi xe": "rgba(255, 159, 64, 1)"
@@ -59,6 +88,7 @@
             datasets: datasets
         },
         options: {
+            responsive: true,
             scales: {
                 x: { title: { display: true, text: 'Date' } },
                 y: { title: { display: true, text: 'Usage' }, beginAtZero: true }
