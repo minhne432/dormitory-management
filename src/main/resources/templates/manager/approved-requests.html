@@ -79,7 +79,7 @@
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                <tr th:each="item : ${approvedRequests.content}">
+                <tr th:each="item : ${approvedRequests.content}" th:attr="data-registration-id=${item.registrationId}">
                     <td class="px-4 py-2 border">
                         <input type="checkbox" name="registrationIds" th:value="${item.registrationId}">
                     </td>
@@ -90,13 +90,11 @@
                     <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
                     <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
-                    <!-- Ô input cho actualQuantity -->
                     <td class="px-4 py-2 border">
                         <input type="number" class="actualQuantity-input w-full border border-gray-300 rounded p-1"
                                th:attr="data-registration-id=${item.registrationId}"
                                th:value="${item.actualQuantity}">
                     </td>
-                    <!-- Nút cập nhật cho mỗi dòng -->
                     <td class="px-4 py-2 border">
                         <button type="button" class="update-btn bg-blue-500 text-white px-2 py-1 rounded"
                                 th:attr="data-registration-id=${item.registrationId}">
@@ -247,54 +245,60 @@ function showToast(message, type = "success") {
            .catch(error => console.error("Lỗi khi tải danh sách:", error));
         }
 
-        // Xử lý tạo hóa đơn (giữ nguyên như bạn đã có)
-        document.addEventListener("DOMContentLoaded", function() {
-           // Nạp bộ lọc cũ
-           loadFilters();
+       document.addEventListener("DOMContentLoaded", function() {
+    // Nạp bộ lọc cũ
+    loadFilters();
 
-           // Lần đầu trang load, gắn event cho nút Update
-           attachUpdateEvents();
+    // Lần đầu trang load, gắn event cho nút Update
+    attachUpdateEvents();
 
-           // Gắn event cho nút “Tạo Hóa Đơn”
-           const createBillButton = document.getElementById("createBillButton");
-           if (createBillButton) {
-             createBillButton.addEventListener("click", function() {
-               const selectedRegistrations = Array.from(
-                 document.querySelectorAll('input[name="registrationIds"]:checked')
-               ).map(el => el.value);
+    // Gắn event cho nút “Tạo Hóa Đơn”
+    const createBillButton = document.getElementById("createBillButton");
+    if (createBillButton) {
+        createBillButton.addEventListener("click", function() {
+            const selectedRegistrations = Array.from(
+                document.querySelectorAll('input[name="registrationIds"]:checked')
+            ).map(el => el.value);
 
-               if (selectedRegistrations.length === 0) {
-                 showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
-                 return;
-               }
+            if (selectedRegistrations.length === 0) {
+                showToast("Vui lòng chọn ít nhất một đăng ký để tạo hóa đơn.", "error");
+                return;
+            }
 
-               const bodyParams = new URLSearchParams({
-                 registrationIds: selectedRegistrations
-               });
-               bodyParams.append(csrfParameterName, csrfTokenValue);
+            const bodyParams = new URLSearchParams({
+                registrationIds: selectedRegistrations
+            });
+            bodyParams.append(csrfParameterName, csrfTokenValue);
 
-               fetch("/personal-bills/create", {
-                 method: "POST",
-                 headers: {
-                   "Content-Type": "application/x-www-form-urlencoded",
-                   "X-Requested-With": "XMLHttpRequest"
-                 },
-                 body: bodyParams
-               })
-               .then(response => response.json())
-               .then(data => {
-                 if (data.message) {
-                   showToast(data.message, "success");
-                 } else if (data.error) {
-                   showToast(data.error, "error");
-                 }
-               })
-               .catch(error => {
-                 showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
-               });
-             });
-           }
+            fetch("/personal-bills/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: bodyParams
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    showToast(data.message, "success");
+                    // Xóa các hàng đã chọn khỏi bảng
+                    selectedRegistrations.forEach(regId => {
+                        const row = document.querySelector(`tr[data-registration-id="${regId}"]`);
+                        if (row) {
+                            row.remove();
+                        }
+                    });
+                } else if (data.error) {
+                    showToast(data.error, "error");
+                }
+            })
+            .catch(error => {
+                showToast("Lỗi khi tạo hóa đơn: " + error.message, "error");
+            });
         });
+    }
+});
     </script>
 
 </div>

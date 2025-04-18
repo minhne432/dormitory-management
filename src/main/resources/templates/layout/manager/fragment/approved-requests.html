@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-        <tr th:each="item : ${approvedRequests.content}">
+        <tr th:each="item : ${approvedRequests.content}" th:attr="data-registration-id=${item.registrationId}">
             <td class="px-4 py-2 border">
                 <input type="checkbox" name="registrationIds" th:value="${item.registrationId}">
             </td>
@@ -26,13 +26,11 @@
             <td class="px-4 py-2 border" th:text="${item.serviceStartDate}"></td>
             <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>
             <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
-            <!-- Ô input cho actualQuantity -->
             <td class="px-4 py-2 border">
                 <input type="number" class="actualQuantity-input w-full border border-gray-300 rounded p-1"
                        th:attr="data-registration-id=${item.registrationId}"
                        th:value="${item.actualQuantity}">
             </td>
-            <!-- Nút cập nhật cho mỗi dòng -->
             <td class="px-4 py-2 border">
                 <button type="button" class="update-btn bg-blue-500 text-white px-2 py-1 rounded"
                         th:attr="data-registration-id=${item.registrationId}">
