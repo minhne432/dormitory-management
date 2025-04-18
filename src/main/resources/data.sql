@@ -271,3 +271,288 @@ VALUES
 
 -- HOÀN TẤT GIAO DỊCH
 COMMIT;
+
+-- Bỏ các lệnh SET @variable
+
+-- --- Tháng 9/2024 (Ghi số ngày 18/10/2024, Hóa đơn kỳ 2024-10) ---
+-- Phòng 1 (Bill ID: 9, Usage IDs: 6, 7, Item IDs: 11, 12, Notif IDs: 13, 14, 15)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(9, 'điện-nước', '2024-10', '2024-10-28', '2024-10-18', 'paid', 220000, 1, NULL, '2024-10-18 10:00:00.000000', '2024-10-22 09:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(11, 150000, 9, 3, NULL, 50, 3000),
+(12, 70000, 9, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(6, 50, 'YES', 0, '2024-10-18', 9, 1, 3, NULL),
+(7, 10, 'YES', 0, '2024-10-18', 9, 1, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(13, '2024-10-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 4),
+(14, '2024-10-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 5),
+(15, '2024-10-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 6);
+
+-- Phòng 2 (Bill ID: 10, Usage IDs: 8, 9, Item IDs: 13, 14, Notif IDs: 16, 17, 18)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(10, 'điện-nước', '2024-10', '2024-10-28', '2024-10-18', 'paid', 220000, 2, NULL, '2024-10-18 10:00:01.000000', '2024-10-23 10:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(13, 150000, 10, 3, NULL, 50, 3000),
+(14, 70000, 10, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(8, 50, 'YES', 0, '2024-10-18', 10, 2, 3, NULL),
+(9, 10, 'YES', 0, '2024-10-18', 10, 2, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(16, '2024-10-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 7),
+(17, '2024-10-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 8),
+(18, '2024-10-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-10 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-10 đã thanh toán', 10);
+
+-- Phòng 3 (Bill ID: 11, Usage IDs: 10, 11, Item IDs: 15, 16)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(11, 'điện-nước', '2024-10', '2024-10-28', '2024-10-18', 'paid', 220000, 3, NULL, '2024-10-18 10:00:02.000000', '2024-10-24 11:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(15, 150000, 11, 3, NULL, 50, 3000),
+(16, 70000, 11, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(10, 50, 'YES', 0, '2024-10-18', 11, 3, 3, NULL),
+(11, 10, 'YES', 0, '2024-10-18', 11, 3, 4, NULL);
+
+-- Phòng 4 (Bill ID: 12, Usage IDs: 12, 13, Item IDs: 17, 18)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(12, 'điện-nước', '2024-10', '2024-10-28', '2024-10-18', 'paid', 220000, 4, NULL, '2024-10-18 10:00:03.000000', '2024-10-25 12:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(17, 150000, 12, 3, NULL, 50, 3000),
+(18, 70000, 12, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(12, 50, 'YES', 0, '2024-10-18', 12, 4, 3, NULL),
+(13, 10, 'YES', 0, '2024-10-18', 12, 4, 4, NULL);
+
+
+-- --- Tháng 10/2024 (Ghi số ngày 18/11/2024, Hóa đơn kỳ 2024-11) ---
+-- Phòng 1 (Bill ID: 13, Usage IDs: 14, 15, Item IDs: 19, 20, Notif IDs: 19, 20, 21)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(13, 'điện-nước', '2024-11', '2024-11-28', '2024-11-18', 'paid', 220000, 1, NULL, '2024-11-18 10:00:00.000000', '2024-11-22 09:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(19, 150000, 13, 3, NULL, 50, 3000),
+(20, 70000, 13, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(14, 100, 'YES', 50, '2024-11-18', 13, 1, 3, NULL),
+(15, 20, 'YES', 10, '2024-11-18', 13, 1, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(19, '2024-11-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 4),
+(20, '2024-11-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 5),
+(21, '2024-11-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 6);
+
+-- Phòng 2 (Bill ID: 14, Usage IDs: 16, 17, Item IDs: 21, 22, Notif IDs: 22, 23, 24)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(14, 'điện-nước', '2024-11', '2024-11-28', '2024-11-18', 'paid', 220000, 2, NULL, '2024-11-18 10:00:01.000000', '2024-11-23 10:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(21, 150000, 14, 3, NULL, 50, 3000),
+(22, 70000, 14, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(16, 100, 'YES', 50, '2024-11-18', 14, 2, 3, NULL),
+(17, 20, 'YES', 10, '2024-11-18', 14, 2, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(22, '2024-11-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 7),
+(23, '2024-11-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 8),
+(24, '2024-11-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-11 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-11 đã thanh toán', 10);
+
+-- Phòng 3 (Bill ID: 15, Usage IDs: 18, 19, Item IDs: 23, 24)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(15, 'điện-nước', '2024-11', '2024-11-28', '2024-11-18', 'paid', 220000, 3, NULL, '2024-11-18 10:00:02.000000', '2024-11-24 11:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(23, 150000, 15, 3, NULL, 50, 3000),
+(24, 70000, 15, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(18, 100, 'YES', 50, '2024-11-18', 15, 3, 3, NULL),
+(19, 20, 'YES', 10, '2024-11-18', 15, 3, 4, NULL);
+
+-- Phòng 4 (Bill ID: 16, Usage IDs: 20, 21, Item IDs: 25, 26)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(16, 'điện-nước', '2024-11', '2024-11-28', '2024-11-18', 'paid', 220000, 4, NULL, '2024-11-18 10:00:03.000000', '2024-11-25 12:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(25, 150000, 16, 3, NULL, 50, 3000),
+(26, 70000, 16, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(20, 100, 'YES', 50, '2024-11-18', 16, 4, 3, NULL),
+(21, 20, 'YES', 10, '2024-11-18', 16, 4, 4, NULL);
+
+
+-- --- Tháng 11/2024 (Ghi số ngày 18/12/2024, Hóa đơn kỳ 2024-12) ---
+-- Phòng 1 (Bill ID: 17, Usage IDs: 22, 23, Item IDs: 27, 28, Notif IDs: 25, 26, 27)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(17, 'điện-nước', '2024-12', '2024-12-28', '2024-12-18', 'paid', 220000, 1, NULL, '2024-12-18 10:00:00.000000', '2024-12-22 09:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(27, 150000, 17, 3, NULL, 50, 3000),
+(28, 70000, 17, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(22, 150, 'YES', 100, '2024-12-18', 17, 1, 3, NULL),
+(23, 30, 'YES', 20, '2024-12-18', 17, 1, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(25, '2024-12-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 4),
+(26, '2024-12-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 5),
+(27, '2024-12-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 6);
+
+-- Phòng 2 (Bill ID: 18, Usage IDs: 24, 25, Item IDs: 29, 30, Notif IDs: 28, 29, 30)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(18, 'điện-nước', '2024-12', '2024-12-28', '2024-12-18', 'paid', 220000, 2, NULL, '2024-12-18 10:00:01.000000', '2024-12-23 10:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(29, 150000, 18, 3, NULL, 50, 3000),
+(30, 70000, 18, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(24, 150, 'YES', 100, '2024-12-18', 18, 2, 3, NULL),
+(25, 30, 'YES', 20, '2024-12-18', 18, 2, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(28, '2024-12-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 7),
+(29, '2024-12-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 8),
+(30, '2024-12-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2024-12 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2024-12 đã thanh toán', 10);
+
+-- Phòng 3 (Bill ID: 19, Usage IDs: 26, 27, Item IDs: 31, 32)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(19, 'điện-nước', '2024-12', '2024-12-28', '2024-12-18', 'paid', 220000, 3, NULL, '2024-12-18 10:00:02.000000', '2024-12-24 11:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(31, 150000, 19, 3, NULL, 50, 3000),
+(32, 70000, 19, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(26, 150, 'YES', 100, '2024-12-18', 19, 3, 3, NULL),
+(27, 30, 'YES', 20, '2024-12-18', 19, 3, 4, NULL);
+
+-- Phòng 4 (Bill ID: 20, Usage IDs: 28, 29, Item IDs: 33, 34)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(20, 'điện-nước', '2024-12', '2024-12-28', '2024-12-18', 'paid', 220000, 4, NULL, '2024-12-18 10:00:03.000000', '2024-12-25 12:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(33, 150000, 20, 3, NULL, 50, 3000),
+(34, 70000, 20, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(28, 150, 'YES', 100, '2024-12-18', 20, 4, 3, NULL),
+(29, 30, 'YES', 20, '2024-12-18', 20, 4, 4, NULL);
+
+
+-- --- Tháng 12/2024 (Ghi số ngày 18/01/2025, Hóa đơn kỳ 2025-01) ---
+-- Phòng 1 (Bill ID: 21, Usage IDs: 30, 31, Item IDs: 35, 36, Notif IDs: 31, 32, 33)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(21, 'điện-nước', '2025-01', '2025-01-28', '2025-01-18', 'paid', 220000, 1, NULL, '2025-01-18 10:00:00.000000', '2025-01-22 09:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(35, 150000, 21, 3, NULL, 50, 3000),
+(36, 70000, 21, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(30, 200, 'YES', 150, '2025-01-18', 21, 1, 3, NULL),
+(31, 40, 'YES', 30, '2025-01-18', 21, 1, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(31, '2025-01-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 4),
+(32, '2025-01-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 5),
+(33, '2025-01-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 6);
+
+-- Phòng 2 (Bill ID: 22, Usage IDs: 32, 33, Item IDs: 37, 38, Notif IDs: 34, 35, 36)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(22, 'điện-nước', '2025-01', '2025-01-28', '2025-01-18', 'paid', 220000, 2, NULL, '2025-01-18 10:00:01.000000', '2025-01-23 10:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(37, 150000, 22, 3, NULL, 50, 3000),
+(38, 70000, 22, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(32, 200, 'YES', 150, '2025-01-18', 22, 2, 3, NULL),
+(33, 40, 'YES', 30, '2025-01-18', 22, 2, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(34, '2025-01-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 7),
+(35, '2025-01-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 8),
+(36, '2025-01-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-01 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-01 đã thanh toán', 10);
+
+-- Phòng 3 (Bill ID: 23, Usage IDs: 34, 35, Item IDs: 39, 40)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(23, 'điện-nước', '2025-01', '2025-01-28', '2025-01-18', 'paid', 220000, 3, NULL, '2025-01-18 10:00:02.000000', '2025-01-24 11:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(39, 150000, 23, 3, NULL, 50, 3000),
+(40, 70000, 23, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(34, 200, 'YES', 150, '2025-01-18', 23, 3, 3, NULL),
+(35, 40, 'YES', 30, '2025-01-18', 23, 3, 4, NULL);
+
+-- Phòng 4 (Bill ID: 24, Usage IDs: 36, 37, Item IDs: 41, 42)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(24, 'điện-nước', '2025-01', '2025-01-28', '2025-01-18', 'paid', 220000, 4, NULL, '2025-01-18 10:00:03.000000', '2025-01-25 12:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(41, 150000, 24, 3, NULL, 50, 3000),
+(42, 70000, 24, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(36, 200, 'YES', 150, '2025-01-18', 24, 4, 3, NULL),
+(37, 40, 'YES', 30, '2025-01-18', 24, 4, 4, NULL);
+
+
+-- --- Tháng 01/2025 (Ghi số ngày 18/02/2025, Hóa đơn kỳ 2025-02) ---
+-- Phòng 1 (Bill ID: 25, Usage IDs: 38, 39, Item IDs: 43, 44, Notif IDs: 37, 38, 39)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(25, 'điện-nước', '2025-02', '2025-02-28', '2025-02-18', 'paid', 220000, 1, NULL, '2025-02-18 10:00:00.000000', '2025-02-22 09:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(43, 150000, 25, 3, NULL, 50, 3000),
+(44, 70000, 25, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(38, 250, 'YES', 200, '2025-02-18', 25, 1, 3, NULL),
+(39, 50, 'YES', 40, '2025-02-18', 25, 1, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(37, '2025-02-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 4),
+(38, '2025-02-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 5),
+(39, '2025-02-18 10:01:00.000000', 'Hóa đơn điện nước phòng A101 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 6);
+
+-- Phòng 2 (Bill ID: 26, Usage IDs: 40, 41, Item IDs: 45, 46, Notif IDs: 40, 41, 42)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(26, 'điện-nước', '2025-02', '2025-02-28', '2025-02-18', 'paid', 220000, 2, NULL, '2025-02-18 10:00:01.000000', '2025-02-23 10:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(45, 150000, 26, 3, NULL, 50, 3000),
+(46, 70000, 26, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(40, 250, 'YES', 200, '2025-02-18', 26, 2, 3, NULL),
+(41, 50, 'YES', 40, '2025-02-18', 26, 2, 4, NULL);
+INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
+(40, '2025-02-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 7),
+(41, '2025-02-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 8),
+(42, '2025-02-18 10:01:01.000000', 'Hóa đơn điện nước phòng A102 kỳ 2025-02 (220000 VND) đã được thanh toán.', 'unread', 'Hóa đơn kỳ 2025-02 đã thanh toán', 10);
+
+-- Phòng 3 (Bill ID: 27, Usage IDs: 42, 43, Item IDs: 47, 48)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(27, 'điện-nước', '2025-02', '2025-02-28', '2025-02-18', 'paid', 220000, 3, NULL, '2025-02-18 10:00:02.000000', '2025-02-24 11:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(47, 150000, 27, 3, NULL, 50, 3000),
+(48, 70000, 27, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(42, 250, 'YES', 200, '2025-02-18', 27, 3, 3, NULL),
+(43, 50, 'YES', 40, '2025-02-18', 27, 3, 4, NULL);
+
+-- Phòng 4 (Bill ID: 28, Usage IDs: 44, 45, Item IDs: 49, 50)
+INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
+(28, 'điện-nước', '2025-02', '2025-02-28', '2025-02-18', 'paid', 220000, 4, NULL, '2025-02-18 10:00:03.000000', '2025-02-25 12:00:00.000000');
+INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_id, quantity, unit_price) VALUES
+(49, 150000, 28, 3, NULL, 50, 3000),
+(50, 70000, 28, 4, NULL, 10, 7000);
+INSERT INTO service_usage (usage_id, current_reading, invoiced, previous_reading, record_date, bill_id, room_id, service_id, student_id) VALUES
+(44, 250, 'YES', 200, '2025-02-18', 28, 4, 3, NULL),
+(45, 50, 'YES', 40, '2025-02-18', 28, 4, 4, NULL);
+
+
+-- --- Tháng 02/2025 (Ghi số ngày 18/03/2025, Hóa đơn kỳ 2025-03) ---
+-- Dữ liệu gốc cho tháng 3/2025 (bill_id 1, 2) đã có.
+-- Cập nhật chỉ số cũ (previous_reading) cho các bản ghi usage gốc (usage_id 1, 2, 3, 4)
+-- để khớp với chỉ số cuối (current_reading) của tháng 2/2025 (là 250 cho điện, 50 cho nước)
+UPDATE service_usage SET previous_reading = 250 WHERE usage_id = 1; -- Phòng 1, Điện, Bill 1
+UPDATE service_usage SET previous_reading = 50 WHERE usage_id = 2;  -- Phòng 1, Nước, Bill 1
+UPDATE service_usage SET previous_reading = 250 WHERE usage_id = 3; -- Phòng 2, Điện, Bill 2
+UPDATE service_usage SET previous_reading = 50 WHERE usage_id = 4;  -- Phòng 2, Nước, Bill 2
+
+-- **QUAN TRỌNG**: Dữ liệu gốc của bạn cho tháng 3/2025 có `current_reading` là 150 (điện) và 60 (nước).
+-- Nếu `previous_reading` là 250 (từ tháng 2), thì `current_reading` phải lớn hơn 250.
+-- Dữ liệu gốc hiện tại không hợp lý về mặt chỉ số liên tục.
+-- Giả sử ta chấp nhận dữ liệu gốc này và không sửa đổi `current_reading`, `quantity`, `amount` của bill 1, 2.
+-- Nếu muốn dữ liệu tháng 3 liền mạch, hãy bỏ comment phần UPDATE tùy chọn dưới đây:
+
+/*
+-- **TÙY CHỌN:** Sửa dữ liệu gốc tháng 3/2025 cho liền mạch (cập nhật chỉ số cuối và tính lại tiền)
+-- Giả sử tháng 3 cũng dùng 50 kWh điện và 10 m3 nước
+-- Phòng 1 (bill_id=1), Usage (usage_id=1, 2)
+UPDATE service_usage SET previous_reading = 250, current_reading = 300 WHERE usage_id = 1; -- Điện: 250 -> 300 (dùng 50)
+UPDATE service_usage SET previous_reading = 50, current_reading = 60 WHERE usage_id = 2;  -- Nước: 50 -> 60 (dùng 10)
+UPDATE bill_items SET quantity = 50, amount = 150000 WHERE bill_item_id = 1; -- Cập nhật điện (bill_item 1 ứng với bill 1, service 3)
+UPDATE bill_items SET quantity = 10, amount = 70000 WHERE bill_item_id = 2;  -- Cập nhật nước (bill_item 2 ứng với bill 1, service 4)
+UPDATE bills SET total_amount = 220000 WHERE bill_id = 1; -- Cập nhật tổng bill 1
+
+-- Phòng 2 (bill_id=2), Usage (usage_id=3, 4)
+UPDATE service_usage SET previous_reading = 250, current_reading = 300 WHERE usage_id = 3; -- Điện: 250 -> 300 (dùng 50)
+UPDATE service_usage SET previous_reading = 50, current_reading = 60 WHERE usage_id = 4;  -- Nước: 50 -> 60 (dùng 10)
+UPDATE bill_items SET quantity = 50, amount = 150000 WHERE bill_item_id = 3; -- Cập nhật điện (bill_item 3 ứng với bill 2, service 3)
+UPDATE bill_items SET quantity = 10, amount = 70000 WHERE bill_item_id = 4;  -- Cập nhật nước (bill_item 4 ứng với bill 2, service 4)
+UPDATE bills SET total_amount = 220000 WHERE bill_id = 2; -- Cập nhật tổng bill 2
+*/
