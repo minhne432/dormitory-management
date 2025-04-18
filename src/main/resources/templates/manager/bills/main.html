@@ -68,11 +68,16 @@
         <td class="px-6 py-4 whitespace-nowrap" th:text="${bill.issueDate}"></td>
         <td class="px-6 py-4 whitespace-nowrap" th:text="${bill.dueDate}"></td>
         <td class="px-6 py-4 whitespace-nowrap">
-          <select class="bill-status" th:data-bill-id="${bill.billId}">
+          <select
+                  th:disabled="${bill.status != null and bill.status.name() == 'paid'}"
+                  th:classappend="${bill.status != null and bill.status.name() == 'paid'} ? ' opacity-50 pointer-events-none' : ''"
+                  class="bill-status"
+                  th:data-bill-id="${bill.billId}">
             <option value="unpaid" th:selected="${bill.status.name() == 'unpaid'}">unpaid</option>
             <option value="paid" th:selected="${bill.status.name() == 'paid'}">paid</option>
             <option value="overdue" th:selected="${bill.status.name() == 'overdue'}">overdue</option>
           </select>
+
         </td>
         <td class="px-6 py-4 whitespace-nowrap" th:text="${bill.totalAmount}"></td>
         <td class="px-6 py-4 whitespace-nowrap">
@@ -104,9 +109,11 @@
   }
 
   function handleStatusChange(event) {
-      console.log('Change status triggered');
-      const billId = parseInt(event.target.dataset.billId);
-      const status = event.target.value;
+      const selectElement = event.target;
+      const billId = parseInt(selectElement.dataset.billId);
+      const status = selectElement.value;
+
+      // Nếu người dùng chọn "paid", vô hiệu hóa dropdown sau khi gửi yêu cầu
       fetch('/bills/manager/updateStatus', {
           method: 'POST',
           headers: {
@@ -124,13 +131,18 @@
       })
       .then(message => {
           console.log(message);
+          if (status === 'paid') {
+              // Vô hiệu hóa select ngay sau khi cập nhật thành công
+              selectElement.disabled = true;
+              selectElement.classList.add('opacity-50', 'pointer-events-none');
+          }
       })
       .catch(error => {
           console.error(error);
       });
   }
 
-  // Đảm bảo rằng sự kiện sẽ được gán lại sau mỗi lần trang render lại danh sách hóa đơn
   document.addEventListener("DOMContentLoaded", updateBillStatusListeners);
 </script>
+
 </html>
