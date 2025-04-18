@@ -22,5 +22,7 @@ public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificat
     @Query("SELECT DISTINCT r.dormitory.dormName FROM Room r")
     List<String> findDistinctDormitoryNames();
 
+    List<Room> findByDormitoryDormIdAndCurrentOccupancyGreaterThan(Long dormId, int currentOccupancy);
+
 
 }

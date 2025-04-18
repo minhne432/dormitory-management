@@ -1,54 +1,106 @@
-<!-- src/main/resources/templates/manager/record_meter_reading.html-->
+<!-- src/main/resources/templates/manager/record_meter_reading.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
 <head>
-    <title layout:fragment="title">Ghi Số Điện và Nước</title>
+    <title layout:fragment="title">Ghi Số Điện / Nước</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <div layout:fragment="content" class="mx-auto mt-4 max-w-lg">
-    <h1 class="text-2xl font-bold mb-4">Ghi Số Điện và Nước cho Phòng</h1>
+    <h1 class="text-2xl font-bold mb-4">Ghi Số Điện / Nước</h1>
 
     <div th:if="${error}" class="mb-4">
         <div class="bg-red-500 text-white p-2 rounded" th:text="${error}"></div>
     </div>
 
-    <form th:action="@{/service-usage/record}" method="post" class="space-y-4">
+    <form th:action="@{/service-usage/record}" method="post" class="space-y-4" id="meterForm">
+        <!-- 🏢 Khu (Dormitory) -->
         <div>
-            <label for="roomId" class="block text-gray-700 mb-1">Phòng</label>
-            <select id="roomId" name="roomId" required class="w-full border border-gray-300 rounded px-3 py-2">
+            <label class="block text-gray-700 mb-1" for="dormId">Khu Ký túc</label>
+            <select id="dormId" name="dormId" required
+                    class="w-full border border-gray-300 rounded px-3 py-2">
+                <option value="">-- Chọn khu --</option>
+                <option th:each="d : ${dormitories}"
+                        th:value="${d.dormId}"
+                        th:text="${d.dormName}"></option>
+            </select>
+        </div>
+
+        <!-- 🏠 Phòng (sẽ thay đổi theo khu) -->
+        <div>
+            <label class="block text-gray-700 mb-1" for="roomId">Phòng</label>
+            <select id="roomId" name="roomId" required
+                    class="w-full border border-gray-300 rounded px-3 py-2">
                 <option value="">-- Chọn phòng --</option>
-                <option th:each="room : ${rooms}" th:value="${room.roomId}" th:text="${room.roomNumber}"></option>
+                <!-- option sẽ được JS thêm vào -->
             </select>
         </div>
 
+        <!-- ⚙️  Loại dịch vụ (chỉ ROOM‑type) -->
         <div>
-            <label for="serviceId" class="block text-gray-700 mb-1">Dịch vụ</label>
-            <select id="serviceId" name="serviceId" required class="w-full border border-gray-300 rounded px-3 py-2">
+            <label class="block text-gray-700 mb-1" for="serviceId">Dịch vụ</label>
+            <select id="serviceId" name="serviceId" required
+                    class="w-full border border-gray-300 rounded px-3 py-2">
                 <option value="">-- Chọn dịch vụ --</option>
-                <option th:each="service : ${services}"
-                        th:if="${service.serviceType == T(com.example.demo.entity.DormitoryService.ServiceType).ROOM}"
-                        th:value="${service.serviceId}"
-                        th:text="${service.serviceName}"></option>
+                <option th:each="s : ${services}"
+                        th:if="${s.serviceType == T(com.example.demo.entity.DormitoryService.ServiceType).ROOM}"
+                        th:value="${s.serviceId}" th:text="${s.serviceName}"></option>
             </select>
         </div>
 
+        <!-- 🔢 Chỉ số mới -->
         <div>
-            <label for="currentReading" class="block text-gray-700 mb-1">Số đo hiện tại</label>
-            <input type="number" step="0.01" id="currentReading" name="currentReading" required class="w-full border border-gray-300 rounded px-3 py-2">
+            <label class="block text-gray-700 mb-1" for="currentReading">Chỉ số hiện tại</label>
+            <input type="number" step="0.01" id="currentReading" name="currentReading" required
+                   class="w-full border border-gray-300 rounded px-3 py-2">
         </div>
 
-        <div>
-            <label for="recordDate" class="block text-gray-700 mb-1">Ngày ghi số (yyyy-MM-dd)</label>
-            <input type="date" id="recordDate" name="recordDate" required class="w-full border border-gray-300 rounded px-3 py-2">
-        </div>
+        <!-- 📅 recordDate = today (ẩn) -->
+        <input type="hidden" id="recordDate" name="recordDate"
+               th:value="${T(java.time.LocalDate).now()}"/>
 
-        <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Ghi Số
+        <button type="submit"
+                class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            💾 Ghi Số
         </button>
     </form>
 </div>
+
+<!-- --- JS --- -->
+<script layout:fragment="script">
+    console.log("JS loaded"); // ➤ đặt ngay trên đầu <script>
+  document.addEventListener('DOMContentLoaded', () => {
+      // Tự đặt recordDate = hôm nay (yyyy-MM-dd)
+      document.getElementById('recordDate').value =
+          new Date().toISOString().split('T')[0];
+
+      // Khi chọn khu -> gọi API lấy phòng
+      const dormSel = document.getElementById('dormId');
+      const roomSel = document.getElementById('roomId');
+
+      dormSel.addEventListener('change', async () => {
+          const dormId = dormSel.value;
+          roomSel.innerHTML = '<option value="">-- Chọn phòng --</option>'; // reset
+
+          if (!dormId) return;
+
+          try {
+              const res = await fetch(`/service-usage/rooms?dormId=${dormId}`);
+              const data = await res.json();
+
+              data.forEach(r => {
+                  const opt = document.createElement('option');
+                  opt.value = r.roomId;
+                  opt.textContent = r.roomNumber;
+                  roomSel.appendChild(opt);
+              });
+          } catch (err) {
+              alert('Không tải được danh sách phòng!');
+          }
+      });
+  });
+</script>
 </body>
 </html>
