@@ -4,6 +4,8 @@ import com.example.demo.entity.ServiceUsage;
 import com.example.demo.service.ServiceUsageService;
 import com.example.demo.specifications.ServiceUsageSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,30 +28,38 @@ public class ElectricityWaterBillController {
     @GetMapping("/list")
     public String listServiceUsage(
             @RequestParam(required = false) Long roomId,
-            @RequestParam(required = false) String roomNumber,    // ➊ thêm
+            @RequestParam(required = false) String roomNumber,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String invoiced,
+
+            /* ✅ tham số phân trang */
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+
             Model model) {
 
         LocalDate parsedStartDate = Optional.ofNullable(startDate)
                 .filter(s -> !s.isBlank())
-                .map(LocalDate::parse)
-                .orElse(null);
-        LocalDate parsedEndDate   = Optional.ofNullable(endDate)
+                .map(LocalDate::parse).orElse(null);
+        LocalDate parsedEndDate = Optional.ofNullable(endDate)
                 .filter(s -> !s.isBlank())
-                .map(LocalDate::parse)
-                .orElse(null);
+                .map(LocalDate::parse).orElse(null);
 
         Specification<ServiceUsage> spec = ServiceUsageSpecification.hasRoomServiceType()
                 .and(ServiceUsageSpecification.hasRoomId(roomId))
-                .and(ServiceUsageSpecification.hasRoomNumber(roomNumber))     // ➋ thêm
+                .and(ServiceUsageSpecification.hasRoomNumber(roomNumber))
                 .and(ServiceUsageSpecification.hasRecordDateBetween(parsedStartDate, parsedEndDate))
                 .and(ServiceUsageSpecification.hasInvoiced(invoiced));
 
-        model.addAttribute("usages", serviceUsageService.searchServiceUsages(spec));
+        /* ✅ lấy Page chứ không phải List */
+        Page<ServiceUsage> usages =
+                serviceUsageService.searchServiceUsages(spec, PageRequest.of(page, size));
+
+        model.addAttribute("usages", usages);
         return "manager/service_usage_list";
     }
+
 
 
     // ======== HIỂN THỊ FORM CHỈNH SỬA =========

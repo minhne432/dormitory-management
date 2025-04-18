@@ -11,6 +11,8 @@ import com.example.demo.repository.DormitoryServiceRepository;
 import com.example.demo.repository.RoomAssignmentRepository;
 import com.example.demo.service.ServiceUsageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -79,8 +81,9 @@ Double previousReading = lastRecordOpt.map(ServiceUsage::getCurrentReading).orEl
     }
 
     @Override
-    public List<ServiceUsage> searchServiceUsages(Specification<ServiceUsage> spec) {
-        return serviceUsageRepository.findAll(spec);
+    public Page<ServiceUsage> searchServiceUsages(Specification<ServiceUsage> spec,
+                                                  Pageable pageable) {             // ✅
+        return serviceUsageRepository.findAll(spec, pageable);                     // ✅
     }
 
     @Override

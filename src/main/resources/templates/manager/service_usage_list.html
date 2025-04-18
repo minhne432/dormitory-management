@@ -22,6 +22,12 @@
             });
             localStorage.setItem("serviceUsageFilter", JSON.stringify(formData));
         }
+
+        /* ------------ pagination helpers ------------ */
+        function changePage(page) {
+            document.getElementById('pageField').value = page;
+            document.getElementById('filterForm').submit();
+        }
     </script>
 </head>
 
@@ -36,36 +42,31 @@
               onsubmit="saveFilter()"
               class="mt-4 p-4 bg-white shadow-lg rounded-lg space-y-4">
 
+            <!-- Hidden pagination fields -->
+            <input type="hidden" name="page" id="pageField" th:value="${usages.number}" />
+            <input type="hidden" name="size" id="sizeField" th:value="${usages.size}" />
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Giữ nguyên: Room ID -->
                 <div class="mb-3">
                     <label for="roomId" class="block text-sm font-medium text-gray-700">Room ID:</label>
                     <input type="text" name="roomId" id="roomId"
                            class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-
-                <!-- Mới: Room Number -->
                 <div class="mb-3">
                     <label for="roomNumber" class="block text-sm font-medium text-gray-700">Room Number:</label>
                     <input type="text" name="roomNumber" id="roomNumber"
                            class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-
-                <!-- Giữ nguyên: startDate -->
                 <div class="mb-3">
-                    <label for="startDate" class="block text-sm font-medium text-gray-700">Record Date từ (yyyy-MM-dd):</label>
+                    <label for="startDate" class="block text-sm font-medium text-gray-700">Record Date từ:</label>
                     <input type="date" name="startDate" id="startDate"
                            class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-
-                <!-- Giữ nguyên: endDate -->
                 <div class="mb-3">
-                    <label for="endDate" class="block text-sm font-medium text-gray-700">Record Date đến (yyyy-MM-dd):</label>
+                    <label for="endDate" class="block text-sm font-medium text-gray-700">Record Date đến:</label>
                     <input type="date" name="endDate" id="endDate"
                            class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-
-                <!-- Giữ nguyên: invoiced -->
                 <div class="mb-3">
                     <label for="invoiced" class="block text-sm font-medium text-gray-700">Invoiced:</label>
                     <select name="invoiced" id="invoiced"
@@ -83,7 +84,7 @@
             </button>
         </form>
 
-        <!-- Giữ nguyên bảng dữ liệu -->
+        <!-- Bảng dữ liệu -->
         <table class="min-w-full mt-6 table-auto border-collapse bg-white shadow-lg rounded-lg">
             <thead class="bg-gray-700 text-white">
             <tr>
@@ -94,13 +95,11 @@
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Previous Reading</th>
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Record Date</th>
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Invoiced</th>
-
-                <!-- ✅ Cột mới: Actions -->
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Actions</th>
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-            <tr th:each="usage : ${usages}">
+            <tr th:each="usage : ${usages.content}">
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.usageId}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.room.roomNumber}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.service.serviceName}"></td>
@@ -108,8 +107,6 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.previousReading}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.recordDate}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.invoiced}"></td>
-
-                <!-- ✅ Cột Actions -->
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                     <a th:if="${usage.invoiced.name() == 'NO'}"
                        th:href="@{/electricity-water-bill/edit/{id}(id=${usage.usageId})}"
@@ -120,6 +117,28 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- Phân trang -->
+        <div th:if="${usages.totalPages > 1}" class="mt-4 flex justify-center gap-1">
+            <button class="px-3 py-1 bg-gray-200 rounded"
+                    th:disabled="${usages.first}"
+                    th:onclick="'changePage(' + (${usages.number - 1}) + ')'">
+                « Prev
+            </button>
+
+            <button th:each="i : ${#numbers.sequence(0, usages.totalPages - 1)}"
+                    th:text="${i + 1}"
+                    th:classappend="${i == usages.number} ? ' bg-blue-500 text-white' : ' bg-gray-200'"
+                    class="px-3 py-1 rounded"
+                    th:onclick="'changePage(' + ${i} + ')'">
+            </button>
+
+            <button class="px-3 py-1 bg-gray-200 rounded"
+                    th:disabled="${usages.last}"
+                    th:onclick="'changePage(' + (${usages.number + 1}) + ')'">
+                Next »
+            </button>
+        </div>
 
     </div>
 </div>
