@@ -5,6 +5,7 @@ import com.example.demo.entity.DormitoryService;
 import com.example.demo.entity.DormitoryService.ServiceType;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.*;
+
 import java.time.LocalDate;
 
 public class ServiceUsageSpecification {
@@ -17,7 +18,7 @@ public class ServiceUsageSpecification {
         };
     }
 
-    // Ví dụ thêm bộ lọc động cho các thuộc tính khác, ví dụ theo roomId
+    // Bộ lọc theo roomId
     public static Specification<ServiceUsage> hasRoomId(Long roomId) {
         return (root, query, criteriaBuilder) -> {
             if (roomId == null) {
@@ -27,7 +28,18 @@ public class ServiceUsageSpecification {
         };
     }
 
-    // Tương tự cho currentReading
+    // ✅ Bộ lọc theo roomNumber (contains, không phân biệt HOA/thường)
+    public static Specification<ServiceUsage> hasRoomNumber(String roomNumber) {
+        return (root, query, cb) -> {
+            if (roomNumber == null || roomNumber.isBlank()) {
+                return cb.conjunction();
+            }
+            Expression<String> numberExp = cb.lower(root.get("room").get("roomNumber"));
+            return cb.like(numberExp, "%" + roomNumber.toLowerCase().trim() + "%");
+        };
+    }
+
+    // Bộ lọc theo currentReading
     public static Specification<ServiceUsage> hasCurrentReading(Double currentReading) {
         return (root, query, criteriaBuilder) -> {
             if (currentReading == null) {
@@ -37,7 +49,7 @@ public class ServiceUsageSpecification {
         };
     }
 
-    // Có thể thêm các bộ lọc cho previousReading, recordDate, invoiced,...
+    // Bộ lọc theo previousReading
     public static Specification<ServiceUsage> hasPreviousReading(Double previousReading) {
         return (root, query, criteriaBuilder) -> {
             if (previousReading == null) {
@@ -47,27 +59,23 @@ public class ServiceUsageSpecification {
         };
     }
 
-    // Loại bỏ hoặc comment out hasRecordDate cũ
-    // public static Specification<ServiceUsage> hasRecordDate(String recordDateStr) { ... }
-
-    // Thêm Specification mới cho lọc theo khoảng thời gian recordDate
+    // Bộ lọc theo khoảng thời gian recordDate
     public static Specification<ServiceUsage> hasRecordDateBetween(LocalDate startDate, LocalDate endDate) {
         return (root, query, criteriaBuilder) -> {
             if (startDate == null && endDate == null) {
-                return criteriaBuilder.conjunction(); // Không lọc theo recordDate nếu cả hai đều null
+                return criteriaBuilder.conjunction();
             }
             if (startDate != null && endDate != null) {
-                return criteriaBuilder.between(root.get("recordDate"), startDate, endDate); // Lọc trong khoảng
+                return criteriaBuilder.between(root.get("recordDate"), startDate, endDate);
             }
             if (startDate != null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("recordDate"), startDate); // Lọc từ startDate trở đi
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("recordDate"), startDate);
             }
-            // if (endDate != null) - chỉ còn trường hợp endDate != null
-            return criteriaBuilder.lessThanOrEqualTo(root.get("recordDate"), endDate); // Lọc đến endDate
+            return criteriaBuilder.lessThanOrEqualTo(root.get("recordDate"), endDate);
         };
     }
 
-
+    // Bộ lọc theo invoiced
     public static Specification<ServiceUsage> hasInvoiced(String invoiced) {
         return (root, query, criteriaBuilder) -> {
             if (invoiced == null || invoiced.isEmpty()) {

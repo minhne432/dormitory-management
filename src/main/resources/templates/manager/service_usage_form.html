@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Chỉnh sửa chỉ số sử dụng</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="max-w-2xl mx-auto bg-white p-6 mt-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Cập nhật chỉ số sử dụng dịch vụ</h2>
+
+    <form th:action="@{/electricity-water-bill/edit}" method="post">
+        <input type="hidden" name="usageId" th:value="${usage.usageId}" />
+
+        <!-- Room Number -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Phòng</label>
+            <input type="text" th:value="${usage.room.roomNumber}" readonly
+                   class="mt-1 block w-full px-3 py-2 bg-gray-100 border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- Service -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Dịch vụ</label>
+            <input type="text" th:value="${usage.service.serviceName}" readonly
+                   class="mt-1 block w-full px-3 py-2 bg-gray-100 border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- Previous Reading -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Chỉ số trước</label>
+            <input type="text" th:value="${usage.previousReading}" readonly
+                   class="mt-1 block w-full px-3 py-2 bg-gray-100 border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- Record Date -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Ngày ghi nhận</label>
+            <input type="text" th:value="${usage.recordDate}" readonly
+                   class="mt-1 block w-full px-3 py-2 bg-gray-100 border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- Invoiced -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Trạng thái hóa đơn</label>
+            <input type="text" th:value="${usage.invoiced}" readonly
+                   class="mt-1 block w-full px-3 py-2 bg-gray-100 border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- ✅ Editable: Current Reading -->
+        <div class="mb-6">
+            <label for="currentReading" class="block text-sm font-medium text-gray-700">Chỉ số hiện tại</label>
+            <input type="number"
+                   id="currentReading" name="currentReading"
+                   th:value="${usage.currentReading}"
+                   step="0.01" min="0" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"/>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-start items-center">
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+                💾 Cập nhật
+            </button>
+            <a th:href="@{/electricity-water-bill/list}"
+               class="ml-4 text-gray-600 hover:underline">Hủy</a>
+        </div>
+    </form>
+
+
+</div>
+</body>
+</html>

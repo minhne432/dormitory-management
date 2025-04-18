@@ -5,7 +5,6 @@
 <head>
     <title layout:fragment="title">Danh sách Service Usage</title>
     <script>
-        // Khi trang load, khôi phục dữ liệu bộ lọc từ localStorage
         window.addEventListener("DOMContentLoaded", function(){
             const filterData = JSON.parse(localStorage.getItem("serviceUsageFilter") || "{}");
             for (const key in filterData) {
@@ -16,7 +15,6 @@
             }
         });
 
-        // Lưu dữ liệu bộ lọc vào localStorage khi form submit
         function saveFilter() {
             const formData = {};
             document.querySelectorAll("#filterForm input, #filterForm select").forEach(function(input){
@@ -32,40 +30,60 @@
     <div class="container mt-4">
         <h1 class="text-2xl font-bold text-gray-700">Danh sách Service Usage (Dịch vụ phòng)</h1>
 
-        <form id="filterForm" th:action="@{/electricity-water-bill/list}" method="get" onsubmit="saveFilter()" class="mt-4 p-4 bg-white shadow-lg rounded-lg space-y-4">
+        <form id="filterForm"
+              th:action="@{/electricity-water-bill/list}"
+              method="get"
+              onsubmit="saveFilter()"
+              class="mt-4 p-4 bg-white shadow-lg rounded-lg space-y-4">
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Giữ nguyên: Room ID -->
                 <div class="mb-3">
                     <label for="roomId" class="block text-sm font-medium text-gray-700">Room ID:</label>
-                    <input type="text" name="roomId" id="roomId" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
+                    <input type="text" name="roomId" id="roomId"
+                           class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
+
+                <!-- Mới: Room Number -->
                 <div class="mb-3">
-                    <label for="currentReading" class="block text-sm font-medium text-gray-700">Current Reading:</label>
-                    <input type="text" name="currentReading" id="currentReading" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
+                    <label for="roomNumber" class="block text-sm font-medium text-gray-700">Room Number:</label>
+                    <input type="text" name="roomNumber" id="roomNumber"
+                           class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
-                <div class="mb-3">
-                    <label for="previousReading" class="block text-sm font-medium text-gray-700">Previous Reading:</label>
-                    <input type="text" name="previousReading" id="previousReading" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
-                </div>
+
+                <!-- Giữ nguyên: startDate -->
                 <div class="mb-3">
                     <label for="startDate" class="block text-sm font-medium text-gray-700">Record Date từ (yyyy-MM-dd):</label>
-                    <input type="date" name="startDate" id="startDate" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
+                    <input type="date" name="startDate" id="startDate"
+                           class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
+
+                <!-- Giữ nguyên: endDate -->
                 <div class="mb-3">
                     <label for="endDate" class="block text-sm font-medium text-gray-700">Record Date đến (yyyy-MM-dd):</label>
-                    <input type="date" name="endDate" id="endDate" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
+                    <input type="date" name="endDate" id="endDate"
+                           class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2" />
                 </div>
+
+                <!-- Giữ nguyên: invoiced -->
                 <div class="mb-3">
                     <label for="invoiced" class="block text-sm font-medium text-gray-700">Invoiced:</label>
-                    <select name="invoiced" id="invoiced" class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2">
+                    <select name="invoiced" id="invoiced"
+                            class="mt-1 block w-full border-gray-300 rounded-md px-3 py-2">
                         <option value="">--Chọn--</option>
                         <option value="NO">NO</option>
                         <option value="YES">YES</option>
                     </select>
                 </div>
             </div>
-            <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lọc</button>
+
+            <button type="submit"
+                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Lọc
+            </button>
         </form>
 
+        <!-- Giữ nguyên bảng dữ liệu -->
         <table class="min-w-full mt-6 table-auto border-collapse bg-white shadow-lg rounded-lg">
             <thead class="bg-gray-700 text-white">
             <tr>
@@ -76,6 +94,9 @@
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Previous Reading</th>
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Record Date</th>
                 <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Invoiced</th>
+
+                <!-- ✅ Cột mới: Actions -->
+                <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Actions</th>
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -87,9 +108,19 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.previousReading}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.recordDate}"></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${usage.invoiced}"></td>
+
+                <!-- ✅ Cột Actions -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <a th:if="${usage.invoiced.name() == 'NO'}"
+                       th:href="@{/electricity-water-bill/edit/{id}(id=${usage.usageId})}"
+                       class="text-indigo-600 hover:underline">✏️ Edit</a>
+                    <span th:if="${usage.invoiced.name() == 'YES'}"
+                          class="text-gray-400 italic">Locked</span>
+                </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 </body>

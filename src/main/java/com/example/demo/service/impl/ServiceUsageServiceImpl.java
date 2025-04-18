@@ -82,4 +82,24 @@ Double previousReading = lastRecordOpt.map(ServiceUsage::getCurrentReading).orEl
     public List<ServiceUsage> searchServiceUsages(Specification<ServiceUsage> spec) {
         return serviceUsageRepository.findAll(spec);
     }
+
+    @Override
+    public ServiceUsage getUsage(Long id) {
+        return serviceUsageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usage not found"));
+    }
+
+    /** Cập nhật, chỉ cho phép khi chưa lập hóa đơn */
+    public void updateCurrentReading(Long usageId, Double currentReading) {
+        ServiceUsage usage = getUsage(usageId);
+
+        if (usage.getInvoiced() == ServiceUsage.InvoicedStatus.YES) {
+            throw new IllegalStateException("Không thể sửa bản ghi đã lập hóa đơn");
+        }
+
+        usage.setCurrentReading(currentReading);
+        // Các trường khác giữ nguyên
+        serviceUsageRepository.save(usage);
+    }
+
 }

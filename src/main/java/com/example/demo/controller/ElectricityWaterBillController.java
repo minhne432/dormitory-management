@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -28,33 +26,54 @@ public class ElectricityWaterBillController {
     @GetMapping("/list")
     public String listServiceUsage(
             @RequestParam(required = false) Long roomId,
-            @RequestParam(required = false) Double currentReading,
-            @RequestParam(required = false) Double previousReading,
-            @RequestParam(required = false) String startDate, // Thay đổi thành startDate
-            @RequestParam(required = false) String endDate,   // Thêm endDate
+            @RequestParam(required = false) String roomNumber,    // ➊ thêm
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String invoiced,
             Model model) {
 
-        // Chuyển đổi startDate và endDate an toàn
         LocalDate parsedStartDate = Optional.ofNullable(startDate)
-                .filter(date -> !date.isBlank())
+                .filter(s -> !s.isBlank())
+                .map(LocalDate::parse)
+                .orElse(null);
+        LocalDate parsedEndDate   = Optional.ofNullable(endDate)
+                .filter(s -> !s.isBlank())
                 .map(LocalDate::parse)
                 .orElse(null);
 
-        LocalDate parsedEndDate = Optional.ofNullable(endDate)
-                .filter(date -> !date.isBlank())
-                .map(LocalDate::parse)
-                .orElse(null);
-
-        // Xây dựng Specification với bộ lọc khoảng thời gian recordDate
         Specification<ServiceUsage> spec = ServiceUsageSpecification.hasRoomServiceType()
                 .and(ServiceUsageSpecification.hasRoomId(roomId))
-                .and(ServiceUsageSpecification.hasCurrentReading(currentReading))
-                .and(ServiceUsageSpecification.hasPreviousReading(previousReading))
-                .and(ServiceUsageSpecification.hasRecordDateBetween(parsedStartDate, parsedEndDate)) // Thay đổi bộ lọc recordDate
+                .and(ServiceUsageSpecification.hasRoomNumber(roomNumber))     // ➋ thêm
+                .and(ServiceUsageSpecification.hasRecordDateBetween(parsedStartDate, parsedEndDate))
                 .and(ServiceUsageSpecification.hasInvoiced(invoiced));
 
         model.addAttribute("usages", serviceUsageService.searchServiceUsages(spec));
         return "manager/service_usage_list";
     }
+
+
+    // ======== HIỂN THỊ FORM CHỈNH SỬA =========
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable Long id, Model model) {
+        ServiceUsage usage = serviceUsageService.getUsage(id);
+
+        if (usage.getInvoiced() == ServiceUsage.InvoicedStatus.YES) {
+            return "redirect:/electricity-water-bill/list?error=locked";
+        }
+
+        model.addAttribute("usage", usage);
+        return "manager/service_usage_form";
+    }
+
+    // ======== NHẬN FORM SUBMIT =========
+    @PostMapping("/edit")
+    public String update(
+            @RequestParam("usageId") Long usageId,
+            @RequestParam("currentReading") Double currentReading
+    ) {
+        // Chỉ cập nhật phần chỉ số mới
+        serviceUsageService.updateCurrentReading(usageId, currentReading);
+        return "redirect:/electricity-water-bill/list?success";
+    }
+
 }
