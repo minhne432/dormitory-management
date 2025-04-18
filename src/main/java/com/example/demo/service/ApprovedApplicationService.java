@@ -4,6 +4,7 @@ import com.example.demo.entity.ApprovedApplication;
 import com.example.demo.repository.ApprovedApplicationRepository;
 import com.example.demo.specifications.ApprovedApplicationSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class ApprovedApplicationService {
                 department
         );
 
-        return approvedApplicationRepository.findAll(spec);
+        // Sắp xếp theo approvalDate giảm dần (mới nhất đến cũ nhất)
+        return approvedApplicationRepository.findAll(spec, Sort.by(Sort.Direction.DESC, "approvalDate"));
     }
 }

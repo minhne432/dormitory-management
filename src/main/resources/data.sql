@@ -138,12 +138,13 @@ VALUES
 --  approved_by = 1 (giả sử quản lý 1 duyệt), và dorm_id = 1 (theo phòng được xếp))
 INSERT INTO applications (approval_date, status, submission_date, approved_by, dorm_id, student_id)
 VALUES
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 4),
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 5),
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 6),
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 7),
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 8),
-  (CURDATE(), 'approved', CURDATE(), 1, 1, 10);
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 4),
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 5),
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 6),
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 7),
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 8),
+  ( CURDATE() - INTERVAL 2 DAY, 'approved', CURDATE() - INTERVAL 2 DAY, 1, 1, 10);
+
 
 -- 2. Cập nhật số người hiện tại (current_occupancy) cho các phòng được phân bổ
 -- Giả sử 2 phòng được sử dụng là room_id = 1 và room_id = 2, mỗi phòng có 3 học sinh
@@ -220,11 +221,11 @@ VALUES
 -- (Ở đây sử dụng student_id từ 21 đến 25, submission_date = CURDATE(), chưa được duyệt nên không có approved_by và approval_date)
 INSERT INTO applications (approval_date, status, submission_date, approved_by, dorm_id, student_id)
 VALUES
-  (NULL, 'pending', CURDATE(), NULL, 1, 21),
-  (NULL, 'pending', CURDATE(), NULL, 1, 22),
-  (NULL, 'pending', CURDATE(), NULL, 1, 23),
-  (NULL, 'pending', CURDATE(), NULL, 1, 24),
-  (NULL, 'pending', CURDATE(), NULL, 1, 25);
+  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 21),
+  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 22),
+  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 23),
+  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 24),
+  (NULL, 'pending',  CURDATE() - INTERVAL 2 DAY, NULL, 1, 25);
 
 
 -- 3. Thêm dữ liệu mẫu cho 6 yêu cầu đăng ký sử dụng dịch vụ giặt ủi (service_id = 2)
