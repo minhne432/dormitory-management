@@ -1,0 +1,17 @@
+<!-- templates/notification/email-result.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+  <title layout:fragment="title">Kết quả gửi Email</title>
+</head>
+<body layout:decorate="~{layout/manager/fragment/sidebar}">
+<div layout:fragment="content">
+  <h2>Kết quả gửi Email</h2>
+  <p th:text="${message}"></p>
+  <a th:href="@{/mail/form}">← Quay lại form gửi email</a>
+</div>
+</body>
+</html>
