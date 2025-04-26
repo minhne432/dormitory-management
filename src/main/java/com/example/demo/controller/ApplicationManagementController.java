@@ -5,6 +5,7 @@ import com.example.demo.entity.Application.ApplicationStatus;
 import com.example.demo.entity.Manager;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.ManagerRepository;
+import com.example.demo.service.EmailService;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -23,10 +24,15 @@ public class ApplicationManagementController {
     private final ApplicationRepository applicationRepository;
     private final ManagerRepository managerRepository;
 
+    // Inject EmailService if you have it
+     private final EmailService emailService;
+
     public ApplicationManagementController(ApplicationRepository applicationRepository,
-                                           ManagerRepository managerRepository) {
+                                           ManagerRepository managerRepository,
+                                           EmailService emailService) {
         this.applicationRepository = applicationRepository;
         this.managerRepository = managerRepository;
+        this.emailService = emailService;
     }
 
     /**
@@ -87,6 +93,13 @@ public class ApplicationManagementController {
         application.setApprovedBy(currentManager);
 
         applicationRepository.save(application);
+        // Gửi email thông báo cho sinh viên
+        String studentEmail = application.getStudent().getUser().getEmail();
+        String subject = "Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt";
+        String body = "Chúc mừng bạn! Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt. " +
+                "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
+        // Gửi email thông báo
+        emailService.sendSimpleEmail(studentEmail, subject, body);
 
         // Truyền tham số lọc trở lại khi chuyển hướng
         return "redirect:/manager/applications/pending-applications?success=approved"
@@ -119,6 +132,14 @@ public class ApplicationManagementController {
         application.setApprovalDate(LocalDate.now());
         application.setApprovedBy(currentManager);
         applicationRepository.save(application);
+
+        // Gửi email thông báo cho sinh viên
+        String studentEmail = application.getStudent().getUser().getEmail();
+        String subject = "Đơn đăng ký ở ký túc xá của bạn đã bị từ chối";
+        String body = "Xin lỗi! Đơn đăng ký ở ký túc xá của bạn đã bị từ chối. " +
+                "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
+        // Gửi email thông báo
+        emailService.sendSimpleEmail(studentEmail, subject, body);
 
         // Truyền lại tham số lọc khi chuyển hướng
         return "redirect:/manager/applications/pending-applications?success=rejected"

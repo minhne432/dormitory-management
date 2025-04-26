@@ -81,5 +81,25 @@ public class StudentService {
         return null; // Sinh viên chưa được phân phòng
     }
 
+    /**
+     * Lấy email của sinh viên hiện tại đang đăng nhập.
+     *
+     * @return Email của sinh viên.
+     * @throws IllegalStateException nếu không tìm thấy sinh viên.
+     */
+    public String getCurrentStudentEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            throw new IllegalStateException("User is not authenticated");
+        }
+
+        String username = auth.getName();
+        Student student = studentRepository.findByUser_Username(username)
+                .orElseThrow(() -> new IllegalStateException("Student not found"));
+
+        return student.getUser().getEmail();
+    }
+
+
 
 }
