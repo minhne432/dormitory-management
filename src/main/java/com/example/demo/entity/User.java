@@ -21,11 +21,6 @@ public class User {
     @Column(name = "username", nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(name = "email", nullable = true, unique = true, length = 100)
-    //email không được trùng lặp
-    private String email;
-
-
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 

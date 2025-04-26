@@ -97,7 +97,7 @@ public class StudentService {
         Student student = studentRepository.findByUser_Username(username)
                 .orElseThrow(() -> new IllegalStateException("Student not found"));
 
-        return student.getUser().getEmail();
+        return student.getEmail();
     }
 
 

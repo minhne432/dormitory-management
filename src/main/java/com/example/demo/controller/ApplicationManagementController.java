@@ -94,14 +94,17 @@ public class ApplicationManagementController {
 
         applicationRepository.save(application);
         // Gửi email thông báo cho sinh viên
-        String studentEmail = application.getStudent().getUser().getEmail();
-        String subject = "Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt";
-        String body = "Chúc mừng bạn! Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt. " +
-                "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
-        // Gửi email thông báo
-        if(studentEmail != null) {
-            emailService.sendSimpleEmail(studentEmail, subject, body);
-        }
+
+            // Gửi email thông báo cho sinh viên
+            String studentEmail = application.getStudent().getEmail();
+            String subject = "Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt";
+            String body = "Chúc mừng bạn! Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt. " +
+                    "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
+            // Gửi email thông báo
+            if(studentEmail != null) {
+                emailService.sendSimpleEmail(studentEmail, subject, body);
+            }
+
 
         // Truyền tham số lọc trở lại khi chuyển hướng
         return "redirect:/manager/applications/pending-applications?success=approved"
@@ -136,7 +139,7 @@ public class ApplicationManagementController {
         applicationRepository.save(application);
 
         // Gửi email thông báo cho sinh viên
-        String studentEmail = application.getStudent().getUser().getEmail();
+        String studentEmail = application.getStudent().getEmail();
         String subject = "Đơn đăng ký ở ký túc xá của bạn đã bị từ chối";
         String body = "Xin lỗi! Đơn đăng ký ở ký túc xá của bạn đã bị từ chối. " +
                 "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";

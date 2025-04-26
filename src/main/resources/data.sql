@@ -52,7 +52,7 @@ VALUES
     (20, '2025-01-01 13:40:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6','student', 'active', '2025-01-02 13:40:00', 'student20')
 ;
 
-UPDATE users SET email = 'nh.minh0403@gmail.com' WHERE `username` = 'student20';
+
 
 
 -- =========================================
@@ -89,7 +89,9 @@ VALUES
     (17, '876 HIJ St', '2002-07-06', 'KinhTe', 'student17@univ.edu', 'Student Seventeen','Nữ','0901000017', 'KT4'),
     (18, '987 IJK St', '2002-06-07', 'KinhTe', 'student18@univ.edu', 'Student Eighteen','Nam','0901000018', 'KT5'),
     (19, '987 IJK St', '2002-05-08', 'CNTT',   'student19@univ.edu', 'Student Nineteen','Nam','0901000019', 'CNTT5'),
-    (20, '987 IJK St', '2002-12-25', 'KinhTe', 'student20@univ.edu', 'Student Twenty',  'Nữ', '0901000020', 'KT7');
+    (20, '987 IJK St', '2002-12-25', 'KinhTe', 'nh.minh0403@gmail.com', 'Student Twenty',  'Nữ', '0901000020', 'KT7');
+
+
 
 -- =========================================
 -- 4. Thêm dữ liệu cho bảng `dormitories`

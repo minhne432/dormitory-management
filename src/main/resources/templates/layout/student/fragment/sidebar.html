@@ -61,11 +61,20 @@
     </script>
 
     <!-- Script cập nhật số lượng thông báo -->
+    <!-- Nhúng biến studentId từ server -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const studentId = /*[[${session.student.studentId}]]*/ 0;
+        /*]]>*/
+    </script>
+
+    <!-- Script cập nhật số lượng thông báo -->
     <script>
         function pollNotifications() {
-            fetch('/notifications/poll?studentId=4')
+            fetch('/notifications/poll?studentId=' + studentId)
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Số lượng thông báo:', data.length);
                     document.getElementById('notificationBadge').innerText = data.length;
                 })
                 .catch(error => console.error('Lỗi khi polling thông báo:', error));
@@ -73,4 +82,5 @@
         setInterval(pollNotifications, 3000);
         pollNotifications();
     </script>
+
 </nav>
