@@ -8,6 +8,7 @@ import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.ApplicationService;
 import com.example.demo.service.StudentService;
+import com.example.demo.service.EmailService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,12 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
     private final StudentService studentService;
+    private final EmailService emailService;
 
-    public ApplicationController(ApplicationService applicationService, StudentService studentService) {
+    public ApplicationController(ApplicationService applicationService, StudentService studentService, EmailService emailService) {
         this.applicationService = applicationService;
         this.studentService = studentService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/register-dormitory")
@@ -54,6 +57,14 @@ public class ApplicationController {
         try {
             Long currentStudentId = studentService.getCurrentStudentId();
             applicationService.saveDormApplication(currentStudentId, form);
+            //send email notification
+            studentService.getStudentById(currentStudentId);
+            emailService.sendSimpleEmail(
+                    studentService.getStudentById(currentStudentId).getEmail(),
+                    "Đăng ký Ký túc xá",
+                    "Đơn đăng ký của bạn đã được gửi thành công. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất!"
+            );
+
             return "redirect:/register-dormitory-success";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
