@@ -70,17 +70,17 @@
 
     <!-- Script cập nhật số lượng thông báo -->
     <script>
-        function pollNotifications() {
-            fetch('/notifications/poll?studentId=' + studentId)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Số lượng thông báo:', data.length);
-                    document.getElementById('notificationBadge').innerText = data.length;
-                })
-                .catch(error => console.error('Lỗi khi polling thông báo:', error));
-        }
-        setInterval(pollNotifications, 3000);
-        pollNotifications();
+<!--        function pollNotifications() {-->
+<!--            fetch('/notifications/poll?studentId=' + studentId)-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    console.log('Số lượng thông báo:', data.length);-->
+<!--                    document.getElementById('notificationBadge').innerText = data.length;-->
+<!--                })-->
+<!--                .catch(error => console.error('Lỗi khi polling thông báo:', error));-->
+<!--        }-->
+<!--        setInterval(pollNotifications, 3000);-->
+<!--        pollNotifications();-->
     </script>
 
 </nav>
