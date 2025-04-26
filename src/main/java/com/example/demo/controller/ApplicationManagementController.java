@@ -99,7 +99,9 @@ public class ApplicationManagementController {
         String body = "Chúc mừng bạn! Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt. " +
                 "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
         // Gửi email thông báo
-        emailService.sendSimpleEmail(studentEmail, subject, body);
+        if(studentEmail != null) {
+            emailService.sendSimpleEmail(studentEmail, subject, body);
+        }
 
         // Truyền tham số lọc trở lại khi chuyển hướng
         return "redirect:/manager/applications/pending-applications?success=approved"
@@ -139,8 +141,9 @@ public class ApplicationManagementController {
         String body = "Xin lỗi! Đơn đăng ký ở ký túc xá của bạn đã bị từ chối. " +
                 "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
         // Gửi email thông báo
-        emailService.sendSimpleEmail(studentEmail, subject, body);
-
+        if(studentEmail != null){
+            emailService.sendSimpleEmail(studentEmail, subject, body);
+        }
         // Truyền lại tham số lọc khi chuyển hướng
         return "redirect:/manager/applications/pending-applications?success=rejected"
                 + (dormitoryArea != null ? "&dormitoryArea=" + dormitoryArea : "")

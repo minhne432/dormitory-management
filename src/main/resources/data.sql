@@ -52,6 +52,9 @@ VALUES
     (20, '2025-01-01 13:40:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6','student', 'active', '2025-01-02 13:40:00', 'student20')
 ;
 
+UPDATE users SET email = 'nh.minh0403@gmail.com' WHERE `username` = 'student20';
+
+
 -- =========================================
 -- 2. Thêm dữ liệu cho bảng `managers`
 -- (manager_id trùng với user_id của người dùng có role = 'manager')

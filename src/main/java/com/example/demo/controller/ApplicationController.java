@@ -58,12 +58,16 @@ public class ApplicationController {
             Long currentStudentId = studentService.getCurrentStudentId();
             applicationService.saveDormApplication(currentStudentId, form);
             //send email notification
-            studentService.getStudentById(currentStudentId);
-            emailService.sendSimpleEmail(
-                    studentService.getStudentById(currentStudentId).getEmail(),
-                    "Đăng ký Ký túc xá",
-                    "Đơn đăng ký của bạn đã được gửi thành công. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất!"
-            );
+
+            if(studentService.getStudentById(currentStudentId).getEmail() != null) {
+                emailService.sendSimpleEmail(
+                        studentService.getStudentById(currentStudentId).getEmail(),
+                        "Đăng ký Ký túc xá",
+                        "Đơn đăng ký của bạn đã được gửi thành công. Chúng tôi sẽ xem xét và phản hồi trong thời gian sớm nhất!"
+                );
+            }
+
+
 
             return "redirect:/register-dormitory-success";
         } catch (IllegalArgumentException e) {
