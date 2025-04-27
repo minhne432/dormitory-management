@@ -6,6 +6,7 @@ import com.example.demo.dto.BillFilterRequestForManager;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.BillService;
+import com.example.demo.service.EmailService;
 import com.example.demo.specifications.BillSpecificationForManager;
 import com.example.demo.specifications.BillSpecificationForStudent;
 import jakarta.transaction.Transactional;
@@ -31,16 +32,18 @@ public class BillServiceImpl implements BillService {
     private final StudentRepository studentRepository;
     private final StudentServiceRegistrationRepository registrationRepository;
 
+    private final EmailService emailService;
     private final DormitoryServiceRepository dormitoryServiceRepository;
     @Autowired
     public BillServiceImpl(BillRepository billRepository, RoomAssignmentRepository roomAssignmentRepository, NotificationRepository notificationRepository, StudentServiceRegistrationRepository registrationRepository, StudentRepository studentRepository,
-                           DormitoryServiceRepository dormitoryServiceRepository) {
+                           DormitoryServiceRepository dormitoryServiceRepository, EmailService emailService) {
         this.billRepository = billRepository;
         this.roomAssignmentRepository = roomAssignmentRepository;
         this.notificationRepository = notificationRepository;
         this.registrationRepository = registrationRepository;
         this.studentRepository = studentRepository;
         this.dormitoryServiceRepository = dormitoryServiceRepository;
+        this.emailService = emailService;
 
     }
 
@@ -128,7 +131,15 @@ notificationRepository.save(notification);
         for (RoomAssignment assignment : activeAssignments) {
             Long studentId = assignment.getStudent().getStudentId();
             if (!billExistsForStudent(studentId, monthStart)) {
-                createRoomBill(studentId);
+                Bill bill = createRoomBill(studentId);
+                //gui email cho sinh viên
+                if(                    bill.getStudent() != null) {
+                    emailService.sendSimpleEmail(
+                            bill.getStudent().getEmail(),
+                            "Hóa đơn mới",
+                            "Hóa đơn của bạn đã được tạo thành công với mã hóa đơn: " + bill.getBillId()
+                    );
+                }
             }
         }
     }

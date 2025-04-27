@@ -73,22 +73,22 @@ VALUES
 INSERT INTO students
 (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
 VALUES
-    (4,  '123 ABC St', '2003-05-10', 'CNTT',   'student4@univ.edu',  'Student Four',   'Nam', '0901000004', 'CNTT1'),
-    (5,  '123 ABC St', '2003-04-11', 'CNTT',   'student5@univ.edu',  'Student Five',   'Nam', '0901000005', 'CNTT1'),
-    (6,  '234 BCD St', '2002-03-12', 'CNTT',   'student6@univ.edu',  'Student Six',    'Nam', '0901000006', 'CNTT2'),
-    (7,  '234 BCD St', '2002-02-05', 'CNTT',   'student7@univ.edu',  'Student Seven',  'Nữ',  '0901000007', 'CNTT2'),
-    (8,  '345 CDE St', '2003-01-05', 'KinhTe', 'student8@univ.edu',  'Student Eight',  'Nữ',  '0901000008', 'KT1'),
-    (9,  '345 CDE St', '2003-08-09', 'KinhTe', 'student9@univ.edu',  'Student Nine',   'Nam', '0901000009', 'KT1'),
-    (10, '456 DEF St', '2003-07-07', 'KinhTe', 'student10@univ.edu', 'Student Ten',    'Nữ',  '0901000010', 'KT2'),
-    (11, '456 DEF St', '2003-06-08', 'CNTT',   'student11@univ.edu', 'Student Eleven', 'Nam', '0901000011', 'CNTT3'),
-    (12, '567 EFG St', '2004-12-01', 'XHNV',   'student12@univ.edu', 'Student Twelve', 'Nữ',  '0901000012', 'XH1'),
-    (13, '567 EFG St', '2002-11-02', 'XHNV',   'student13@univ.edu', 'Student Thirteen','Nữ', '0901000013', 'XH1'),
-    (14, '678 FGH St', '2002-10-03', 'KinhTe', 'student14@univ.edu', 'Student Fourteen','Nam','0901000014', 'KT3'),
-    (15, '789 GHI St', '2002-09-04', 'XHNV',   'student15@univ.edu', 'Student Fifteen','Nữ',  '0901000015', 'XH2'),
-    (16, '789 GHI St', '2002-08-05', 'CNTT',   'student16@univ.edu', 'Student Sixteen','Nam', '0901000016', 'CNTT4'),
-    (17, '876 HIJ St', '2002-07-06', 'KinhTe', 'student17@univ.edu', 'Student Seventeen','Nữ','0901000017', 'KT4'),
-    (18, '987 IJK St', '2002-06-07', 'KinhTe', 'student18@univ.edu', 'Student Eighteen','Nam','0901000018', 'KT5'),
-    (19, '987 IJK St', '2002-05-08', 'CNTT',   'student19@univ.edu', 'Student Nineteen','Nam','0901000019', 'CNTT5'),
+    (4,  '123 ABC St', '2003-05-10', 'CNTT',   NULL,  'Student Four',   'Nam', '0901000004', 'CNTT1'),
+    (5,  '123 ABC St', '2003-04-11', 'CNTT',   NULL,  'Student Five',   'Nam', '0901000005', 'CNTT1'),
+    (6,  '234 BCD St', '2002-03-12', 'CNTT',   NULL,  'Student Six',    'Nam', '0901000006', 'CNTT2'),
+    (7,  '234 BCD St', '2002-02-05', 'CNTT',   NULL,  'Student Seven',  'Nữ',  '0901000007', 'CNTT2'),
+    (8,  '345 CDE St', '2003-01-05', 'KinhTe', NULL,  'Student Eight',  'Nữ',  '0901000008', 'KT1'),
+    (9,  '345 CDE St', '2003-08-09', 'KinhTe', NULL,  'Student Nine',   'Nam', '0901000009', 'KT1'),
+    (10, '456 DEF St', '2003-07-07', 'KinhTe', NULL, 'Student Ten',    'Nữ',  '0901000010', 'KT2'),
+    (11, '456 DEF St', '2003-06-08', 'CNTT',   NULL, 'Student Eleven', 'Nam', '0901000011', 'CNTT3'),
+    (12, '567 EFG St', '2004-12-01', 'XHNV',   NULL, 'Student Twelve', 'Nữ',  '0901000012', 'XH1'),
+    (13, '567 EFG St', '2002-11-02', 'XHNV',   NULL, 'Student Thirteen','Nữ', '0901000013', 'XH1'),
+    (14, '678 FGH St', '2002-10-03', 'KinhTe', NULL, 'Student Fourteen','Nam','0901000014', 'KT3'),
+    (15, '789 GHI St', '2002-09-04', 'XHNV',   NULL, 'Student Fifteen','Nữ',  '0901000015', 'XH2'),
+    (16, '789 GHI St', '2002-08-05', 'CNTT',   NULL, 'Student Sixteen','Nam', '0901000016', 'CNTT4'),
+    (17, '876 HIJ St', '2002-07-06', 'KinhTe', NULL, 'Student Seventeen','Nữ','0901000017', 'KT4'),
+    (18, '987 IJK St', '2002-06-07', 'KinhTe', NULL, 'Student Eighteen','Nam','0901000018', 'KT5'),
+    (19, '987 IJK St', '2002-05-08', 'CNTT',   NULL, 'Student Nineteen','Nam','0901000019', 'CNTT5'),
     (20, '987 IJK St', '2002-12-25', 'KinhTe', 'nh.minh0403@gmail.com', 'Student Twenty',  'Nữ', '0901000020', 'KT7');
 
 
@@ -210,16 +210,16 @@ VALUES
 -- b) Thêm vào bảng `students`
 INSERT INTO students (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
 VALUES
-  (21, '123 New St', '2003-03-01', 'CNTT', 'student21@univ.edu', 'Student Twenty One', 'Nam', '0901000021', 'CNTT1'),
-  (22, '123 New St', '2003-03-02', 'CNTT', 'student22@univ.edu', 'Student Twenty Two', 'Nữ',  '0901000022', 'CNTT1'),
-  (23, '234 New St', '2003-03-03', 'KinhTe', 'student23@univ.edu', 'Student Twenty Three', 'Nam', '0901000023', 'KT1'),
-  (24, '234 New St', '2003-03-04', 'KinhTe', 'student24@univ.edu', 'Student Twenty Four', 'Nữ',  '0901000024', 'KT1'),
-  (25, '345 New St', '2003-03-05', 'XHNV', 'student25@univ.edu', 'Student Twenty Five', 'Nam', '0901000025', 'XH1'),
-  (26, '345 New St', '2003-03-06', 'XHNV', 'student26@univ.edu', 'Student Twenty Six', 'Nữ',  '0901000026', 'XH1'),
-  (27, '456 New St', '2003-03-07', 'CNTT', 'student27@univ.edu', 'Student Twenty Seven', 'Nam', '0901000027', 'CNTT2'),
-  (28, '456 New St', '2003-03-08', 'CNTT', 'student28@univ.edu', 'Student Twenty Eight', 'Nữ',  '0901000028', 'CNTT2'),
-  (29, '567 New St', '2003-03-09', 'KinhTe', 'student29@univ.edu', 'Student Twenty Nine', 'Nam', '0901000029', 'KT2'),
-  (30, '567 New St', '2003-03-10', 'KinhTe', 'student30@univ.edu', 'Student Thirty',      'Nữ',  '0901000030', 'KT2');
+  (21, '123 New St', '2003-03-01', 'CNTT', NULL, 'Student Twenty One', 'Nam', '0901000021', 'CNTT1'),
+  (22, '123 New St', '2003-03-02', 'CNTT', NULL, 'Student Twenty Two', 'Nữ',  '0901000022', 'CNTT1'),
+  (23, '234 New St', '2003-03-03', 'KinhTe',NULL, 'Student Twenty Three', 'Nam', '0901000023', 'KT1'),
+  (24, '234 New St', '2003-03-04', 'KinhTe', NULL, 'Student Twenty Four', 'Nữ',  '0901000024', 'KT1'),
+  (25, '345 New St', '2003-03-05', 'XHNV', NULL, 'Student Twenty Five', 'Nam', '0901000025', 'XH1'),
+  (26, '345 New St', '2003-03-06', 'XHNV', NULL, 'Student Twenty Six', 'Nữ',  '0901000026', 'XH1'),
+  (27, '456 New St', '2003-03-07', 'CNTT', NULL, 'Student Twenty Seven', 'Nam', '0901000027', 'CNTT2'),
+  (28, '456 New St', '2003-03-08', 'CNTT', NULL, 'Student Twenty Eight', 'Nữ',  '0901000028', 'CNTT2'),
+  (29, '567 New St', '2003-03-09', 'KinhTe', NULL, 'Student Twenty Nine', 'Nam', '0901000029', 'KT2'),
+  (30, '567 New St', '2003-03-10', 'KinhTe', NULL, 'Student Thirty',      'Nữ',  '0901000030', 'KT2');
 
 
 -- 2. Thêm dữ liệu mẫu cho 5 đơn đăng ký ở ký túc xá (status 'pending') cho 5 sinh viên

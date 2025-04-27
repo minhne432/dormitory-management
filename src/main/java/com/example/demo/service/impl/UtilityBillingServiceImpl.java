@@ -6,6 +6,7 @@ import com.example.demo.repository.NotificationRepository;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.ServiceUsageRepository;
 import com.example.demo.repository.BillRepository;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.NotificationService;
 import com.example.demo.service.StudentService;
 import com.example.demo.service.UtilityBillingService;
@@ -26,17 +27,21 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
     private final StudentService studentService;
     private final NotificationService notificationService;
 
+    //email
+    private final EmailService emailService;
     @Autowired
     public UtilityBillingServiceImpl(RoomRepository roomRepository,
                                      ServiceUsageRepository serviceUsageRepository,
                                      BillRepository billRepository,
                                      StudentService studentService,
-                                     NotificationService notificationService) {
+                                     NotificationService notificationService,
+                                     EmailService emailService) {
         this.roomRepository = roomRepository;
         this.serviceUsageRepository = serviceUsageRepository;
         this.billRepository = billRepository;
         this.studentService = studentService;
         this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -133,6 +138,20 @@ public class UtilityBillingServiceImpl implements UtilityBillingService {
                     String message = "Hóa đơn phòng " + room.getRoomNumber() + " đã được tạo với số tiền: " + totalAmount + " VND. Vui lòng thanh toán trước ngày " + bill.getDueDate() + ".";
 
                     notificationService.sendNotificationToStudents(students, title, message);
+
+// Gửi email thông báo cho từng sinh viên
+                    for (Student student : students) {
+                        if (student.getEmail() != null && !student.getEmail().isEmpty()) {
+                            String subject = "Thông báo hóa đơn điện nước tháng " + billingPeriod;
+                            String content = "Xin chào " + student.getFullName() + ",\n\n"
+                                    + "Hóa đơn điện nước phòng " + room.getRoomNumber() + " tháng " + billingPeriod
+                                    + " đã được tạo với số tiền: " + totalAmount + " VND.\n"
+                                    + "Vui lòng thanh toán trước ngày " + bill.getDueDate() + ".\n\n"
+                                    + "Trân trọng.";
+                            emailService.sendSimpleEmail(student.getEmail(), subject, content);
+                        }
+                    }
+
                 }
             }
         }

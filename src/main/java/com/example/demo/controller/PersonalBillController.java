@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Bill;
 import com.example.demo.service.BillService;
+import com.example.demo.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,12 +19,21 @@ import java.util.List;
 public class PersonalBillController {
 
     private final BillService billService;
-
+    private final EmailService emailService;
     @PostMapping("/create")
     public ResponseEntity<?> createBill(@RequestParam List<Long> registrationIds) {
         try {
             Bill bill = billService.createBillForRegistrations(registrationIds);
             // Trả về JSON thông báo thành công
+            //gui email cho sinh viên
+            if(bill.getStudent() != null) {
+                emailService.sendSimpleEmail(
+                        bill.getStudent().getEmail(),
+                        "Hóa đơn mới",
+                        "Hóa đơn của bạn đã được tạo thành công với mã hóa đơn: " + bill.getBillId()
+                );
+            }
+
             return ResponseEntity.ok(Collections.singletonMap("message", "Hóa đơn đã được tạo thành công!"));
         } catch (ResponseStatusException ex) {
             // Trả về JSON thông báo lỗi với mã lỗi tương ứng
