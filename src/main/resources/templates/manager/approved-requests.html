@@ -91,9 +91,18 @@
 <!--                    <td class="px-4 py-2 border" th:text="${item.serviceEndDate}"></td>-->
                     <td class="px-4 py-2 border" th:text="${item.serviceName}"></td>
                     <td class="px-4 py-2 border">
-                        <input type="number" class="actualQuantity-input w-full border border-gray-300 rounded p-1"
-                               th:attr="data-registration-id=${item.registrationId}"
-                               th:value="${item.actualQuantity}">
+                        <input
+                                type="number"
+                                class="actualQuantity-input w-full border border-gray-300 rounded p-1"
+                                th:attr="data-registration-id=${item.registrationId}"
+                                th:value="${item.actualQuantity}"
+                                min="0"
+                                step="1"
+                                pattern="\d*"
+                                required
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        />
+
                     </td>
                     <td class="px-4 py-2 border">
                         <button type="button" class="update-btn bg-blue-500 text-white px-2 py-1 rounded"
@@ -166,9 +175,18 @@ function showToast(message, type = "success") {
   document.querySelectorAll('.update-btn').forEach(button => {
     button.addEventListener('click', function() {
         console.log("Update button clicked");
+         // ✅ ===> Đặt đoạn kiểm tra ở đây:
         var regId = this.getAttribute('data-registration-id');
         var input = document.querySelector('.actualQuantity-input[data-registration-id="' + regId + '"]');
         var newQuantity = input.value;
+
+        // FRONT-END VALIDATION: chỉ số nguyên dương
+        if (!/^\d+$/.test(newQuantity)) {
+            showToast("Vui lòng nhập số nguyên dương hợp lệ.", "error");
+            return;
+        }
+
+        // ✅ Nếu hợp lệ thì tiếp tục gửi request
 
         // Chuẩn bị dữ liệu POST
         var params = new URLSearchParams();
