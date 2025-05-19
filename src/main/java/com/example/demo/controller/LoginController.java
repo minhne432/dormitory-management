@@ -77,7 +77,7 @@ public class LoginController {
         }
 
         // Lấy 5 bản tin mới nhất
-        model.addAttribute("newsList", newsService.getLatest(5));
+        model.addAttribute("newsList", newsService.getLatest(3));
 
         // 6) Trả về view
         return "student/home";
@@ -94,7 +94,7 @@ public class LoginController {
         int newRequestsWeek = 20;
 
         // Lấy 5 bản tin mới nhất
-        model.addAttribute("newsList", newsService.getLatest(5));
+        model.addAttribute("newsList", newsService.getLatest(3));
 
         // 3. Truyền dữ liệu sang template thông qua Model
         model.addAttribute("totalStudents", totalStudents);

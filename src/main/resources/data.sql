@@ -134,17 +134,7 @@ VALUES
     (3,  'Điện sinh hoạt',                  'Điện',               'ROOM',     'kWh',   3000,   FALSE),
     (4,  'Nước sinh hoạt',                  'Nước',               'ROOM',     'm3',    7000,   FALSE),
     (5,  'Phòng ở cho sinh viên',          'Phòng ở',            'PERSONAL', 'tháng', 1000,   FALSE),
-    (6,  'Thay gas bình',                   'Thay gas',           'ROOM',     'bình',  450000, TRUE),
-    (7,  'Dịch vụ sửa chữa nhỏ',            'Sửa chữa',           'ROOM',     'lần',   50000,  FALSE),
-    (8,  'In ấn tài liệu A4 đen trắng',     'In A4 trắng đen',    'PERSONAL', 'trang', 500,    TRUE),
-    (9,  'In ấn tài liệu A4 màu',           'In A4 màu',          'PERSONAL', 'trang', 1500,   TRUE),
-    (10, 'Phí gửi xe đạp',                 'Gửi xe đạp',         'PERSONAL', 'tháng', 10000,  TRUE),
-    (11, 'Phí gửi xe máy',                 'Gửi xe máy',         'PERSONAL', 'tháng', 50000,  TRUE),
-    (12, 'Mượn sách thư viện',             'Mượn sách',          'PERSONAL', 'lượt',  5000,      TRUE),
-    (13, 'Dọn vệ sinh định kỳ phòng',       'Dọn vệ sinh phòng',  'ROOM',     'tháng', 80000,  FALSE),
-    (14, 'Tư vấn tâm lý sinh viên',         'Tư vấn tâm lý',      'PERSONAL', 'buổi',  100000,      TRUE),
-    (15, 'Sử dụng phòng học nhóm',          'Phòng học nhóm',     'PERSONAL', 'giờ',   20000,      TRUE);
-
+    (6,  'Thay gas bình',                   'Thay gas',           'ROOM',     'bình',  450000, TRUE);
 
 
 -- 1. Thêm đơn đăng ký ở ký túc xá đã được duyệt cho 6 học sinh
