@@ -37,6 +37,6 @@ public class ApprovedApplicationService {
         );
 
         // Sắp xếp theo approvalDate giảm dần (mới nhất đến cũ nhất)
-        return approvedApplicationRepository.findAll(spec, Sort.by(Sort.Direction.DESC, "approvalDate"));
+        return approvedApplicationRepository.findAll(spec, Sort.by(Sort.Direction.ASC, "approvalDate"));
     }
 }

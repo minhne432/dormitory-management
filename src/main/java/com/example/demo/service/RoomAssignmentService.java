@@ -32,6 +32,8 @@ public class RoomAssignmentService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    EmailService emailService; // Để gửi email
     @Autowired ApplicationService applicationService;
 
     public void assignRoomToApplications(Long roomId, List<Long> applicationIds) {
@@ -95,6 +97,13 @@ public class RoomAssignmentService {
 
             // Lưu RoomAssignment
             roomAssignmentRepository.save(assignment);
+
+
+            //send email
+            String email = student.getEmail();
+            String subject = "Room Assignment Notification";
+            String body = "Bạn đã được xếp vào phòng " + room.getRoomNumber() + " kể từ ngày " + now;
+            emailService.sendSimpleEmail(email, subject, body);
 
             // Tạo Notification
             Notification notification = new Notification();
