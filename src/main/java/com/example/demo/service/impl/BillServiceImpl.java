@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -252,7 +253,12 @@ notificationRepository.save(notification);
                 filterRequest.getEndDate()
         );
 
-        var pageable = PageRequest.of(filterRequest.getPage(), filterRequest.getSize());
+        var pageable = PageRequest.of(
+                filterRequest.getPage(),
+                filterRequest.getSize(),
+                Sort.by("createdDate").descending()  // 🔁 Sắp xếp mới nhất đến cũ nhất
+        );
+
         return billRepository.findAll(spec, pageable);
     }
 
