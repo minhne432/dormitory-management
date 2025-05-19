@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+//@ToString
 @EqualsAndHashCode
 public class Student {
 
@@ -61,4 +61,12 @@ public class Student {
     private List<ServiceUsage> serviceUsages; // Thêm danh sách sử dụng dịch vụ
 
     // Constructors, getters, setters...
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", fullName='" + fullName + '\'' +
+                '}';
+    }
+
 }

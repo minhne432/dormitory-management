@@ -54,10 +54,14 @@
 
     <!-- Script xử lý Dropdown -->
     <script>
-        document.getElementById('dropdownButton').addEventListener('click', function() {
-            const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('hidden');
-        });
+        const dropdownBtn = document.getElementById('dropdownButton');
+        if (dropdownBtn) {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownBtn.addEventListener('click', () => {
+                dropdownMenu?.classList.toggle('hidden');
+            });
+        }
+
     </script>
 
     <!-- Script cập nhật số lượng thông báo -->

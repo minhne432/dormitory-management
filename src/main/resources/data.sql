@@ -73,7 +73,7 @@ VALUES
 INSERT INTO students
 (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
 VALUES
-    (4,  '123 ABC St', '2003-05-10', 'CNTT',   NULL,  'Student Four',   'Nam', '0901000004', 'CNTT1'),
+    (4,  '123 ABC St', '2003-05-10', 'CNTT',   'nh.minh0403@gmail.com',  'Student Four',   'Nam', '0901000004', 'CNTT1'),
     (5,  '123 ABC St', '2003-04-11', 'CNTT',   NULL,  'Student Five',   'Nam', '0901000005', 'CNTT1'),
     (6,  '234 BCD St', '2002-03-12', 'CNTT',   NULL,  'Student Six',    'Nam', '0901000006', 'CNTT2'),
     (7,  '234 BCD St', '2002-02-05', 'CNTT',   NULL,  'Student Seven',  'Nữ',  '0901000007', 'CNTT2'),
@@ -131,8 +131,8 @@ INSERT INTO services (service_id, description, service_name, service_type, unit,
 VALUES
     (1, 'Internet cáp quang',      'Internet',         'ROOM',    'tháng',  100000,true),
     (2, 'Dịch vụ giặt ủi',         'Giặt ủi',          'PERSONAL','lần',    20000,true),
-    (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000,true),
-    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000,true),
+    (3, 'Điện sinh hoạt',          'Điện',             'ROOM',    'kWh',    3000,false),
+    (4, 'Nước sinh hoạt',          'Nước',             'ROOM',    'm3',     7000,false),
     (5, 'Phòng ở',          'Phòng ở',             'PERSONAL',    'tháng',   1000,false);
 
 

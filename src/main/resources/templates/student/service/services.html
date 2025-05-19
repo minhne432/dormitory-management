@@ -1,44 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/student/layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student/layout}">
+
 <head>
     <meta charset="UTF-8">
     <title layout:fragment="title">Đăng ký dịch vụ</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function openModal(serviceId, serviceName) {
-            document.getElementById('modalServiceName').textContent = serviceName;
-            document.getElementById('confirmButton').setAttribute("onclick", `registerService(${serviceId})`);
-            document.getElementById('modal').classList.remove("hidden");
-        }
-        function closeModal() {
-            document.getElementById('modal').classList.add("hidden");
-        }
-        function registerService(serviceId) {
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-            fetch(`/student/register-service/` + serviceId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [csrfHeader]: csrfToken
-                }
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                alert("Đã xảy ra lỗi khi đăng ký dịch vụ.");
-            });
-            closeModal();
-        }
-    </script>
 </head>
+
 <body>
+<!-- ✅ TOÀN BỘ nội dung nằm trong fragment này -->
 <div layout:fragment="content" class="mt-6 mx-auto max-w-4xl bg-gray-50 shadow-xl rounded-xl p-8">
+
     <!-- Tiêu đề chính -->
     <h1 class="text-3xl font-extrabold text-blue-600 mb-10 text-center">
         Đăng ký dịch vụ 🚀
@@ -48,6 +23,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div th:each="service : ${services}"
              class="bg-white border border-gray-200 rounded-xl shadow-md p-5 transition transform hover:scale-105 hover:shadow-lg">
+
             <!-- Tên dịch vụ -->
             <h2 class="text-xl font-semibold text-gray-800 mb-2" th:text="${service.serviceName}"></h2>
 
@@ -61,40 +37,90 @@
             <p class="text-sm text-gray-600 mb-4" th:text="${service.description}"></p>
 
             <!-- Nút đăng ký -->
-            <button th:attr="onclick='openModal(' + ${service.serviceId} + ', `' + ${service.serviceName} + '`)'"
+            <button
                     class="w-full bg-blue-500 text-white py-2 px-4 rounded-md font-medium
-                           hover:bg-blue-600 transition duration-300 ease-in-out">
+                       hover:bg-blue-600 transition duration-300 ease-in-out"
+                    th:attr="data-service-id=${service.serviceId}, data-service-name=${service.serviceName}"
+                    onclick="handleOpenModal(this)">
                 Đăng ký ngay
             </button>
-        </div>
-    </div>
-</div>
 
-<!-- Modal xác nhận -->
-<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden transition-opacity duration-300">
-    <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full">
-        <!-- Tiêu đề -->
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">
-            Xác nhận đăng ký 📋
-        </h2>
-        <!-- Nội dung modal -->
-        <p class="text-gray-600 leading-relaxed">
-            Bạn có chắc chắn muốn đăng ký dịch vụ <span id="modalServiceName" class="font-medium text-blue-500"></span>?
-        </p>
-        <!-- Nút hành động -->
-        <div class="mt-6 flex justify-end space-x-3">
-            <button onclick="closeModal()"
-                    class="bg-gray-300 text-gray-700 py-2 px-4 rounded-md
-                           hover:bg-gray-400 transition duration-200">
-                Hủy
-            </button>
-            <button id="confirmButton"
-                    class="bg-blue-500 text-white py-2 px-4 rounded-md
-                           hover:bg-blue-600 transition duration-200">
-                Xác nhận
-            </button>
         </div>
     </div>
-</div>
+
+    <!-- Modal xác nhận -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden transition-opacity duration-300">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                Xác nhận đăng ký 📋
+            </h2>
+            <p class="text-gray-600 leading-relaxed">
+                Bạn có chắc chắn muốn đăng ký dịch vụ <span id="modalServiceName" class="font-medium text-blue-500"></span>?
+            </p>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button onclick="closeModal()"
+                        class="bg-gray-300 text-gray-700 py-2 px-4 rounded-md
+                               hover:bg-gray-400 transition duration-200">
+                    Hủy
+                </button>
+                <button id="confirmButton"
+                        class="bg-blue-500 text-white py-2 px-4 rounded-md
+                               hover:bg-blue-600 transition duration-200">
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script nội bộ -->
+    <script>
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+        function handleOpenModal(button) {
+            const serviceId = button.getAttribute('data-service-id');
+            const serviceName = button.getAttribute('data-service-name');
+            openModal(serviceId, serviceName);
+        }
+
+        function openModal(serviceId, serviceName) {
+            $('modalServiceName').textContent = serviceName;
+            $('confirmButton').onclick = function () {
+                registerService(serviceId);
+            };
+            $('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            $('modal').classList.add('hidden');
+        }
+
+        function registerService(serviceId) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            fetch(`/student/register-service/${serviceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                }
+            })
+                .then(r => r.text())
+                .then(msg => {
+                    alert(msg);
+                    location.reload();
+                })
+                .catch(e => {
+                    console.error(e);
+                    alert('Đã xảy ra lỗi khi đăng ký dịch vụ.');
+                });
+
+            closeModal();
+        }
+    </script>
+
+</div> <!-- 🔚 Kết thúc layout:fragment="content" -->
 </body>
 </html>

@@ -30,7 +30,7 @@ public class PersonalBillController {
                 emailService.sendSimpleEmail(
                         bill.getStudent().getEmail(),
                         "Hóa đơn mới",
-                        "Hóa đơn của bạn đã được tạo thành công với mã hóa đơn: " + bill.getBillId()
+                        "Hóa đơn mới đã được tạo với mã hóa đơn: " + bill.getBillId()
                 );
             }
 

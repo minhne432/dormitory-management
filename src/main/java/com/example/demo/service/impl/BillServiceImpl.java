@@ -136,7 +136,7 @@ notificationRepository.save(notification);
                 if(                    bill.getStudent() != null) {
                     emailService.sendSimpleEmail(
                             bill.getStudent().getEmail(),
-                            "Hóa đơn mới",
+                            "Hóa tiền phòng mới",
                             "Hóa đơn của bạn đã được tạo thành công với mã hóa đơn: " + bill.getBillId()
                     );
                 }

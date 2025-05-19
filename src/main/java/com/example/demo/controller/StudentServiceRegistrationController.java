@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.RegistrationFilterDTO;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.StudentServiceRegistration;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.StudentService;
 import com.example.demo.service.StudentServiceRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,29 @@ import java.util.List;
 public class StudentServiceRegistrationController {
 
     private final StudentServiceRegistrationService registrationService;
+    private final EmailService emailService;
+
 
     private final StudentService studentService;
     @Autowired
-    public StudentServiceRegistrationController(StudentServiceRegistrationService registrationService, StudentService studentService) {
+    public StudentServiceRegistrationController(StudentServiceRegistrationService registrationService, StudentService studentService, EmailService emailService) {
         this.registrationService = registrationService;
         this.studentService = studentService;
+        this.emailService = emailService;
     }
 
     @PostMapping("/{registrationId}/approve")
     public String approveRegistration(@PathVariable Long registrationId) {
-        registrationService.updateRegistrationStatus(registrationId, StudentServiceRegistration.RegistrationStatus.approved);
+        StudentServiceRegistration result = registrationService.updateRegistrationStatus(registrationId, StudentServiceRegistration.RegistrationStatus.approved);
+        //send email
+        String email = result.getStudent() != null ? result.getStudent().getEmail() : null;
+        String serviceName = result.getDormitoryService() != null ? result.getDormitoryService().getServiceName() : null;
+        if (email != null && !email.isBlank()) {
+            emailService.sendSimpleEmail(email,
+                    "Đăng ký dịch vụ đã được phê duyệt",
+                    "Đăng ký dịch vụ " + serviceName + " của bạn đã được phê duyệt. Hãy đên phòng [TÊN PHÒNG] để tiến hành thực hiện dịch vụ.");
+        }
+
         // Sau khi cập nhật, chuyển hướng về trang danh sách yêu cầu
         return "redirect:/student-service-requests";
     }

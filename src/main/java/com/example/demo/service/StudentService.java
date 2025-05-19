@@ -100,6 +100,18 @@ public class StudentService {
         return student.getEmail();
     }
 
+   //get email by studentId
+    public String getEmailBy(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student not found"));
+        return student.getEmail();
+    }
 
+    //getcurrentstudent
+    public Student getCurrentStudent() {
+        Long studentId = getCurrentStudentId();
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student not found"));
+    }
 
 }

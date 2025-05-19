@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.DormitoryServiceDTO;
 import com.example.demo.entity.DormitoryService;
+import com.example.demo.entity.Student;
 import com.example.demo.entity.StudentServiceRegistration;
 import com.example.demo.repository.DormitoryServiceRepository;
 import com.example.demo.service.DormitoryServiceService;
 import com.example.demo.service.StudentService;
 import com.example.demo.service.StudentServiceRegistrationService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +35,23 @@ public class StudentDormitoryServiceController {
     @Autowired
     DormitoryServiceRepository dormitoryServiceRepository;
 
+
+
     @GetMapping("/services")
-    public String listServices(Model model) {
+    public String listServices(Model model, HttpSession session) {
         List<DormitoryServiceDTO> services = dormitoryServiceService.getAllServices();
+        Long studentId = studentService.getCurrentStudentId();
         model.addAttribute("services", services);
+
+        // Lấy thông tin sinh viên đầy đủ và đưa vào session (nếu chưa có)
+        if (session.getAttribute("student") == null) {
+            Student student = studentService.getCurrentStudent(); // hoặc lấy từ context đăng nhập
+            session.setAttribute("student", student);
+        }
+
         return "student/service/services";
     }
+
 
     @PostMapping("/register-service/{serviceId}")
     @ResponseBody
