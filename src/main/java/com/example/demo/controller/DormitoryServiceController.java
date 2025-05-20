@@ -23,7 +23,7 @@ public class DormitoryServiceController {
     // Hiển thị danh sách dịch vụ
     @GetMapping
     public String listServices(Model model) {
-        List<DormitoryServiceDTO> services = dormitoryServiceService.getAllServices();
+        List<DormitoryServiceDTO> services = dormitoryServiceService.getAllServicesForAdmin();
         model.addAttribute("services", services);
         return "manager/service/list-services";
     }

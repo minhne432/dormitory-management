@@ -93,4 +93,19 @@ public class DormitoryServiceService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<DormitoryServiceDTO> getAllServicesForAdmin() {
+        return dormitoryServiceRepository.findAll()
+                .stream()
+                .map(service -> DormitoryServiceDTO.builder()
+                        .serviceId(service.getServiceId())
+                        .serviceName(service.getServiceName())
+                        .unitPrice(service.getUnitPrice())
+                        .unit(service.getUnit())
+                        .description(service.getDescription())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
