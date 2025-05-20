@@ -99,7 +99,7 @@ public class ApplicationManagementController {
             String studentEmail = application.getStudent().getEmail();
             String subject = "Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt";
             String body = "Chúc mừng bạn! Đơn đăng ký ở ký túc xá của bạn đã được phê duyệt. " +
-                    "Vui lòng kiểm tra thông tin chi tiết trong tài khoản của bạn.";
+                    "Vui lòng vui lòng đến phòng ký túc xá để nhận thông tin chi tiết về thủ tục ở ký túc xá.";
             // Gửi email thông báo
             if(studentEmail != null) {
                 emailService.sendSimpleEmail(studentEmail, subject, body);

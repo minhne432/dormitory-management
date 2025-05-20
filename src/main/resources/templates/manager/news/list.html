@@ -7,27 +7,41 @@
     <title>Quản lý bản tin</title>
 </head>
 <body>
-<div layout:fragment="content" class="max-w-6xl mx-auto p-6">
-<h2 class="text-2xl font-bold mb-4">Bảng tin KTX</h2>
-<a th:href="@{/manager/news/new}" class="bg-blue-500 text-white px-3 py-1 rounded">+ Thêm mới</a>
+<div layout:fragment="content" class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-semibold text-gray-800">Bảng tin KTX</h2>
+        <a th:href="@{/manager/news/new}"
+           class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded shadow">
+            + Thêm mới
+        </a>
+    </div>
 
-<table class="min-w-full divide-y divide-gray-200 mt-4">
-    <thead><tr><th>Tiêu đề</th><th>Ngày</th><th>Thao tác</th></tr></thead>
-    <tbody th:each="n : ${page.content}">
-    <tr>
-        <td th:text="${n.title}"></td>
-        <td th:text="${#temporals.format(n.createdAt,'dd/MM/yyyy')}"></td>
-        <td>
-            <a th:href="@{/manager/news/edit/{id}(id=${n.id})}" class="text-blue-600 mr-2">Sửa</a>
-
-            <form th:action="@{/manager/news/delete/{id}(id=${n.id})}" method="post"
-                  class="inline" onsubmit="return confirm('Xoá bản tin?');">
-                <button type="submit" class="text-red-600">Xoá</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div class="overflow-x-auto">
+        <table class="w-full bg-white border border-gray-300 rounded-md shadow-sm table-auto">
+            <thead class="bg-gray-100">
+            <tr class="text-left text-sm font-medium text-gray-700 uppercase tracking-wider">
+                <th class="px-6 py-4 border-b">Tiêu đề</th>
+                <th class="px-6 py-4 border-b">Ngày</th>
+                <th class="px-6 py-4 border-b">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 text-sm text-gray-800" th:each="n : ${page.content}">
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4" th:text="${n.title}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(n.createdAt,'dd/MM/yyyy')}"></td>
+                <td class="px-6 py-4">
+                    <a th:href="@{/manager/news/edit/{id}(id=${n.id})}"
+                       class="text-indigo-600 hover:text-indigo-800 font-medium mr-4">Sửa</a>
+                    <form th:action="@{/manager/news/delete/{id}(id=${n.id})}" method="post" class="inline"
+                          onsubmit="return confirm('Xoá bản tin?');">
+                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">Xoá</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 </body>
 </html>
