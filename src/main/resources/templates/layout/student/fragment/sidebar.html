@@ -9,11 +9,7 @@
         </button>
     </div>
 
-    <!-- Thông báo -->
-    <a th:href="@{/notifications/student/{studentId}(studentId=${session.student?.studentId})}" class="flex items-center justify-between bg-white p-2 rounded shadow my-4 hover:bg-gray-50">
-        <span class="text-gray-700 sidebar-text">Thông báo</span>
-        <div id="notificationBadge" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">0</div>
-    </a>
+    <!-- Đã loại bỏ phần thông báo -->
 
     <hr class="my-4 border-gray-300">
 
@@ -34,9 +30,6 @@
             </form>
         </li>
     </ul>
-
-
-
 
     <!-- Script xử lý Sidebar -->
     <script>
@@ -61,30 +54,5 @@
                 dropdownMenu?.classList.toggle('hidden');
             });
         }
-
     </script>
-
-    <!-- Script cập nhật số lượng thông báo -->
-    <!-- Nhúng biến studentId từ server -->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const studentId = /*[[${session.student.studentId}]]*/ 0;
-        /*]]>*/
-    </script>
-
-    <!-- Script cập nhật số lượng thông báo -->
-    <script>
-<!--        function pollNotifications() {-->
-<!--            fetch('/notifications/poll?studentId=' + studentId)-->
-<!--                .then(response => response.json())-->
-<!--                .then(data => {-->
-<!--                    console.log('Số lượng thông báo:', data.length);-->
-<!--                    document.getElementById('notificationBadge').innerText = data.length;-->
-<!--                })-->
-<!--                .catch(error => console.error('Lỗi khi polling thông báo:', error));-->
-<!--        }-->
-<!--        setInterval(pollNotifications, 3000);-->
-<!--        pollNotifications();-->
-    </script>
-
 </nav>
