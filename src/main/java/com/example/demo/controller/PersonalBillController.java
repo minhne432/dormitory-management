@@ -26,7 +26,7 @@ public class PersonalBillController {
             Bill bill = billService.createBillForRegistrations(registrationIds);
             // Trả về JSON thông báo thành công
             //gui email cho sinh viên
-            if(bill.getStudent() != null) {
+            if(bill.getStudent().getEmail() != null) {
                 emailService.sendSimpleEmail(
                         bill.getStudent().getEmail(),
                         "Hóa đơn mới",
