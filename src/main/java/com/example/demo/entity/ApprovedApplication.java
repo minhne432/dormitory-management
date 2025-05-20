@@ -26,9 +26,8 @@ public class ApprovedApplication {
     @Column(name = "student_id")
     private Long studentId;
 
-
-
-
+    @Column(name = "full_name")
+    private String fullName;
 
     @Column(name = "gender")
     private String gender;
