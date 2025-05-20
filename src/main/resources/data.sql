@@ -74,22 +74,22 @@ VALUES
 INSERT INTO students
 (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
 VALUES
-    (4,  '123 ABC St', '2003-05-10', 'CNTT',   'nh.minh0403@gmail.com',  'Nguyễn Hoàng Minh',     'Nam', '0901000004', 'CNTT1'),
-    (5,  '123 ABC St', '2003-04-11', 'CNTT',   'tuan.anh05@gmail.com',   'Trần Tuấn Anh',        'Nam', '0901000005', 'CNTT1'),
-    (6,  '234 BCD St', '2002-03-12', 'CNTT',   'hoang.khang06@gmail.com','Lê Hoàng Khang',       'Nam', '0901000006', 'CNTT2'),
-    (7,  '234 BCD St', '2002-02-05', 'CNTT',   'thao.nhi07@gmail.com',   'Phạm Thảo Nhi',         'Nữ',  '0901000007', 'CNTT2'),
-    (8,  '345 CDE St', '2003-01-05', 'KinhTe', 'bao.tran08@gmail.com',   'Đặng Bảo Trân',         'Nữ',  '0901000008', 'KT1'),
-    (9,  '345 CDE St', '2003-08-09', 'KinhTe', 'khoa.nguyen09@gmail.com','Nguyễn Minh Khoa',     'Nam', '0901000009', 'KT1'),
-    (10, '456 DEF St', '2003-07-07', 'KinhTe', 'lan.pham10@gmail.com',   'Phạm Ngọc Lan',         'Nữ',  '0901000010', 'KT2'),
-    (11, '456 DEF St', '2003-06-08', 'CNTT',   'quang.huy11@gmail.com',  'Võ Quang Huy',          'Nam', '0901000011', 'CNTT3'),
-    (12, '567 EFG St', '2004-12-01', 'XHNV',   'mai.anh12@gmail.com',    'Lê Mai Anh',            'Nữ',  '0901000012', 'XH1'),
-    (13, '567 EFG St', '2002-11-02', 'XHNV',   'ngoc.ha13@gmail.com',    'Trịnh Ngọc Hà',         'Nữ',  '0901000013', 'XH1'),
-    (14, '678 FGH St', '2002-10-03', 'KinhTe', 'dinh.trung14@gmail.com', 'Đinh Gia Trung',        'Nam', '0901000014', 'KT3'),
-    (15, '789 GHI St', '2002-09-04', 'XHNV',   'cam.tu15@gmail.com',     'Nguyễn Cẩm Tú',         'Nữ',  '0901000015', 'XH2'),
-    (16, '789 GHI St', '2002-08-05', 'CNTT',   'anh.duy16@gmail.com',    'Trần Anh Duy',          'Nam', '0901000016', 'CNTT4'),
-    (17, '876 HIJ St', '2002-07-06', 'KinhTe', 'ngoc.trinh17@gmail.com', 'Ngô Ngọc Trinh',        'Nữ',  '0901000017', 'KT4'),
-    (18, '987 IJK St', '2002-06-07', 'KinhTe', 'hoang.nam18@gmail.com',  'Lê Hoàng Nam',          'Nam', '0901000018', 'KT5'),
-    (19, '987 IJK St', '2002-05-08', 'CNTT',   'bao.long19@gmail.com',   'Phan Bảo Long',         'Nam', '0901000019', 'CNTT5'),
+    (4,  '123 ABC St', '2003-05-10', 'CNTT',   NULL,  'Nguyễn Hoàng Minh',     'Nam', '0901000004', 'CNTT1'),
+    (5,  '123 ABC St', '2003-04-11', 'CNTT',   NULL,   'Trần Tuấn Anh',        'Nam', '0901000005', 'CNTT1'),
+    (6,  '234 BCD St', '2002-03-12', 'CNTT',   NULL,'Lê Hoàng Khang',       'Nam', '0901000006', 'CNTT2'),
+    (7,  '234 BCD St', '2002-02-05', 'CNTT',   NULL,   'Phạm Thảo Nhi',         'Nữ',  '0901000007', 'CNTT2'),
+    (8,  '345 CDE St', '2003-01-05', 'KinhTe', NULL,   'Đặng Bảo Trân',         'Nữ',  '0901000008', 'KT1'),
+    (9,  '345 CDE St', '2003-08-09', 'KinhTe', NULL,'Nguyễn Minh Khoa',     'Nam', '0901000009', 'KT1'),
+    (10, '456 DEF St', '2003-07-07', 'KinhTe', NULL,   'Phạm Ngọc Lan',         'Nữ',  '0901000010', 'KT2'),
+    (11, '456 DEF St', '2003-06-08', 'CNTT',   NULL,  'Võ Quang Huy',          'Nam', '0901000011', 'CNTT3'),
+    (12, '567 EFG St', '2004-12-01', 'XHNV',   NULL,    'Lê Mai Anh',            'Nữ',  '0901000012', 'XH1'),
+    (13, '567 EFG St', '2002-11-02', 'XHNV',   NULL,    'Trịnh Ngọc Hà',         'Nữ',  '0901000013', 'XH1'),
+    (14, '678 FGH St', '2002-10-03', 'KinhTe', NULL, 'Đinh Gia Trung',        'Nam', '0901000014', 'KT3'),
+    (15, '789 GHI St', '2002-09-04', 'XHNV',   NULL,     'Nguyễn Cẩm Tú',         'Nữ',  '0901000015', 'XH2'),
+    (16, '789 GHI St', '2002-08-05', 'CNTT',   NULL,    'Trần Anh Duy',          'Nam', '0901000016', 'CNTT4'),
+    (17, '876 HIJ St', '2002-07-06', 'KinhTe', NULL, 'Ngô Ngọc Trinh',        'Nữ',  '0901000017', 'KT4'),
+    (18, '987 IJK St', '2002-06-07', 'KinhTe', NULL,  'Lê Hoàng Nam',          'Nam', '0901000018', 'KT5'),
+    (19, '987 IJK St', '2002-05-08', 'CNTT',   NULL,   'Phan Bảo Long',         'Nam', '0901000019', 'CNTT5'),
     (20, '987 IJK St', '2002-12-25', 'KinhTe', 'nh.minh0403@gmail.com',  'Vũ Diệu Hương',         'Nữ',  '0901000020', 'KT7');
 
 
@@ -204,21 +204,23 @@ VALUES
   (27, '2025-01-02 15:00:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:00:00', 'student27'),
   (28, '2025-01-02 15:10:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:10:00', 'student28'),
   (29, '2025-01-02 15:20:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:20:00', 'student29'),
-  (30, '2025-01-02 15:30:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:30:00', 'student30');
+  (30, '2025-01-02 15:30:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:30:00', 'student30'),
+  (31, '2025-01-02 15:30:00', '$2a$10$HZTSF2uLVsjKW2gTD5XvVOz3bwk6/xNyCSCiDp26dt4ZrVW19Ggt6', 'student', 'active', '2025-01-02 15:30:00', 'minhtriet');
 
 -- b) Thêm vào bảng `students`
 INSERT INTO students (student_id, address, date_of_birth, department, email, full_name, gender, phone_number, student_class)
 VALUES
-  (21, '123 New St', '2003-03-01', 'CNTT', 'minh.tri21@gmail.com',     'Nguyễn Minh Trí',       'Nam', '0901000021', 'CNTT1'),
-  (22, '123 New St', '2003-03-02', 'CNTT', 'thu.trang22@gmail.com',    'Trần Thu Trang',         'Nữ',  '0901000022', 'CNTT1'),
-  (23, '234 New St', '2003-03-03', 'KinhTe', 'quoc.khanh23@gmail.com','Lê Quốc Khánh',          'Nam', '0901000023', 'KT1'),
-  (24, '234 New St', '2003-03-04', 'KinhTe', 'my.hanh24@gmail.com',    'Võ Mỹ Hạnh',             'Nữ',  '0901000024', 'KT1'),
-  (25, '345 New St', '2003-03-05', 'XHNV', 'bao.phuc25@gmail.com',     'Phan Bảo Phúc',          'Nam', '0901000025', 'XH1'),
-  (26, '345 New St', '2003-03-06', 'XHNV', 'hai.yen26@gmail.com',      'Ngô Hải Yến',            'Nữ',  '0901000026', 'XH1'),
-  (27, '456 New St', '2003-03-07', 'CNTT', 'anh.tuan27@gmail.com',     'Đặng Anh Tuấn',          'Nam', '0901000027', 'CNTT2'),
-  (28, '456 New St', '2003-03-08', 'CNTT', 'kieu.oanh28@gmail.com',    'Hoàng Kiều Oanh',        'Nữ',  '0901000028', 'CNTT2'),
-  (29, '567 New St', '2003-03-09', 'KinhTe', 'tien.dat29@gmail.com',   'Đỗ Tiến Đạt',            'Nam', '0901000029', 'KT2'),
-  (30, '567 New St', '2003-03-10', 'KinhTe', 'bao.ngoc30@gmail.com',   'Bùi Bảo Ngọc',           'Nữ',  '0901000030', 'KT2');
+  (21, '123 New St', '2003-03-01', 'CNTT', NULL,     'Nguyễn Minh Trí',       'Nam', '0901000021', 'CNTT1'),
+  (22, '123 New St', '2003-03-02', 'CNTT', NULL,    'Trần Thu Trang',         'Nữ',  '0901000022', 'CNTT1'),
+  (23, '234 New St', '2003-03-03', 'KinhTe', NULL,'Lê Quốc Khánh',          'Nam', '0901000023', 'KT1'),
+  (24, '234 New St', '2003-03-04', 'KinhTe', NULL,    'Võ Mỹ Hạnh',             'Nữ',  '0901000024', 'KT1'),
+  (25, '345 New St', '2003-03-05', 'XHNV', NULL,     'Phan Bảo Phúc',          'Nam', '0901000025', 'XH1'),
+  (26, '345 New St', '2003-03-06', 'XHNV', NULL,      'Ngô Hải Yến',            'Nữ',  '0901000026', 'XH1'),
+  (27, '456 New St', '2003-03-07', 'CNTT', NULL,     'Đặng Anh Tuấn',          'Nam', '0901000027', 'CNTT2'),
+  (28, '456 New St', '2003-03-08', 'CNTT', NULL,    'Hoàng Kiều Oanh',        'Nữ',  '0901000028', 'CNTT2'),
+  (29, '567 New St', '2003-03-09', 'KinhTe', NULL,   'Đỗ Tiến Đạt',            'Nam', '0901000029', 'KT2'),
+  (30, '567 New St', '2003-03-10', 'KinhTe', NULL,   'Bùi Bảo Ngọc',           'Nữ',  '0901000030', 'KT2'),
+  (31, '567 New St', '2003-03-10', 'CNTT', NULL,   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
 
 
 

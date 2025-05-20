@@ -3,6 +3,7 @@ package com.example.demo.specifications;
 import com.example.demo.entity.Bill;
 import com.example.demo.entity.Bill.BillStatus;
 import com.example.demo.entity.Bill.BillType;
+import com.example.demo.entity.Student;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -20,34 +21,41 @@ public class BillSpecificationForStudent {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        return (Root<Bill> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // ✅ Lọc hóa đơn cá nhân hoặc hóa đơn phòng
-            if (studentId != null && roomId != null) {
-                // Join student với LEFT JOIN vì hóa đơn phòng có thể null student
-                Join<Object, Object> studentJoin = root.join("student", JoinType.LEFT);
-
-                Predicate personalBill = cb.equal(studentJoin.get("studentId"), studentId);
-                Predicate roomBill = cb.and(
+            // 1. Tạo danh sách OR-predicates cho bill cá nhân và bill phòng
+            List<Predicate> orPreds = new ArrayList<>();
+            // Nếu có studentId thì thêm predicate lọc bill cá nhân
+            if (studentId != null) {
+                Join<Bill, Student> studentJoin = root.join("student", JoinType.LEFT);
+                orPreds.add(cb.equal(studentJoin.get("studentId"), studentId));
+            }
+            // Nếu có roomId thì thêm predicate lọc bill phòng (student == null)
+            if (roomId != null) {
+                orPreds.add(cb.and(
                         cb.equal(root.get("room").get("roomId"), roomId),
-                        cb.isNull(root.get("student")) // hóa đơn phòng
-                );
-
-                predicates.add(cb.or(personalBill, roomBill));
+                        cb.isNull(root.get("student"))
+                ));
+            }
+            // Nếu có bất kỳ predicate nào thì gộp lại bằng OR
+            if (!orPreds.isEmpty()) {
+                predicates.add(orPreds.size() == 1
+                        ? orPreds.get(0)
+                        : cb.or(orPreds.toArray(new Predicate[0])));
             }
 
-            // Lọc theo BillStatus
+            // 2. Lọc theo status nếu có
             if (status != null) {
                 predicates.add(cb.equal(root.get("status"), status));
             }
 
-            // Lọc theo BillType
+            // 3. Lọc theo billType nếu có
             if (billType != null) {
                 predicates.add(cb.equal(root.get("billType"), billType));
             }
 
-            // Lọc theo khoảng thời gian của issueDate
+            // 4. Lọc theo khoảng thời gian
             if (startDate != null && endDate != null) {
                 predicates.add(cb.between(root.get("issueDate"), startDate, endDate));
             } else if (startDate != null) {
@@ -56,8 +64,10 @@ public class BillSpecificationForStudent {
                 predicates.add(cb.lessThanOrEqualTo(root.get("issueDate"), endDate));
             }
 
+            // Kết hợp tất cả bằng AND
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
 
 }

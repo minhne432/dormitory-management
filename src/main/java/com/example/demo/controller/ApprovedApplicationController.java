@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -52,6 +53,12 @@ public class ApprovedApplicationController {
 
         List<RoomList> roomList = roomListRepository.findAll();
         model.addAttribute("roomList", roomList);
+
+        List<String> departments = Arrays.asList("CNTT", "KinhTe","XHNV");
+        model.addAttribute("departments", departments);
+
+        List<String> dormitoryAreasList = Arrays.asList("KTX Khu A", "KTX Khu B");
+        model.addAttribute("dormitoryAreas", dormitoryAreasList);
 
         return "manager/application/approved_application_list";
         // trả về file HTML trong thư mục templates/manager/application/approved_application_list.html

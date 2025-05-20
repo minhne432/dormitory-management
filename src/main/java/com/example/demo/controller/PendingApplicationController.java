@@ -48,8 +48,10 @@ public class PendingApplicationController {
         List<Dormitory> dormitoryAreas = dormitoryService.getAllDormitories();
         model.addAttribute("dormitoryAreas", dormitoryAreas);
 
-        List<String> departments = Arrays.asList("Computer Science", "Electrical Engineering");
+        List<String> departments = Arrays.asList("CNTT", "KinhTe","XHNV");
         model.addAttribute("departments", departments);
+
+
 
         return "manager/application/pending_applications";
     }

@@ -36,16 +36,32 @@
             </div>
             <div>
                 <label for="dormitoryArea" class="block text-sm font-medium text-gray-700">Dormitory Area:</label>
-                <input type="text" id="dormitoryArea" name="dormitoryArea" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
+                <select id="dormitoryArea" name="dormitoryArea" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    <option value="">All</option>
+                    <option th:each="area : ${dormitoryAreas}"
+                            th:value="${area}"
+                            th:text="${area}"
+                            th:selected="${area} == ${dormitoryArea}">
+                    </option>
+                </select>
             </div>
+
             <div>
                 <label for="address" class="block text-sm font-medium text-gray-700">Address:</label>
                 <input type="text" id="address" name="address" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
             </div>
             <div>
                 <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
-                <input type="text" id="department" name="department" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" />
+                <select id="department" name="department" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    <option value="">All</option>
+                    <option th:each="dept : ${departments}"
+                            th:value="${dept}"
+                            th:text="${dept}"
+                            th:selected="${dept} == ${department}">
+                    </option>
+                </select>
             </div>
+
             <div class="md:col-span-3">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Tìm kiếm</button>
             </div>
