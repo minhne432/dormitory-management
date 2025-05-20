@@ -22,7 +22,7 @@ public class BillSchedulerService {
     }
 
     // Phương thức này chạy định kỳ, ví dụ mỗi phút để kiểm tra lịch hẹn giờ
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 30000)
     public void processBillingSchedules() {
         LocalDateTime now = LocalDateTime.now();
         // Lấy các lịch có schedule_time <= hiện tại và đang active

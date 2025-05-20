@@ -114,4 +114,12 @@ public class StudentService {
                 .orElseThrow(() -> new IllegalStateException("Student not found"));
     }
 
+    public RoomAssignment getCurrentRoomAssignment() {
+        Long studentId = getCurrentStudentId();
+        return roomAssignmentRepository.findByStudentStudentIdAndEndDateIsNull(studentId);
+    }
+
+
+
+
 }

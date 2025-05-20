@@ -90,7 +90,7 @@ VALUES
     (17, '876 HIJ St', '2002-07-06', 'KinhTe', NULL, 'Ngô Ngọc Trinh',        'Nữ',  '0901000017', 'KT4'),
     (18, '987 IJK St', '2002-06-07', 'KinhTe', NULL,  'Lê Hoàng Nam',          'Nam', '0901000018', 'KT5'),
     (19, '987 IJK St', '2002-05-08', 'CNTT',   NULL,   'Phan Bảo Long',         'Nam', '0901000019', 'CNTT5'),
-    (20, '987 IJK St', '2002-12-25', 'KinhTe', 'nh.minh0403@gmail.com',  'Vũ Diệu Hương',         'Nữ',  '0901000020', 'KT7');
+    (20, '987 IJK St', '2002-12-25', 'KinhTe', NULL,  'Vũ Diệu Hương',         'Nữ',  '0901000020', 'KT7');
 
 
 -- =========================================
@@ -220,7 +220,7 @@ VALUES
   (28, '456 New St', '2003-03-08', 'CNTT', NULL,    'Hoàng Kiều Oanh',        'Nữ',  '0901000028', 'CNTT2'),
   (29, '567 New St', '2003-03-09', 'KinhTe', NULL,   'Đỗ Tiến Đạt',            'Nam', '0901000029', 'KT2'),
   (30, '567 New St', '2003-03-10', 'KinhTe', NULL,   'Bùi Bảo Ngọc',           'Nữ',  '0901000030', 'KT2'),
-  (31, '567 New St', '2003-03-10', 'CNTT', NULL,   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
+  (31, '567 New St', '2003-03-10', 'CNTT', 'nh.minh0403@gmail.com',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
 
 
 

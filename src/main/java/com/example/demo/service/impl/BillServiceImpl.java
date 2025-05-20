@@ -134,7 +134,7 @@ notificationRepository.save(notification);
             if (!billExistsForStudent(studentId, monthStart)) {
                 Bill bill = createRoomBill(studentId);
                 //gui email cho sinh viên
-                if(                    bill.getStudent() != null) {
+                if(bill.getStudent().getEmail() != null) {
                     emailService.sendSimpleEmail(
                             bill.getStudent().getEmail(),
                             "Hóa tiền phòng mới",
@@ -232,7 +232,8 @@ notificationRepository.save(notification);
                 filterRequest.getStatus(),
                 filterRequest.getBillType(),
                 filterRequest.getStartDate(),
-                filterRequest.getEndDate()
+                filterRequest.getEndDate(),
+                filterRequest.getRoomJoinDate()  // mới
         );
 
         // Tạo Pageable

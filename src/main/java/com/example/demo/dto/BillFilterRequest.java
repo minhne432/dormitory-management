@@ -26,4 +26,6 @@ public class BillFilterRequest {
 
     private Long roomId;  // optional - dùng cho filter theo phòng
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate roomJoinDate;   // mới
 }

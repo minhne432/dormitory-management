@@ -103,7 +103,10 @@ public class RoomAssignmentService {
             String email = student.getEmail();
             String subject = "Room Assignment Notification";
             String body = "Bạn đã được xếp vào phòng " + room.getRoomNumber() + " kể từ ngày " + now;
-            emailService.sendSimpleEmail(email, subject, body);
+
+            if(email!= null && !email.isEmpty()){
+                emailService.sendSimpleEmail(email, subject, body);
+            }
 
             // Tạo Notification
             Notification notification = new Notification();

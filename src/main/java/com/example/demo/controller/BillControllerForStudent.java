@@ -53,6 +53,7 @@ public class BillControllerForStudent {
         filter.setEndDate(endDate);
         filter.setPage(page);
         filter.setSize(size);
+        filter.setRoomJoinDate(studentService.getCurrentRoomAssignment().getAssignedDate()); // mới
 
         // Lấy danh sách hóa đơn với phân trang và lọc
         Page<Bill> bills = billService.getBillsByFilter(filter);
