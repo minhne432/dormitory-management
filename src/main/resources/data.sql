@@ -17,6 +17,7 @@ TRUNCATE TABLE students;
 TRUNCATE TABLE users;
 TRUNCATE TABLE billing_schedules;
 TRUNCATE TABLE utility_billing_schedule;
+TRUNCATE TABLE news;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -881,3 +882,14 @@ INSERT INTO bill_items (bill_item_id, amount, bill_id, service_id, registration_
 (80, 40000, 58, 2, 41, 2, 20000);
 INSERT INTO notifications (notification_id, created_at, message, read_status, title, student_id) VALUES
 (72, '2025-03-01 08:01:05', 'Hóa đơn dịch vụ Giặt ủi kỳ 2025-02 (40000 VND) đã được thanh toán.', 'unread', 'Hóa đơn dịch vụ tháng 02/2025', 10);
+
+-- Dumping data for table `news`
+--
+
+INSERT INTO `news` (`id`, `author`, `content`, `created_at`, `title`, `updated_at`) VALUES
+(1, 'Nguyễn Văn A', 'Hôm nay thời tiết nắng đẹp, sinh viên háo hức tham gia các hoạt động ngoại khoá.', '2025-04-01 08:00:00.000000', 'Hoạt động ngoại khoá rộn ràng', '2025-04-01 09:00:00.000000'),
+(2, 'Trần Thị B', 'Ký túc xá sẽ tiến hành bảo trì hệ thống điện trong hai ngày cuối tuần.', '2025-04-02 10:00:00.000000', 'Thông báo bảo trì hệ thống điện', '2025-04-02 10:30:00.000000'),
+(3, 'Lê Văn C', 'Giải bóng đá sinh viên chính thức khởi tranh với nhiều đội bóng mạnh tham dự.', '2025-04-03 14:00:00.000000', 'Giải bóng đá sinh viên 2025 bắt đầu', '2025-04-03 15:00:00.000000'),
+(4, 'Huỳnh Văn Kha', 'Nhằm chào mừng ngày Sách Việt Nam, thư viện tổ chức buổi giao lưu với các tác giả nổi tiếng.', '2025-04-03 14:00:00.000000', 'Ngày hội sách tại thư viện', '2025-05-20 14:06:53.000000'),
+(5, 'Trương Gia Bảo', 'Tổ chức tập huấn phòng cháy chữa cháy dành cho sinh viên nội trú vào thứ Bảy.', '2025-04-03 14:00:00.000000', 'Tập huấn PCCC cho sinh viên', '2025-05-20 13:42:40.000000'),
+(6, 'Hoàng Nam Khánh', 'Phòng quản lý ký túc xá thông báo về việc đăng ký ở lại dịp lễ 30/4 và 1/5.', '2025-04-03 14:00:00.000000', 'Thông báo đăng ký ở lại lễ 30/4', '2025-05-20 13:40:31.000000');
