@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.DashboardSummary;
 import com.example.demo.entity.Room;
 import com.example.demo.entity.Student;
+import com.example.demo.repository.DashboardSummaryRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.NewsService;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +25,9 @@ public class LoginController {
 
     private final StudentRepository studentRepository;
     private final StudentRoomService studentRoomService; // đã có trong dự án
+
+    @Autowired
+    private DashboardSummaryRepository dashboardSummaryRepository;
 
     private final NewsService newsService;
 
@@ -100,25 +105,18 @@ public class LoginController {
 
     @GetMapping("/manager/home")
     public String home(Model model) {
-        // 1. Giả lập dữ liệu cho các thông tin tổng quan
-        int totalStudents = 1350;
-        int vacantRooms = 68;
-        int pendingRequests = 12;
-        int newRequestsToday = 3;
-        int newRequestsWeek = 20;
+        // 1. Lấy dữ liệu từ view (chỉ có 1 dòng duy nhất)
+        DashboardSummary stats = dashboardSummaryRepository.findAll().stream().findFirst().orElse(new DashboardSummary());
 
-        // Lấy 5 bản tin mới nhất
+        model.addAttribute("totalStudents", stats.getStudentCount());
+        model.addAttribute("vacantRooms", stats.getAvailableRooms());
+        model.addAttribute("pendingRequests", stats.getPendingApplications());
+        model.addAttribute("newRequestsToday", stats.getNewServiceRequests());
+
+        // 2. Lấy tin tức
         model.addAttribute("newsList", newsService.getLatest(3));
 
-        // 3. Truyền dữ liệu sang template thông qua Model
-        model.addAttribute("totalStudents", totalStudents);
-        model.addAttribute("vacantRooms", vacantRooms);
-        model.addAttribute("pendingRequests", pendingRequests);
-        model.addAttribute("newRequestsToday", newRequestsToday);
-        model.addAttribute("newRequestsWeek", newRequestsWeek);
-
-
-        return "manager/home"; // Trả về tên template 'home.html' (đặt trong thư mục 'manager')
+        return "manager/home";
     }
 
     // Class đại diện cho một mục tin bảng tin (News Item) - Inner Class
