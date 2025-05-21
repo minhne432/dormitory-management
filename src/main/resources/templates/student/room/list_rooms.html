@@ -5,6 +5,14 @@
 
 <head>
     <title layout:fragment="title">Room List</title>
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 </head>
 
 <body>
@@ -79,7 +87,7 @@
 
     <!-- Bảng danh sách phòng -->
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-300">
+        <table id="roomTable" class="min-w-full divide-y divide-gray-300">
             <thead>
             <tr class="bg-blue-500 text-white">
                 <th class="py-3 px-4 text-left font-semibold">Room ID</th>
@@ -142,6 +150,16 @@
             });
         });
     });
+
+     $(document).ready(function() {
+    $('#roomTable').DataTable({
+      pageLength: 5,       // số dòng mỗi trang
+      lengthChange: false, // ẩn dropdown chọn pageLength
+      searching: false,    // tắt search nếu không cần
+      info: false,         // ẩn “Showing 1 to 5 of …”
+      paging: true
+    });
+  });
 </script>
 </body>
 </html>

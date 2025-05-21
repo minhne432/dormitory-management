@@ -925,4 +925,27 @@ VALUES
 --VALUES
 --    (CURDATE(), NULL, 3, 31);
 
+
+-- KTX Khu A (dorm_id = 1)
+INSERT INTO rooms (room_id, current_occupancy, description, room_number, status, dorm_id, room_type_id) VALUES
+(5,  0, 'Phòng trống', 'A103', 'available', 1, 1),
+(6,  0, 'Phòng trống', 'A104', 'available', 1, 2),
+(7,  0, 'Phòng trống', 'A105', 'available', 1, 3),
+(8,  0, 'Phòng trống', 'A106', 'available', 1, 4),
+(9,  0, 'Phòng trống', 'A107', 'available', 1, 1),
+(10, 0, 'Phòng trống', 'A108', 'available', 1, 2),
+(11, 0, 'Phòng trống', 'A109', 'available', 1, 3),
+(12, 0, 'Phòng trống', 'A110', 'available', 1, 4),
+
+-- KTX Khu B (dorm_id = 2)
+(13, 0, 'Phòng trống', 'B203', 'available', 2, 1),
+(14, 0, 'Phòng trống', 'B204', 'available', 2, 2),
+(15, 0, 'Phòng trống', 'B205', 'available', 2, 3),
+(16, 0, 'Phòng trống', 'B206', 'available', 2, 4),
+(17, 0, 'Phòng trống', 'B207', 'available', 2, 1),
+(18, 0, 'Phòng trống', 'B208', 'available', 2, 2),
+(19, 0, 'Phòng trống', 'B209', 'available', 2, 3),
+(20, 0, 'Phòng trống', 'B210', 'available', 2, 4);
+
+
 COMMIT;
