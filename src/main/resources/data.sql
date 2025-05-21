@@ -133,8 +133,8 @@ VALUES
     (2,  'Dịch vụ giặt ủi',                 'Giặt ủi',            'PERSONAL', 'lần',   20000,  TRUE),
     (3,  'Điện sinh hoạt',                  'Điện',               'ROOM',     'kWh',   3000,   FALSE),
     (4,  'Nước sinh hoạt',                  'Nước',               'ROOM',     'm3',    7000,   FALSE),
-    (5,  'Thay gas bình',                   'Thay gas',           'PERSONAL',     'bình',  450000, TRUE);
-
+    (5,  'Phòng ở cho sinh viên',          'Phòng ở',            'PERSONAL', 'tháng', 1000,   FALSE),
+    (6,  'Thay gas bình',                   'Thay gas',           'PERSONAL',     'bình',  450000, TRUE);
 
 -- 1. Thêm đơn đăng ký ở ký túc xá đã được duyệt cho 6 học sinh
 -- (Ở đây dùng CURDATE() cho ngày duyệt và ngày nộp đơn;
@@ -281,7 +281,7 @@ VALUES
 COMMIT;
 
 -- Bỏ các lệnh SET @variable
-
+START TRANSACTION;
 -- --- Tháng 9/2024 (Ghi số ngày 18/10/2024, Hóa đơn kỳ 2024-10) ---
 -- Phòng 1 (Bill ID: 9, Usage IDs: 6, 7, Item IDs: 11, 12, Notif IDs: 13, 14, 15)
 INSERT INTO bills (bill_id, bill_type, billing_period, due_date, issue_date, status, total_amount, room_id, student_id, created_date, paid_date) VALUES
@@ -916,3 +916,5 @@ VALUES
 --INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
 --VALUES
 --    (CURDATE(), NULL, 3, 31);
+
+COMMIT;
