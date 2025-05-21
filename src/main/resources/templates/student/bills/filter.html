@@ -59,7 +59,7 @@
 <!--                <td class="py-3 px-4 text-gray-800" th:text="${bill.student != null ? bill.student.fullName : '-!'}"></td>-->
                 <td class="py-3 px-4 text-gray-800">
                     <span th:if="${bill.billType.name() == 'DIEN_NUOC'}"
-                          th:text="'Room ' + ${bill.room != null ? bill.room.roomId : 'N/A'}"></span>
+                          th:text="'Phòng ' + ${bill.room != null ? bill.room.roomNumber : 'N/A'}"></span>
                     <span th:unless="${bill.billType.name() == 'DIEN_NUOC'}"
                           th:text="${bill.student != null ? bill.student.fullName : '-'}"></span>
                 </td>

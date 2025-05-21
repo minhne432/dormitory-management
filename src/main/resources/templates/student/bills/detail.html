@@ -71,11 +71,13 @@
 
     </div>
     <!-- Nút thanh toán VNPay -->
-    <form th:action="@{'/bills/' + ${bill.billId} + '/checkout'}" method="post">
-        <button class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-            Thanh toán VNPay
-        </button>
-    </form>
+    <div th:if="${bill.paidDate == null}">
+        <form th:action="@{'/bills/' + ${bill.billId} + '/checkout'}" method="post">
+            <button class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                Thanh toán VNPay
+            </button>
+        </form>
+    </div>
     <!-- Nút quay lại -->
     <div class="mt-6 text-right">
         <a th:href="@{/bills/filter}"
