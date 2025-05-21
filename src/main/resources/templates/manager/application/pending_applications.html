@@ -73,16 +73,16 @@
             <td class="px-6 py-4 whitespace-nowrap" th:text="${app.phoneNumber}">Phone Number</td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex space-x-2">
-                    <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" class="inline">
-                        <input type="hidden" name="applicationId" th:value="${applicationId}" />
-                        <input type="hidden" name="address" th:value="${address}" />
-                        <input type="hidden" name="department" th:value="${department}" />
-                        <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}" />
-                        <input type="hidden" name="startDate" th:value="${startDate}" />
-                        <input type="hidden" name="endDate" th:value="${endDate}" />
-                        <input type="hidden" name="page" th:value="${applicationPage.number}" />
-                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xem</button>
-                    </form>
+<!--                    <form th:action="@{/manager/applications/{id}(id=${app.applicationId})}" method="get" class="inline">-->
+<!--                        <input type="hidden" name="applicationId" th:value="${applicationId}" />-->
+<!--                        <input type="hidden" name="address" th:value="${address}" />-->
+<!--                        <input type="hidden" name="department" th:value="${department}" />-->
+<!--                        <input type="hidden" name="dormitoryArea" th:value="${dormitoryArea}" />-->
+<!--                        <input type="hidden" name="startDate" th:value="${startDate}" />-->
+<!--                        <input type="hidden" name="endDate" th:value="${endDate}" />-->
+<!--                        <input type="hidden" name="page" th:value="${applicationPage.number}" />-->
+<!--                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xem</button>-->
+<!--                    </form>-->
                     <form th:action="@{/manager/applications/{id}/approve(id=${app.applicationId})}" method="post" class="inline">
                         <input type="hidden" name="applicationId" th:value="${applicationId}" />
                         <input type="hidden" name="address" th:value="${address}" />

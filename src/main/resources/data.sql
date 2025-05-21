@@ -229,8 +229,8 @@ VALUES
   (28, '456 New St', '2003-03-08', 'CNTT', NULL,    'Hoàng Kiều Oanh',        'Nữ',  '0901000028', 'CNTT2'),
   (29, '567 New St', '2003-03-09', 'KinhTe', NULL,   'Đỗ Tiến Đạt',            'Nam', '0901000029', 'KT2'),
   (30, '567 New St', '2003-03-10', 'KinhTe', NULL,   'Bùi Bảo Ngọc',           'Nữ',  '0901000030', 'KT2'),
-  (31, '567 New St', '2003-03-10', 'CNTT', 'minhb2014933@student.ctu.edu.vn',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
---  (31, '567 New St', '2003-03-10', 'CNTT', 'Trietb2014955@student.ctu.edu.vn',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
+--  (31, '567 New St', '2003-03-10', 'CNTT', 'minhb2014933@student.ctu.edu.vn',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
+  (31, '567 New St', '2003-03-10', 'CNTT', 'Trietb2014955@student.ctu.edu.vn',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
 
 
 -- 2. Thêm dữ liệu mẫu cho 5 đơn đăng ký ở ký túc xá (status 'pending') cho 5 sinh viên

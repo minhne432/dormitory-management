@@ -56,7 +56,21 @@ public class PendingApplicationController {
         model.addAttribute("applicationId", applicationId);
 
         model.addAttribute("dormitoryAreas", dormitoryService.getAllDormitories());
-        model.addAttribute("departments", Arrays.asList("CNTT","KinhTe","XHNV"));
+        model.addAttribute("departments", Arrays.asList(
+                "CNTT", "KinhTe", "XHNV",
+                "BK",      // Trường Bách khoa
+                "SP",      // Trường Sư phạm
+                "TS",      // Trường Thủy sản
+                "NN",      // Trường Nông nghiệp
+                "DBDT",    // Khoa Dự bị Dân tộc
+                "GDTC",    // Khoa Giáo dục Thể chất
+                "KHCT",    // Khoa Khoa học Chính trị
+                "KHTN",    // Khoa Khoa học Tự nhiên
+                "LU",      // Khoa Luật
+                "MT&TNTN", // Khoa Môi trường & Tài nguyên Thiên nhiên
+                "PTNT",    // Khoa Phát triển Nông thôn
+                "SDH"      // Khoa Sau đại học
+        ));
 
         model.addAttribute("applicationPage", applicationPage);
         return "manager/application/pending_applications";

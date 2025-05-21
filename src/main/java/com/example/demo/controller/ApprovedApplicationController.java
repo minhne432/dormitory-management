@@ -54,8 +54,22 @@ public class ApprovedApplicationController {
         List<RoomList> roomList = roomListRepository.findAll();
         model.addAttribute("roomList", roomList);
 
-        List<String> departments = Arrays.asList("CNTT", "KinhTe","XHNV");
-        model.addAttribute("departments", departments);
+
+        model.addAttribute("departments", Arrays.asList(
+                "CNTT", "KinhTe", "XHNV",
+                "BK",      // Trường Bách khoa
+                "SP",      // Trường Sư phạm
+                "TS",      // Trường Thủy sản
+                "NN",      // Trường Nông nghiệp
+                "DBDT",    // Khoa Dự bị Dân tộc
+                "GDTC",    // Khoa Giáo dục Thể chất
+                "KHCT",    // Khoa Khoa học Chính trị
+                "KHTN",    // Khoa Khoa học Tự nhiên
+                "LU",      // Khoa Luật
+                "MT&TNTN", // Khoa Môi trường & Tài nguyên Thiên nhiên
+                "PTNT",    // Khoa Phát triển Nông thôn
+                "SDH"      // Khoa Sau đại học
+        ));
 
         List<String> dormitoryAreasList = Arrays.asList("KTX Khu A", "KTX Khu B");
         model.addAttribute("dormitoryAreas", dormitoryAreasList);
