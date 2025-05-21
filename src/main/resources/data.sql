@@ -133,8 +133,7 @@ VALUES
     (2,  'Dịch vụ giặt ủi',                 'Giặt ủi',            'PERSONAL', 'lần',   20000,  TRUE),
     (3,  'Điện sinh hoạt',                  'Điện',               'ROOM',     'kWh',   3000,   FALSE),
     (4,  'Nước sinh hoạt',                  'Nước',               'ROOM',     'm3',    7000,   FALSE),
-    (5,  'Phòng ở cho sinh viên',          'Phòng ở',            'PERSONAL', 'tháng', 1000,   FALSE),
-    (6,  'Thay gas bình',                   'Thay gas',           'PERSONAL',     'bình',  450000, TRUE);
+    (5,  'Thay gas bình',                   'Thay gas',           'PERSONAL',     'bình',  450000, TRUE);
 
 
 -- 1. Thêm đơn đăng ký ở ký túc xá đã được duyệt cho 6 học sinh
@@ -220,7 +219,7 @@ VALUES
   (28, '456 New St', '2003-03-08', 'CNTT', NULL,    'Hoàng Kiều Oanh',        'Nữ',  '0901000028', 'CNTT2'),
   (29, '567 New St', '2003-03-09', 'KinhTe', NULL,   'Đỗ Tiến Đạt',            'Nam', '0901000029', 'KT2'),
   (30, '567 New St', '2003-03-10', 'KinhTe', NULL,   'Bùi Bảo Ngọc',           'Nữ',  '0901000030', 'KT2'),
-  (31, '567 New St', '2003-03-10', 'CNTT', 'nh.minh0403@gmail.com',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
+  (31, '567 New St', '2003-03-10', 'CNTT', 'Trietb2014955@student.ctu.edu.vn',   'Nguyễn Minh Triết',           'Nam',  '0901000030', 'CNTT2');
 
 
 
