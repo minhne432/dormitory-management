@@ -5,6 +5,8 @@ import com.example.demo.entity.Application;
 import com.example.demo.entity.Application.ApplicationStatus;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.ApplicationRepository;
+import com.example.demo.repository.RoomListRepository;
+import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.ApplicationService;
 import com.example.demo.service.StudentService;
@@ -25,10 +27,14 @@ public class ApplicationController {
     private final StudentService studentService;
     private final EmailService emailService;
 
-    public ApplicationController(ApplicationService applicationService, StudentService studentService, EmailService emailService) {
+    private RoomListRepository roomListRepository;
+
+    public ApplicationController(ApplicationService applicationService, StudentService studentService, EmailService emailService,
+                                 RoomListRepository roomListRepository) {
         this.applicationService = applicationService;
         this.studentService = studentService;
         this.emailService = emailService;
+        this.roomListRepository = roomListRepository;
     }
 
     @GetMapping("/register-dormitory")
@@ -45,6 +51,7 @@ public class ApplicationController {
             // Nếu chưa có đơn đăng ký, hiển thị form đăng ký như bình thường
             DormApplicationForm form = applicationService.prepareDormApplicationForm(currentStudentId);
             model.addAttribute("student", form);
+            model.addAttribute("rooms",    roomListRepository.findAll());
             return "student/application/registerDormitory"; // Tên view Thymeleaf cho form đăng ký
         }
     }

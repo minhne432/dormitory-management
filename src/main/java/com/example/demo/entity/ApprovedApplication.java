@@ -60,4 +60,7 @@ public class ApprovedApplication {
     @Column(name = "dormitory_area")
     private String dormitoryArea;
 
+    @Column(name = "note")
+    private String note;
+
 }
