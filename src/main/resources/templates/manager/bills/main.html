@@ -180,6 +180,49 @@
   }
 
   document.addEventListener("DOMContentLoaded", updateBillStatusListeners);
+
+
+
+  // Các hàm lưu / load filter
+  function saveFiltersToLocal() {
+    const fields = ['billId','studentId','status','startDate','endDate','page','size'];
+    const data = {};
+    fields.forEach(name => {
+      const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+      if (el) data[name] = el.value;
+    });
+    localStorage.setItem('billFilters', JSON.stringify(data));
+  }
+
+  function loadFiltersFromLocal() {
+    const raw = localStorage.getItem('billFilters');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(data).forEach(([name, value]) => {
+      const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+      if (el && value !== null) el.value = value;
+    });
+  }
+
+  // Gắn sự kiện khi DOM sẵn sàng
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1) Load lại filter cũ (nếu có)
+    loadFiltersFromLocal();
+
+    // 2) Gắn listener cho thay đổi giá trị để tự động lưu
+    ['billId','studentId','status','startDate','endDate','page','size'].forEach(name => {
+      const el = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+      if (el) el.addEventListener('change', saveFiltersToLocal);
+    });
+
+    // 3) Khi submit form cũng lưu (tránh trường hợp dùng enter hoặc JS submit)
+    document.getElementById('filterForm')
+            .addEventListener('submit', saveFiltersToLocal);
+
+    // 4) Cuối cùng là gắn listener cho status như cũ
+    updateBillStatusListeners();
+  });
+
 </script>
 
 </html>

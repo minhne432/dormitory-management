@@ -6,6 +6,8 @@ import com.example.demo.specifications.ServiceUsageSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +34,9 @@ public class ElectricityWaterBillController {
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String invoiced,
-
-            /* ✅ tham số phân trang */
+            /* tham số phân trang */
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size,
-
             Model model) {
 
         LocalDate parsedStartDate = Optional.ofNullable(startDate)
@@ -52,9 +52,11 @@ public class ElectricityWaterBillController {
                 .and(ServiceUsageSpecification.hasRecordDateBetween(parsedStartDate, parsedEndDate))
                 .and(ServiceUsageSpecification.hasInvoiced(invoiced));
 
-        /* ✅ lấy Page chứ không phải List */
+        // Tạo Pageable kèm Sort: recordDate giảm dần
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "recordDate"));
+
         Page<ServiceUsage> usages =
-                serviceUsageService.searchServiceUsages(spec, PageRequest.of(page, size));
+                serviceUsageService.searchServiceUsages(spec, pageable);
 
         model.addAttribute("usages", usages);
         return "manager/service_usage_list";
