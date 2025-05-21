@@ -73,7 +73,9 @@
                             [[${bill.status}]]
                         </span>
                 </td>
-                <td class="py-3 px-4 text-gray-800" th:text="${bill.totalAmount}"></td>
+<!--                <td class="py-3 px-4 text-gray-800" th:text="${bill.totalAmount}"></td>-->
+                <td class="py-3 px-4 text-gray-800" th:text="${#numbers.formatDecimal(bill.totalAmount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
                 <td class="py-3 px-4 text-gray-800" th:text="${bill.issueDate}"></td>
                 <td class="py-3 px-4 text-gray-800" th:text="${bill.dueDate}"></td>
                 <td class="py-3 px-4 text-center">

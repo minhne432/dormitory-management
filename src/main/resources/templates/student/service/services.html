@@ -29,7 +29,7 @@
 
             <!-- Giá dịch vụ -->
             <p class="text-sm text-gray-500 mb-1">
-                💲 <span th:text="${service.unitPrice}" class="font-medium"></span> /
+                💲 <span th:text="${#numbers.formatDecimal(service.unitPrice, 0, 'POINT', 0, 'NONE') + ' ₫'}" class="font-medium"></span> /
                 <span th:text="${service.unit}" class="font-medium"></span>
             </p>
 

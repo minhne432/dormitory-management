@@ -85,7 +85,9 @@
             <option value="overdue" th:selected="${bill.status.name() == 'overdue'}">overdue</option>
           </select>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap" th:text="${bill.totalAmount}"></td>
+<!--        <td class="px-6 py-4 whitespace-nowrap" th:text="${bill.totalAmount}"></td>-->
+        <td class="px-6 py-4 whitespace-nowrap" th:text="${#numbers.formatDecimal(bill.totalAmount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
         <td class="px-6 py-4 whitespace-nowrap">
           <a th:href="@{/bills/manager/detail/{billId}(billId=${bill.billId})}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Xem chi tiết</a>
         </td>

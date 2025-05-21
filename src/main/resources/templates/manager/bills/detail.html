@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/manager/layout}">
-
 <head>
     <title layout:fragment="title">Chi tiết hóa đơn</title>
 </head>
@@ -13,40 +12,91 @@
     <!-- Tiêu đề -->
     <h1 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Chi tiết hóa đơn</h1>
 
-    <!-- Mã hóa đơn -->
-    <div class="mb-4">
-        <strong class="text-gray-700">Mã hóa đơn:</strong>
-        <span class="text-gray-900 font-semibold" th:text="${bill.billId}"></span>
+    <!-- Thông tin tổng quan về hóa đơn -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+            <p><strong>Mã hóa đơn:</strong> <span th:text="${bill.billId}"></span></p>
+            <p><strong>Kỳ thanh toán:</strong> <span th:text="${bill.billingPeriod}"></span></p>
+            <p><strong>Loại hóa đơn:</strong> <span th:text="${bill.billType}"></span></p>
+            <p><strong>Trạng thái:</strong>
+                <span th:if="${bill.status.name() == 'paid'}" class="text-green-600 font-semibold">Đã thanh toán</span>
+                <span th:if="${bill.status.name() == 'unpaid'}" class="text-yellow-600 font-semibold">Chưa thanh toán</span>
+                <span th:if="${bill.status.name() == 'overdue'}" class="text-red-600 font-semibold">Quá hạn</span>
+            </p>
+        </div>
+        <div>
+            <p><strong>Ngày phát hành:</strong> <span th:text="${#temporals.format(bill.issueDate,'dd/MM/yyyy')}"></span></p>
+            <p><strong>Ngày đến hạn:</strong> <span th:text="${#temporals.format(bill.dueDate,'dd/MM/yyyy')}"></span></p>
+            <p><strong>Ngày tạo:</strong> <span th:text="${#temporals.format(bill.createdDate,'dd/MM/yyyy HH:mm')}"></span></p>
+            <p th:if="${bill.paidDate} != null"><strong>Ngày thanh toán:</strong> <span th:text="${#temporals.format(bill.paidDate,'dd/MM/yyyy HH:mm')}"></span></p>
+        </div>
     </div>
 
-    <!-- Danh sách chi tiết hóa đơn -->
-    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-4">Dịch vụ đã sử dụng</h2>
+    <!-- Thông tin phòng -->
+    <div th:if="${bill.room} != null" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+            <h2 class="text-xl font-semibold mb-2">Thông tin phòng</h2>
+            <p><strong>Số phòng:</strong> <span th:text="${bill.room.roomNumber}"></span></p>
+            <p><strong>Ký túc xá:</strong> <span th:text="${bill.room.dormitory.dormName}"></span></p>
+            <p><strong>Loại phòng:</strong> <span th:text="${bill.room.roomType.maxCapacity} + ' người - ' + ${bill.room.roomType.gender}"></span></p>
+        </div>
+    </div>
+    <div th:unless="${bill.room} != null" class="mb-4 text-gray-500">
+        Chưa có thông tin phòng
+    </div>
 
+    <!-- Thông tin sinh viên -->
+    <div th:if="${bill.student} != null" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+            <h2 class="text-xl font-semibold mb-2">Thông tin sinh viên</h2>
+            <p><strong>Họ tên:</strong> <span th:text="${bill.student.fullName}"></span></p>
+            <p><strong>Lớp:</strong> <span th:text="${bill.student.studentClass}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${bill.student.email}"></span></p>
+            <p><strong>Điện thoại:</strong> <span th:text="${bill.student.phoneNumber}"></span></p>
+        </div>
+    </div>
+    <div th:unless="${bill.student} != null" class="mb-4 text-gray-500">
+        Chưa có thông tin sinh viên
+    </div>
+
+    <!-- Bảng dịch vụ đã sử dụng -->
+    <h2 class="text-2xl font-semibold text-gray-800 mt-6 mb-4">Dịch vụ đã sử dụng</h2>
     <div class="overflow-x-auto">
         <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
             <thead class="bg-gray-700 text-white text-left">
             <tr>
-                <th class="px-6 py-3 font-medium uppercase">Tên dịch vụ</th>
-                <th class="px-6 py-3 font-medium uppercase">Đơn giá</th>
-                <th class="px-6 py-3 font-medium uppercase">Số lượng</th>
-                <th class="px-6 py-3 font-medium uppercase">Số tiền</th>
+                <th class="px-6 py-3 uppercase">Tên dịch vụ</th>
+                <th class="px-6 py-3 uppercase">Đơn giá</th>
+                <th class="px-6 py-3 uppercase">Số lượng</th>
+                <th class="px-6 py-3 uppercase">Thành tiền</th>
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
             <tr th:each="item : ${bill.billItems}" class="hover:bg-gray-100 transition">
                 <td class="px-6 py-4" th:text="${item.service.serviceName}"></td>
-                <td class="px-6 py-4" th:text="${item.unitPrice}"></td>
+<!--                <td class="px-6 py-4" th:text="${item.unitPrice} + ' đ'"></td>-->
+                <td class="px-6 py-4" th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
                 <td class="px-6 py-4" th:text="${item.quantity}"></td>
-                <td class="px-6 py-4 font-bold text-gray-800" th:text="${item.amount}"></td>
+<!--                <td class="px-6 py-4 font-bold text-gray-800" th:text="${item.amount} + ' đ'"></td>-->
+                <td class="px-6 py-4 font-bold text-gray-800" th:text="${#numbers.formatDecimal(item.amount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
             </tr>
             </tbody>
+            <tfoot class="bg-gray-100">
+            <tr>
+                <td colspan="3" class="px-6 py-4 text-right font-semibold">Tổng cộng:</td>
+<!--                <td class="px-6 py-4 font-bold text-gray-900" th:text="${bill.totalAmount} + ' đ'"></td>-->
+                <td class="px-6 py-4 font-bold text-gray-900" th:text="${#numbers.formatDecimal(bill.totalAmount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
+            </tr>
+            </tfoot>
         </table>
     </div>
 
     <!-- Nút quay lại -->
     <div class="mt-6 text-right">
-        <a th:href="@{/bills/manager/filter}"
-           class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        <a th:href="@{/bills/manager/filter}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
             Quay lại danh sách
         </a>
     </div>

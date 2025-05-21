@@ -130,7 +130,7 @@ VALUES
 INSERT INTO services (service_id, description, service_name, service_type, unit, unit_price, visible_for_student)
 VALUES
     (1,  'Internet cáp quang',              'Internet',           'PERSONAL',     'tháng', 100000, TRUE),
-    (2,  'Dịch vụ giặt ủi',                 'Giặt ủi',            'PERSONAL', 'lần',   20000,  TRUE),
+    (2,  'Dịch vụ giặt ủi',                 'Giặt ủi',            'PERSONAL', 'kg',   20000,  TRUE),
     (3,  'Điện sinh hoạt',                  'Điện',               'ROOM',     'kWh',   3000,   FALSE),
     (4,  'Nước sinh hoạt',                  'Nước',               'ROOM',     'm3',    7000,   FALSE),
     (5,  'Phòng ở cho sinh viên',          'Phòng ở',            'PERSONAL', 'tháng', 1000,   FALSE),
