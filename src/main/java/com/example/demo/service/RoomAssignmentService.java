@@ -4,10 +4,12 @@ import com.example.demo.entity.*;
 import com.example.demo.exception.NotEnoughCapacityException;
 import com.example.demo.repository.*;
 import com.example.demo.specifications.RoomAssignmentSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,9 +34,19 @@ public class RoomAssignmentService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired private RoomRepository roomRepo;
     @Autowired
     EmailService emailService; // Để gửi email
     @Autowired ApplicationService applicationService;
+
+    public RoomAssignment getById(Long studentId, Long roomId) {
+        RoomAssignmentId id = new RoomAssignmentId(roomId, studentId);
+        return roomAssignmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Không tìm thấy RoomAssignment cho studentId="
+                                + studentId + ", roomId=" + roomId));
+    }
+
 
     public void assignRoomToApplications(Long roomId, List<Long> applicationIds) {
         // 1. Lấy Room
@@ -168,4 +180,68 @@ public class RoomAssignmentService {
         roomAssignmentRepository.save(ra);
         roomRepository.save(room);
     }
+
+
+    // Lọc
+    public List<RoomAssignment> list(Long roomId, Long studentId) {
+        Specification<RoomAssignment> spec = Specification.where(null);
+        if (roomId != null) {
+            spec = spec.and((root, q, cb) ->
+                    cb.equal(root.get("room").get("id"), roomId));
+        }
+        if (studentId != null) {
+            spec = spec.and((root, q, cb) ->
+                    cb.equal(root.get("student").get("id"), studentId));
+        }
+        return roomAssignmentRepository.findAll(spec);
+    }
+
+    // Dừng ở: chỉ cần cập nhật endDate
+    @Transactional
+    public void endAssignment(Long studentId, Long roomId) {
+        RoomAssignmentId id = new RoomAssignmentId(studentId, roomId);
+        RoomAssignment ra = roomAssignmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException());
+        ra.setEndDate(LocalDate.now());
+        roomAssignmentRepository.save(ra);
+    }
+
+    // Chuyển phòng:
+    // 1) Đặt endDate cho assignment cũ
+    // 2) Tạo mới assignment với room mới
+    @Transactional
+    public void transferRoom(Long studentId, Long oldRoomId, Long newRoomId) {
+        // 1. Tìm và kết thúc assignment cũ
+        RoomAssignmentId oldId = new RoomAssignmentId(oldRoomId, studentId);
+        RoomAssignment ra = roomAssignmentRepository.findById(oldId)
+                .orElseThrow(() -> new EntityNotFoundException("Old assignment not found"));
+
+        ra.setEndDate(LocalDate.now());
+        roomAssignmentRepository.save(ra);
+
+        // 2. Tạo assignment mới cho phòng mới
+        Room newRoom = roomRepo.findById(newRoomId)
+                .orElseThrow(() -> new EntityNotFoundException("New room not found"));
+
+        RoomAssignment newRa = RoomAssignment.builder()
+                .id(new RoomAssignmentId(newRoomId, studentId))
+                .student(ra.getStudent())
+                .room(newRoom)
+                .assignedDate(LocalDate.now())
+                .endDate(null)
+                .build();
+
+        roomAssignmentRepository.save(newRa);
+
+        //send email
+        String email = ra.getStudent().getEmail();
+        String subject = "Room Transfer Notification";
+        String body = "Bạn đã được chuyển từ phòng " + ra.getRoom().getRoomNumber() +
+                " sang phòng " + newRoom.getRoomNumber() + " kể từ ngày " + LocalDate.now();
+        if(email!= null && !email.isEmpty()){
+            emailService.sendSimpleEmail(email, subject, body);
+        }
+
+    }
+
 }

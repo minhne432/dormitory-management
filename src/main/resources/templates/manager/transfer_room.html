@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/manager/layout}">
+
+<head>
+    <title layout:fragment="title">Chuyển phòng</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="max-w-lg mx-auto p-6 bg-white rounded-lg shadow">
+
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Chuyển phòng sinh viên</h2>
+
+    <form th:action="@{/assignments/transfer}" method="post" class="space-y-4">
+
+        <input type="hidden" name="studentId" th:value="${current.student.studentId}"/>
+        <input type="hidden" name="oldRoomId"  th:value="${current.room.roomId}"/>
+
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Sinh viên</label>
+            <p class="text-gray-900 font-semibold" th:text="${current.student.fullName}"></p>
+        </div>
+
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Phòng hiện tại</label>
+            <p class="text-gray-900 font-semibold" th:text="${current.room.roomNumber}"></p>
+        </div>
+
+        <div>
+            <label for="newRoomId" class="block text-gray-700 font-medium mb-1">Chọn phòng mới</label>
+            <select id="newRoomId" name="newRoomId"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="">--Chọn phòng--</option>
+                <option th:each="r : ${rooms}"
+                        th:value="${r.roomId}"
+                        th:text="${r.roomNumber}">
+                </option>
+            </select>
+        </div>
+
+        <div class="pt-4 flex justify-end">
+            <button type="submit"
+                    class="bg-green-500 hover:bg-green-600 text-white font-medium px-5 py-2 rounded transition">
+                Xác nhận chuyển
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<div layout:fragment="script"></div>
+</body>
+</html>
