@@ -63,6 +63,39 @@ public class RoomController {
         return "manager/room/list_rooms";
     }
 
+    @GetMapping("/student/list")
+    public String listRoomsForStudent(
+            @RequestParam(required = false) String roomNumber,
+            @RequestParam(required = false) String dormName,
+            @RequestParam(required = false) Integer maxCapacity,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) Room.RoomStatus status,
+            Model model
+    ) {
+        // Khởi tạo filter từ các tham số nhận được
+        RoomFilter filter = new RoomFilter();
+        filter.setRoomNumber(roomNumber);
+        filter.setDormName(dormName);
+        filter.setMaxCapacity(maxCapacity);
+        filter.setGender(gender);
+        filter.setPrice(price);
+        filter.setStatus(status);
+
+        // Tạo Specification từ filter
+        Specification<Room> spec = RoomSpecification.filter(filter);
+
+        // Lấy danh sách phòng với điều kiện lọc
+        List<Room> rooms = roomRepository.findAll(spec);
+
+        // Đưa vào model
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("filter", filter);
+
+        // Trả về trang list_rooms
+        return "student/room/list_rooms";
+    }
+
     // Hiển thị form tạo phòng mới
     @GetMapping("/new")
     public String showCreateRoomForm(Model model) {
