@@ -37,33 +37,38 @@ public class BillControllerForStudent {
             @RequestParam(defaultValue = "10") int size,
             Model model
     ) {
-        // Lấy ID của sinh viên hiện tại
+        // 1. Lấy ID và roomId của sinh viên hiện tại
         Long studentId = studentService.getCurrentStudentId();
+        Long roomId    = studentService.getCurrentRoomId(); // có thể null nếu chưa xếp phòng
 
-        // Lấy roomId của sinh viên hiện tại (nếu có)
-        Long roomId = studentService.getCurrentRoomId();
-
-        // Map param vào DTO
+        // 2. Đổ param vào DTO
         BillFilterRequest filter = new BillFilterRequest();
         filter.setStudentId(studentId);
-        filter.setRoomId(roomId); // thêm dòng này
+        filter.setRoomId(roomId);
         filter.setStatus(status);
         filter.setBillType(billType);
         filter.setStartDate(startDate);
         filter.setEndDate(endDate);
         filter.setPage(page);
         filter.setSize(size);
-        filter.setRoomJoinDate(studentService.getCurrentRoomAssignment().getAssignedDate()); // mới
 
-        // Lấy danh sách hóa đơn với phân trang và lọc
+        // 3. Xử lý lấy ngày join room một cách null-safe
+        var currentAssignment = studentService.getCurrentRoomAssignment();
+        if (currentAssignment != null && currentAssignment.getAssignedDate() != null) {
+            filter.setRoomJoinDate(currentAssignment.getAssignedDate());
+        }
+        // nếu currentAssignment == null, filter.roomJoinDate để mặc định null (không lọc theo ngày join)
+
+        // 4. Lấy dữ liệu hóa đơn đã lọc
         Page<Bill> bills = billService.getBillsByFilter(filter);
 
-        // Truyền dữ liệu vào view
-        model.addAttribute("bills", bills);
+        // 5. Truyền vào view
+        model.addAttribute("bills",  bills);
         model.addAttribute("filter", filter);
 
-        return "student/bills/filter"; // Trả về view Thymeleaf
+        return "student/bills/filter";
     }
+
 
 
     @PostMapping("/detail")
