@@ -23,7 +23,15 @@
         <tr th:each="schedule : ${schedules}">
             <td class="px-6 py-4 whitespace-nowrap" th:text="${schedule.scheduleId}"></td>
             <td class="px-6 py-4 whitespace-nowrap" th:text="${schedule.scheduleTime}"></td>
-            <td class="px-6 py-4 whitespace-nowrap" th:text="${schedule.active}"></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+            <span th:if="${schedule.active}">
+                 🕒 Pending
+            </span>
+                <span th:unless="${schedule.active}">
+                    ✅ Completed
+                </span>
+            </td>
+
         </tr>
         </tbody>
     </table>

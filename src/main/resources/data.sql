@@ -178,15 +178,23 @@ VALUES
 -- Giả sử:
 --   - Với điện: previous_reading = 100, current_reading = 150, service_id = 3 (Điện sinh hoạt)
 --   - Với nước: previous_reading = 50,  current_reading = 60,  service_id = 4 (Nước sinh hoạt)
-INSERT INTO service_usage (current_reading, invoiced, previous_reading, record_date, room_id, service_id, student_id)
+INSERT INTO service_usage (
+  current_reading,
+  invoiced,
+  previous_reading,
+  record_date,
+  room_id,
+  service_id,
+  student_id
+)
 VALUES
-  -- Ghi số cho phòng room_id = 1
-  (150, 'NO', 100, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 3, NULL),  -- Điện
-  (60,  'NO', 50,  DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 4, NULL),  -- Nước
+  -- Phòng 1, Điện (usage_id tự gán)
+  (300, 'NO', 250, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 3, NULL),
+  ( 60, 'NO',  50, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 1, 4, NULL),
 
-  -- Ghi số cho phòng room_id = 2
-  (150, 'NO', 100, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 3, NULL),  -- Điện
-  (60,  'NO', 50,  DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 4, NULL);  -- Nước
+  -- Phòng 2, Điện
+  (300, 'NO', 250, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 3, NULL),
+  ( 60, 'NO',  50, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), 2, 4, NULL);
 
 
 
