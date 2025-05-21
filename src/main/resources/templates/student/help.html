@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student/layout}">
+
+<head>
+    <title layout:fragment="title">Trợ Giúp</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-3xl font-semibold mb-4 text-gray-800">Trang Trợ Giúp</h2>
+    <p class="mb-6 text-gray-600">
+        Nếu bạn cần hỗ trợ, vui lòng liên hệ với các số điện thoại sau:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div th:each="contact : ${contacts}"
+             class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+            <h3 class="text-xl font-medium text-gray-800" th:text="${contact.role}"></h3>
+            <p class="mt-1 text-gray-600" th:text="${contact.name}"></p>
+            <a th:href="'tel:' + ${contact.phone}"
+               class="mt-2 inline-block font-semibold hover:underline text-indigo-600"
+               th:text="${contact.phone}"></a>
+        </div>
+    </div>
+
+    <section class="mt-10">
+        <h3 class="text-2xl font-semibold mb-3 text-gray-800">Câu hỏi thường gặp</h3>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+            <li>
+                <strong>Thủ tục đăng ký ở KTX như thế nào?</strong>
+                Truy cập trang <a th:href="@{/register-dormitory}" class="text-indigo-600 hover:underline">Đăng ký ở KTX</a> để điền thông tin.
+            </li>
+            <li>
+                <strong>Báo hỏng phòng hoặc thiết bị ra sao?</strong>
+                Gọi ngay cho Tổ bảo vệ hoặc Quản lý KTX để được hỗ trợ kịp thời.
+            </li>
+        </ul>
+    </section>
+</div>
+
+<div layout:fragment="script">
+    <!-- Nếu cần thêm JavaScript riêng cho page này -->
+</div>
+</body>
+</html>
