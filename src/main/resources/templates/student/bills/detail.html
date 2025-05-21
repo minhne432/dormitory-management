@@ -35,9 +35,13 @@
             <tbody class="divide-y divide-gray-200 bg-white">
             <tr th:each="item : ${bill.billItems}" class="hover:bg-indigo-100 transition">
                 <td class="px-6 py-4" th:text="${item.service.serviceName}"></td>
-                <td class="px-6 py-4" th:text="${item.unitPrice}"></td>
+<!--                <td class="px-6 py-4" th:text="${item.unitPrice}"></td>-->
+                <td class="px-6 py-4" th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
                 <td class="px-6 py-4" th:text="${item.quantity}"></td>
-                <td class="px-6 py-4 font-bold text-indigo-800" th:text="${item.amount}"></td>
+<!--                <td class="px-6 py-4 font-bold text-indigo-800" th:text="${item.amount}"></td>-->
+                <td class="px-6 py-4 font-bold text-indigo-800" th:text="${#numbers.formatDecimal(item.amount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></td>
+
             </tr>
             </tbody>
         </table>
@@ -46,7 +50,9 @@
     <!-- Tổng tiền -->
     <div class="mt-4">
         <strong class="text-indigo-700">Tổng tiền:</strong>
-        <span class="text-indigo-900 font-semibold" th:text="${bill.totalAmount}"></span>
+<!--        <span class="text-indigo-900 font-semibold" th:text="${bill.totalAmount}"></span>-->
+        <span class="text-indigo-900 font-semibold" th:text="${#numbers.formatDecimal(bill.totalAmount, 0, 'POINT', 0, 'NONE') + ' ₫'}"></span>
+
     </div>
     <!-- Trạng thái -->
     <div class="mt-4">
