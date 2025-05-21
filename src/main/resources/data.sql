@@ -171,6 +171,8 @@ VALUES
   (CURDATE(), NULL, 2, 8),
   (CURDATE(), NULL, 2, 10);
 
+
+
 -- 4. Ghi số điện và số nước cho 2 phòng với thời điểm là "ngày này của tháng trước"
 -- Dùng DATE_SUB(CURDATE(), INTERVAL 1 MONTH) để tính ngày ghi
 -- Giả sử:
@@ -894,3 +896,23 @@ INSERT INTO `news` (`id`, `author`, `content`, `created_at`, `title`, `updated_a
 (4, 'Huỳnh Văn Kha', 'Nhằm chào mừng ngày Sách Việt Nam, thư viện tổ chức buổi giao lưu với các tác giả nổi tiếng.', '2025-04-03 14:00:00.000000', 'Ngày hội sách tại thư viện', '2025-05-20 14:06:53.000000'),
 (5, 'Trương Gia Bảo', 'Tổ chức tập huấn phòng cháy chữa cháy dành cho sinh viên nội trú vào thứ Bảy.', '2025-04-03 14:00:00.000000', 'Tập huấn PCCC cho sinh viên', '2025-05-20 13:42:40.000000'),
 (6, 'Hoàng Nam Khánh', 'Phòng quản lý ký túc xá thông báo về việc đăng ký ở lại dịp lễ 30/4 và 1/5.', '2025-04-03 14:00:00.000000', 'Thông báo đăng ký ở lại lễ 30/4', '2025-05-20 13:40:31.000000');
+
+--- Giả lập student 20 đã ở phòng 3 (phòng 6 nữ) từ 2 tháng trước
+INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
+VALUES
+    (CURDATE() - INTERVAL 2 MONTH, NULL, 3, 20);
+
+-- cập nhật orcurrent_occupancy cho phòng 3
+UPDATE rooms
+SET current_occupancy = 1
+WHERE room_id = 3;
+
+-- giả lập đã ghi số điện nước cho phòng 3 vào tháng 4 và chưa lên hóa đơn
+INSERT INTO service_usage (current_reading, invoiced, previous_reading, record_date, room_id, service_id, student_id)
+VALUES
+    (500, 'NO', 250, '2025-04-25', 3, 3, NULL), -- Điện
+    (100, 'NO', 50,  '2025-04-25', 3, 4, NULL); -- Nước
+
+--INSERT INTO room_assignments (assigned_date, end_date, room_id, student_id)
+--VALUES
+--    (CURDATE(), NULL, 3, 31);

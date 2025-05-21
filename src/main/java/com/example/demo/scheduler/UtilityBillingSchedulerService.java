@@ -23,7 +23,7 @@ public class UtilityBillingSchedulerService {
     }
 
     // Chạy định kỳ mỗi phút để kiểm tra các lịch hẹn giờ trong DB
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 30000)
     public void processUtilityBillingSchedules() {
         LocalDateTime now = LocalDateTime.now();
         List<UtilityBillingSchedule> schedules = scheduleRepository.findByScheduleTimeLessThanEqualAndActive(now, true);
