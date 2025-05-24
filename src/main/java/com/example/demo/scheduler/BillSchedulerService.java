@@ -1,4 +1,4 @@
-package com.example.demo.service.impl;
+package com.example.demo.scheduler;
 
 import com.example.demo.entity.BillingSchedule;
 import com.example.demo.repository.BillingScheduleRepository;

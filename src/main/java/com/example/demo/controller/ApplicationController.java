@@ -1,24 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.DormApplicationForm;
-import com.example.demo.entity.Application;
-import com.example.demo.entity.Application.ApplicationStatus;
-import com.example.demo.entity.Student;
-import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.RoomListRepository;
-import com.example.demo.repository.RoomRepository;
-import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.ApplicationService;
 import com.example.demo.service.StudentService;
 import com.example.demo.service.EmailService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Optional;
+
 
 @Controller
 public class ApplicationController {
@@ -27,7 +18,7 @@ public class ApplicationController {
     private final StudentService studentService;
     private final EmailService emailService;
 
-    private RoomListRepository roomListRepository;
+    private final RoomListRepository roomListRepository;
 
     public ApplicationController(ApplicationService applicationService, StudentService studentService, EmailService emailService,
                                  RoomListRepository roomListRepository) {
